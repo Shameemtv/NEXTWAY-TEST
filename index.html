@@ -86,7 +86,7 @@
 
       <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print">
         <div class="flex flex-wrap items-center gap-2">
-          <span id="roleBadge" class="px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-100 text-slate-900 border border-gray-300"></span>
+          <span id="roleBadge" class="flex items-center px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-100 text-slate-900 border border-gray-300"></span>
           <div id="adminOtpControl" class="hidden flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200"><span class="text-[10px] font-semibold text-gray-700">Delivery OTP:</span><button id="otpToggleBtn" onclick="toggleGlobalOtp()" class="px-2 py-0.5 rounded text-[10px] font-bold"></button></div>
         </div>
         <div class="flex items-center gap-2 w-full sm:w-auto">
@@ -164,8 +164,9 @@
             <div><label class="block text-xs font-semibold text-gray-600 mb-1">Status</label><select id="agentFinanceStatus" onchange="generateAgentFinanceReport()" class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 bg-gray-50"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
           </div>
           <div class="flex flex-wrap gap-2 pt-1">
-            <button onclick="printAgentFinanceReport('agent')" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg">Print Report</button>
-            <button onclick="exportAgentDailyExcel('agent')" class="bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-lg">Download .xlsx</button>
+            <button onclick="printAgentFinanceReport('agent')" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg shadow">Print Report</button>
+            <button onclick="exportAgentDailyExcel('agent')" class="bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow">Download .xlsx</button>
+            <button onclick="sendAgentReportWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white text-xs font-bold px-4 py-2 rounded-lg shadow transition">WhatsApp Report</button>
           </div>
         </div>
         <div id="printableAgentFinance" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
@@ -291,14 +292,14 @@
   </main>
 
   <!-- BOTTOM NAVIGATION BAR -->
-  <nav id="bottomNav" class="hidden fixed bottom-0 w-full bg-slate-900/95 backdrop-blur-xl border-t border-slate-700 flex justify-start sm:justify-center text-[10px] sm:text-xs text-gray-400 pb-safe z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] overflow-x-auto hide-scrollbar">
-    <button onclick="switchTab('consignments')" id="tab-consignments" class="flex-none w-20 py-3 flex flex-col items-center gap-1 tab-active transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Dispatch</button>
-    <button onclick="switchTab('confirmations')" id="tab-confirmations" class="flex-none w-20 py-3 flex flex-col items-center gap-1 transition-all relative"><span id="navConfirmBadge" class="absolute top-1 right-2 bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>Alerts</button>
-    <button onclick="switchTab('agent-reports')" id="tab-agent-reports" class="admin-only flex-none w-20 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Reports</button>
-    <button onclick="switchTab('agent-finance')" id="tab-agent-finance" class="agent-only flex-none w-20 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Finance</button>
-    <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only flex-none w-20 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>Vendors</button>
-    <button onclick="switchTab('invoices')" id="tab-invoices" class="admin-only flex-none w-20 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Ledger</button>
-    <button onclick="switchTab('system')" id="tab-system" class="flex-none w-20 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Settings</button>
+  <nav id="bottomNav" class="hidden fixed bottom-0 w-full bg-slate-900/95 backdrop-blur-xl border-t border-slate-700 flex justify-around text-[10px] sm:text-xs text-gray-400 pb-safe z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+    <button onclick="switchTab('consignments')" id="tab-consignments" class="flex-1 py-3 flex flex-col items-center gap-1 tab-active transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Dispatch</button>
+    <button onclick="switchTab('confirmations')" id="tab-confirmations" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all relative"><span id="navConfirmBadge" class="absolute top-1 right-2 bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>Alerts</button>
+    <button onclick="switchTab('agent-reports')" id="tab-agent-reports" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Reports</button>
+    <button onclick="switchTab('agent-finance')" id="tab-agent-finance" class="agent-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Finance</button>
+    <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>Vendors</button>
+    <button onclick="switchTab('invoices')" id="tab-invoices" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Ledger</button>
+    <button onclick="switchTab('system')" id="tab-system" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Settings</button>
   </nav>
 
   <!-- ================= MODALS ================= -->
@@ -545,7 +546,7 @@
     
     function enterWorkspace() {
       document.getElementById('authView').classList.add('hidden'); document.getElementById('appView').classList.remove('hidden'); document.getElementById('bottomNav').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('flex'); document.getElementById('logoutBtn').classList.remove('hidden');
-      const isA = currentUser.role === 'ADMIN'; document.getElementById('roleBadge').textContent = isA ? `ADMIN: ${currentUser.username}` : `AGENT: ${currentUser.name}`;
+      const isA = currentUser.role === 'ADMIN'; document.getElementById('roleBadge').innerHTML = isA ? `<span>${currentUser.username}</span>` : `<span>${currentUser.name}</span> <span class="ml-2 px-1.5 py-0.5 bg-gray-200 text-gray-700 rounded text-[9px] border border-gray-300 font-black">${currentUser.id}</span>`;
       document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', !isA)); document.querySelectorAll('.agent-only').forEach(el => el.classList.toggle('hidden', isA));
       document.getElementById('agentDashboardBanner').classList.toggle('hidden', isA);
       if (isA) { 
@@ -738,6 +739,7 @@
       document.getElementById('afTotalCount').textContent=r.length; document.getElementById('afTotalCollected').textContent=formatAmt(tc);
       document.getElementById('afAgentNameDisplay').textContent = currentUser.name; document.getElementById('afDateDisplay').textContent = d;
     }
+    
     function printAgentFinanceReport(role) { document.querySelectorAll('.print-area').forEach(e=>e.classList.remove('print-area')); if(role==='admin'){document.getElementById('printableAdminAgentReport').classList.add('print-area');} else {document.getElementById('printableAgentFinance').classList.add('print-area');} window.print(); }
     
     function exportAgentDailyExcel(role) {
@@ -748,6 +750,33 @@
       const ls = db.consignments.filter(c=>c.assignedTo===id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
       const data = ls.map(c => ({ "ID": c.id, "Customer": c.customerName, "Status": c.status, "Fee Type": c.feeType, "Amount Collected": c.status==='Delivered'?c.productAmount:0 }));
       const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "AgentReport"); XLSX.writeFile(wb, `AgentReport_${d}.xlsx`);
+    }
+
+    function sendAgentReportWhatsApp() {
+      if(currentUser.role !== 'AGENT') return;
+      if(!document.getElementById('agentFinanceDate').value) document.getElementById('agentFinanceDate').value=new Date().toISOString().split('T')[0];
+      const d = document.getElementById('agentFinanceDate').value, stat = document.getElementById('agentFinanceStatus').value;
+      const r = db.consignments.filter(c=>c.assignedTo===currentUser.id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
+      
+      let tc = 0;
+      let text = `*Daily Finance Report*\n`;
+      text += `*Name:* ${currentUser.name}\n`;
+      text += `*ID:* ${currentUser.id}\n`;
+      text += `*Date:* ${d}\n\n`;
+      
+      if(r.length === 0) {
+        text += `No deliveries found for this date.`;
+      } else {
+        r.forEach(c => {
+          const amt = c.status === 'Delivered' ? c.productAmount : 0;
+          tc += amt;
+          text += `• ${c.id} - ${c.status} - ${formatAmt(amt)}\n`;
+        });
+        text += `\n*Total Deliveries:* ${r.length}\n`;
+        text += `*Total Collected:* ${formatAmt(tc)}`;
+      }
+      
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     // INVOICES & EXCEL
