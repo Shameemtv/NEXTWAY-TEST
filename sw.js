@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nextway-premium-v5';
+const CACHE_NAME = 'nextway-premium-v6';
 const LOCAL_ASSETS = [
   './',
   './index.html',
@@ -25,7 +25,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   // STRICT RULE: Only cache GET requests from our EXACT SAME origin.
-  // This completely frees Firebase to sync instantly without Service Worker interference.
+  // This allows Supabase API and Realtime WebSockets to communicate without SW interception.
   if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
     return;
   }
