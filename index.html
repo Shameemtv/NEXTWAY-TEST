@@ -112,7 +112,7 @@
             <div id="adminAgentSlicerWrap" class="hidden"><select id="filterAgentSlicer" onchange="renderConsignments()" class="text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-gray-50 font-medium"><option value="ALL">All Agents</option></select></div>
             <input id="filterSearchText" oninput="renderConsignments()" type="text" placeholder="Filter List..." class="flex-1 sm:w-48 text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-gray-50" />
           </div>
-          <button onclick="openNewConsignmentModal()" class="admin-only w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-yellow-400 text-xs font-bold px-3 py-2 rounded-lg shadow uppercase">+ New Consignment</button>
+          <button onclick="openNewConsignmentModal()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-yellow-400 text-xs font-bold px-3 py-2 rounded-lg shadow uppercase">+ New Consignment</button>
         </div>
 
         <div class="admin-only bg-white p-3 rounded-xl shadow-sm border border-gray-200 flex flex-wrap gap-2 items-center">
@@ -176,9 +176,9 @@
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Deliveries</p><p id="afTotalCount" class="text-lg font-bold text-slate-900">0</p></div>
-            <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Collected</p><p id="afTotalCollected" class="text-lg font-black text-emerald-900">0.00</p></div>
+            <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Collected</p><p id="afTotalCollected" class="text-lg font-black text-emerald-900">0.00 AED</p></div>
           </div>
-          <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Status</th><th class="p-2 text-right">Amt Collected</th><th class="p-2 text-right">Fee Type</th></tr></thead><tbody id="afTableBody" class="divide-y divide-gray-200"></tbody></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Status</th><th class="p-2 text-right">Amt Collected</th></tr></thead><tbody id="afTableBody" class="divide-y divide-gray-200"></tbody></table></div>
         </div>
       </div>
 
@@ -218,14 +218,14 @@
             </div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-            <div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-[10px] uppercase font-bold text-gray-500">Gross Collected</p><p id="invTotalProduct" class="text-lg font-bold text-slate-900">0.00</p></div>
-            <div class="p-3 rounded-lg bg-red-50 border border-red-200"><p class="text-[10px] uppercase font-bold text-red-800">Less: Delivery Fees</p><p id="invTotalDeductions" class="text-lg font-bold text-red-900">0.00</p></div>
-            <div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-[10px] uppercase font-bold text-gray-500">Ledger Paid</p><p id="invSettledAmount" class="text-lg font-bold text-slate-700">0.00</p></div>
-            <div class="p-3 rounded-lg bg-slate-900 text-white"><p id="invNetLabel" class="text-[10px] uppercase font-bold text-yellow-400">Net Payable Balance</p><p id="invNetAmount" class="text-lg font-black">0.00</p></div>
+            <div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-[10px] uppercase font-bold text-gray-500">Gross Collected</p><p id="invTotalProduct" class="text-lg font-bold text-slate-900">0.00 AED</p></div>
+            <div class="p-3 rounded-lg bg-red-50 border border-red-200"><p class="text-[10px] uppercase font-bold text-red-800">Delivery Fees</p><p id="invTotalDeductions" class="text-lg font-bold text-red-900">0.00 AED</p></div>
+            <div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-[10px] uppercase font-bold text-gray-500">Ledger Paid</p><p id="invSettledAmount" class="text-lg font-bold text-slate-700">0.00 AED</p></div>
+            <div class="p-3 rounded-lg bg-slate-900 text-white"><p id="invNetLabel" class="text-[10px] uppercase font-bold text-yellow-400">Net Payable Balance</p><p id="invNetAmount" class="text-lg font-black">0.00 AED</p></div>
           </div>
           <div class="md:col-span-3 space-y-4 overflow-x-auto">
             <table class="w-full text-left text-xs border-collapse">
-              <thead><tr class="bg-gray-100 text-gray-700 border-b border-gray-300"><th class="p-2">Date</th><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2 text-right">Fee Type</th><th class="p-2 text-right text-red-700">Del. Fee</th><th class="p-2 text-right">Product Amt</th></tr></thead>
+              <thead><tr class="bg-gray-100 text-gray-700 border-b border-gray-300"><th class="p-2">Date</th><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2 text-right text-red-700">Del. Fee</th><th class="p-2 text-right">Product Amt</th></tr></thead>
               <tbody id="invTableBody" class="divide-y divide-gray-200"></tbody>
             </table>
             <div id="invSettledLedgerWrap" class="hidden pt-3 border-t"><p class="text-xs font-bold text-slate-800 mb-1.5">Ledger Deductions (Payments to Vendor)</p><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 text-gray-700 border-b"><th class="p-1.5">Date</th><th class="p-1.5">Type</th><th class="p-1.5">Ref</th><th class="p-1.5 text-right">Amount</th></tr></thead><tbody id="invSettledTableBody" class="divide-y divide-gray-200"></tbody></table></div>
@@ -247,6 +247,20 @@
 
       <!-- TAB 7: SYSTEM & SETTINGS (SUPABASE INTEGRATED) -->
       <div id="panel-system" class="hidden space-y-4">
+        
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3">
+          <h3 class="font-bold text-sm text-slate-900">Change My Password</h3>
+          <div class="space-y-3 max-w-xl text-xs">
+            <div>
+              <label class="font-semibold text-gray-700 block mb-1">New Password</label>
+              <input id="selfNewPassword" type="password" placeholder="Enter new password..." class="w-full border rounded-lg px-3 py-2 bg-gray-50" />
+            </div>
+            <div class="flex gap-2 pt-1">
+              <button type="button" onclick="changeOwnPassword()" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Update Password</button>
+            </div>
+          </div>
+        </div>
+
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="font-bold text-sm text-slate-900">Live Cloud Sync (Supabase Free Tier)</h3>
@@ -584,8 +598,14 @@
     function openNewConsignmentModal() {
       document.getElementById('cIdInput').value = 'NW-' + Math.floor(1000 + Math.random()*9000);
       document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join(''); syncVendorPickupAddress();
-      document.getElementById('cAgentSelect').innerHTML = `<option value="">-- Pool --</option>`+db.users.filter(u=>u.role==='AGENT'&&u.status==='ACTIVE').map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
-      document.getElementById('cCustomerName').value=''; document.getElementById('cCustomerPhone').value=''; document.getElementById('cDeliveryAddress').value=''; document.getElementById('consignmentModal').classList.remove('hidden');
+      
+      if (currentUser.role === 'ADMIN') {
+        document.getElementById('cAgentSelect').innerHTML = `<option value="">-- Pool --</option>`+db.users.filter(u=>u.role==='AGENT'&&u.status==='ACTIVE').map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
+      } else {
+        document.getElementById('cAgentSelect').innerHTML = `<option value="${currentUser.id}">${currentUser.name}</option>`;
+      }
+      
+      document.getElementById('cCustomerName').value=''; document.getElementById('cCustomerPhone').value='+971'; document.getElementById('cDeliveryAddress').value=''; document.getElementById('consignmentModal').classList.remove('hidden');
     }
     function generateRandomConsignmentId() { document.getElementById('cIdInput').value = 'NW-' + Math.floor(10000+Math.random()*90000); }
     function syncVendorPickupAddress() { const v = getVendorByCode(document.getElementById('cVendorSelect').value); if(v) document.getElementById('cPickupFrom').value = v.address; }
@@ -725,8 +745,8 @@
     function generateAdminAgentReport() {
       const id = document.getElementById('adminReportSelect').value, d = document.getElementById('adminReportDate').value, stat = document.getElementById('adminReportStatus').value, ag = db.users.find(u=>u.id===id);
       const r = db.consignments.filter(c=>c.assignedTo===id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      let tc = 0; const tbody = r.map(c=>{const amt=c.status==='Delivered'?c.productAmount:0; tc+=amt; return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td><td class="p-2 text-right text-[10px] text-gray-500">${c.feeType}</td></tr>`;}).join('');
-      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-gray-200 pb-4"><div><h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-gray-500">Agent Finance Sheet</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-gray-600 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Deliveries</p><p class="text-lg font-bold text-slate-900">${r.length}</p></div><div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Collected</p><p class="text-lg font-black text-emerald-900">${formatAmt(tc)}</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Status</th><th class="p-2 text-right">Amt Collected</th><th class="p-2 text-right">Fee Type</th></tr></thead><tbody class="divide-y divide-gray-200">${tbody}</tbody></table></div>`;
+      let tc = 0; const tbody = r.map(c=>{const amt=c.status==='Delivered'?(c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount):0; tc+=amt; return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td></tr>`;}).join('');
+      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-gray-200 pb-4"><div><h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-gray-500">Agent Finance Sheet</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-gray-600 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Deliveries</p><p class="text-lg font-bold text-slate-900">${r.length}</p></div><div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Collected</p><p class="text-lg font-black text-emerald-900">${formatAmt(tc)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Status</th><th class="p-2 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-gray-200">${tbody}</tbody></table></div>`;
       document.getElementById('printableAdminAgentReport').classList.remove('hidden');
     }
 
@@ -735,8 +755,8 @@
       if(!document.getElementById('agentFinanceDate').value) document.getElementById('agentFinanceDate').value=new Date().toISOString().split('T')[0];
       const d = document.getElementById('agentFinanceDate').value, stat = document.getElementById('agentFinanceStatus').value;
       const r = db.consignments.filter(c=>c.assignedTo===currentUser.id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      let tc = 0; document.getElementById('afTableBody').innerHTML = r.map(c=>{const amt=c.status==='Delivered'?c.productAmount:0; tc+=amt; return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td><td class="p-2 text-right text-[10px] text-gray-500">${c.feeType}</td></tr>`;}).join('');
-      document.getElementById('afTotalCount').textContent=r.length; document.getElementById('afTotalCollected').textContent=formatAmt(tc);
+      let tc = 0; document.getElementById('afTableBody').innerHTML = r.map(c=>{const amt=c.status==='Delivered'?(c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount):0; tc+=amt; return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td></tr>`;}).join('');
+      document.getElementById('afTotalCount').textContent=r.length; document.getElementById('afTotalCollected').textContent=formatAmt(tc) + ' AED';
       document.getElementById('afAgentNameDisplay').textContent = currentUser.name; document.getElementById('afDateDisplay').textContent = d;
     }
     
@@ -748,7 +768,7 @@
       const d = role==='admin' ? document.getElementById('adminReportDate').value : document.getElementById('agentFinanceDate').value;
       const stat = role==='admin' ? document.getElementById('adminReportStatus').value : document.getElementById('agentFinanceStatus').value;
       const ls = db.consignments.filter(c=>c.assignedTo===id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      const data = ls.map(c => ({ "ID": c.id, "Customer": c.customerName, "Status": c.status, "Fee Type": c.feeType, "Amount Collected": c.status==='Delivered'?c.productAmount:0 }));
+      const data = ls.map(c => ({ "ID": c.id, "Customer": c.customerName, "Status": c.status, "Amount Collected": c.status==='Delivered' ? (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount) : 0 }));
       const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "AgentReport"); XLSX.writeFile(wb, `AgentReport_${d}.xlsx`);
     }
 
@@ -768,12 +788,12 @@
         text += `No deliveries found for this date.`;
       } else {
         r.forEach(c => {
-          const amt = c.status === 'Delivered' ? c.productAmount : 0;
+          const amt = c.status === 'Delivered' ? (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount) : 0;
           tc += amt;
           text += `• ${c.id} - ${c.status} - ${formatAmt(amt)}\n`;
         });
         text += `\n*Total Deliveries:* ${r.length}\n`;
-        text += `*Total Collected:* ${formatAmt(tc)}`;
+        text += `*Total Collected:* ${formatAmt(tc)} AED`;
       }
       
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
@@ -806,7 +826,7 @@
       let tp=0, td=0; 
       document.getElementById('invTableBody').innerHTML = ls.map(c=>{
         tp+=c.productAmount; if(c.feeType === 'COD' || c.feeType === 'CAD') td+=c.deliveryCharge;
-        return `<tr><td class="p-2">${c.createdAt}</td><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2 text-right text-[10px] text-gray-500 font-bold">${c.feeType}</td><td class="p-2 text-right text-red-700">${formatAmt(c.deliveryCharge)}</td><td class="p-2 text-right font-black">${formatAmt(c.productAmount)}</td></tr>`;
+        return `<tr><td class="p-2">${c.createdAt}</td><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2 text-right text-red-700">${formatAmt(c.deliveryCharge)}</td><td class="p-2 text-right font-black">${formatAmt(c.productAmount)}</td></tr>`;
       }).join(''); 
       
       let lp=0; const pL = db.vendorPayments.filter(p=>{
@@ -815,7 +835,10 @@
       });
       if(pL.length>0) { document.getElementById('invSettledLedgerWrap').classList.remove('hidden'); document.getElementById('invSettledTableBody').innerHTML = pL.map(p=>{ if(p.type==='PAID') lp+=p.amount; else lp-=p.amount; return `<tr><td class="p-1.5">${p.date}</td><td class="p-1.5 font-bold ${p.type==='PAID'?'text-emerald-700':'text-blue-700'}">${p.type}</td><td class="p-1.5">${p.notes}</td><td class="p-1.5 text-right font-bold">${formatAmt(p.amount)}</td></tr>`;}).join(''); } else { document.getElementById('invSettledLedgerWrap').classList.add('hidden'); }
       
-      document.getElementById('invTotalProduct').textContent=formatAmt(tp); document.getElementById('invTotalDeductions').textContent=formatAmt(td); document.getElementById('invSettledAmount').textContent=formatAmt(lp); document.getElementById('invNetAmount').textContent=formatAmt(tp-td-lp); 
+      document.getElementById('invTotalProduct').textContent=formatAmt(tp) + ' AED'; 
+      document.getElementById('invTotalDeductions').textContent=formatAmt(td) + ' AED'; 
+      document.getElementById('invSettledAmount').textContent=formatAmt(lp) + ' AED'; 
+      document.getElementById('invNetAmount').textContent=formatAmt(tp-td-lp) + ' AED'; 
       
       setTimeout(()=>{ document.getElementById('pdfQrCodeCanvas').innerHTML=''; new QRCode(document.getElementById('pdfQrCodeCanvas'), { text: JSON.stringify({ Vendor: vCode, NetPayable: formatAmt(tp-td-lp), Date: new Date().toISOString() }), width: 64, height: 64 }); }, 100);
     }
@@ -827,7 +850,7 @@
         if(v!=='ALL'&&c.vendorCode!==v) return false; if(c.productAmount === 0 && c.feeType === 'COD') return false; 
         const cd = c.createdAt; if(type==='DATE'&&sVal&&cd!==sVal) return false; if(type==='MONTH'&&sVal&&!cd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!cd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&cd<start) return false; if(end&&cd>end) return false; } return true;
       });
-      const data = ls.map(c => ({ "Date": c.createdAt, "ID": c.id, "Customer": c.customerName, "Fee Type": c.feeType, "Delivery Fee": c.deliveryCharge, "Product Amount": c.productAmount }));
+      const data = ls.map(c => ({ "Date": c.createdAt, "ID": c.id, "Customer": c.customerName, "Delivery Fee": c.deliveryCharge, "Product Amount": c.productAmount }));
       const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Invoice"); XLSX.writeFile(wb, `NEXTWAY_Invoice_${v}.xlsx`);
     }
 
@@ -845,8 +868,30 @@
     
     function openAgentModal() { document.getElementById('aName').value=''; document.getElementById('aUser').value=''; document.getElementById('aPhone').value=''; document.getElementById('aPass').value=''; document.getElementById('agentModal').classList.remove('hidden'); }
     async function saveAgent(e) { e.preventDefault(); db.users.push({id:'AG-'+Math.floor(100+Math.random()*900), username:document.getElementById('aUser').value, name:document.getElementById('aName').value, phone:document.getElementById('aPhone').value, role:'AGENT', passwordHash:await hashPassword(document.getElementById('aPass').value), status:'ACTIVE'}); await saveDB(); closeModal('agentModal'); renderAgents(); }
-    function renderAgents() { document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button></td></tr>`).join(''); }
+    function renderAgents() { document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminResetAgentPassword('${a.id}')" class="ml-1 text-slate-900 font-bold bg-yellow-400 px-2 py-1 rounded border shadow-sm">Reset Pass</button></td></tr>`).join(''); }
     async function setAgentStatus(id, st) { const a=db.users.find(u=>u.id===id); if(a) a.status=st; await saveDB(); renderAgents(); }
+
+    async function adminResetAgentPassword(id) { 
+      const newPass = prompt('Enter new password for this agent:'); 
+      if (!newPass) return; 
+      const a = db.users.find(u => u.id === id); 
+      if (a) { 
+        a.passwordHash = await hashPassword(newPass); 
+        await saveDB(); 
+        alert('Password updated successfully.'); 
+      } 
+    }
+
+    async function changeOwnPassword() {
+      const pass = document.getElementById('selfNewPassword').value.trim();
+      if (!pass) return alert('Enter a new password');
+      currentUser.passwordHash = await hashPassword(pass);
+      const userInDb = db.users.find(u => u.id === currentUser.id);
+      if (userInDb) userInDb.passwordHash = currentUser.passwordHash;
+      await saveDB();
+      document.getElementById('selfNewPassword').value = '';
+      alert('Password updated successfully');
+    }
 
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function downloadBackup() { const a=document.createElement('a'); a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(db)); a.download='Backup.json'; document.body.appendChild(a); a.click(); }
