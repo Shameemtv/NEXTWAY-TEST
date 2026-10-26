@@ -9,8 +9,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <!-- SUPABASE JS V2 (REPLACES FIREBASE) -->
+  
+  <!-- LOCALFORAGE: Bypasses 5MB localStorage limit -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+  <!-- SUPABASE JS V2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <style>
     @media print {
       body * { visibility: hidden !important; }
@@ -264,8 +268,21 @@
           </div>
         </div>
         <div class="admin-only grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3"><h3 class="font-bold text-sm text-slate-900">Database Backup</h3><button onclick="downloadBackup()" class="bg-slate-900 text-yellow-400 text-xs font-bold px-4 py-2.5 rounded-lg">Download .json Backup</button></div>
-          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3"><h3 class="font-bold text-sm text-slate-900">Restore Backup</h3><input id="restoreFileInput" type="file" accept=".json" onchange="restoreBackup(event)" class="block w-full text-xs bg-gray-100 p-2 rounded-lg" /></div>
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-sm text-slate-900">Database Optimizer</h3>
+              <p class="text-xs text-gray-500 mt-1">Remove delivered orders older than 24 hrs to keep live sync blazing fast.</p>
+            </div>
+            <button onclick="archiveOldDeliveries()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg mt-2 transition">Purge Old Deliveries</button>
+          </div>
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-sm text-slate-900">Database Backup</h3>
+              <p class="text-xs text-gray-500 mt-1">Download local JSON state (make sure you purge first to reduce size).</p>
+            </div>
+            <button onclick="downloadBackup()" class="bg-slate-900 text-yellow-400 text-xs font-bold px-4 py-2.5 rounded-lg mt-2">Download .json Backup</button>
+          </div>
+          <div class="md:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3"><h3 class="font-bold text-sm text-slate-900">Restore Backup</h3><input id="restoreFileInput" type="file" accept=".json" onchange="restoreBackup(event)" class="block w-full text-xs bg-gray-100 p-2 rounded-lg" /></div>
         </div>
         <div class="admin-only bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex justify-between gap-3"><div><h3 class="font-bold text-sm">Personnel Directory</h3></div><button onclick="openAgentModal()" class="bg-slate-900 text-yellow-400 text-xs font-bold px-4 py-2 rounded-lg">+ Add Personnel</button></div>
         <div class="admin-only bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-gray-100 border-b"><th class="p-3">ID</th><th class="p-3">Name</th><th class="p-3">Username</th><th class="p-3">Status</th><th class="p-3">Action</th></thead><tbody id="agentTableBody" class="divide-y"></tbody></table></div>
@@ -299,14 +316,14 @@
     let db = null; 
     let currentUser = null;
 
-    function formatAmt(value) { return (Number(value) || 0).toFixed(2); }
-
     // Supabase variables
     let supabaseClient = null;
     let realtimeChannel = null;
     let isApplyingRemoteUpdate = false;
     let isPushingToCloud = false;
     let pushSyncDebounceTimer = null;
+
+    function formatAmt(value) { return (Number(value) || 0).toFixed(2); }
 
     function updateSyncBadge(state, label) {
       const badge = document.getElementById('syncStatusBadge'), dot = document.getElementById('syncDot'), text = document.getElementById('syncText');
@@ -338,8 +355,7 @@
 
     function applyIncomingCloudState(remoteData) {
       if (!remoteData || !Array.isArray(remoteData.users) || remoteData.users.length === 0) return false;
-      // Skip updates originated from this exact browser tab
-      if (remoteData._lastUpdatedBy === CLIENT_INSTANCE_ID) return false;
+      if (remoteData._lastUpdatedBy === CLIENT_INSTANCE_ID) return false; // Prevent echo
 
       isApplyingRemoteUpdate = true;
       try {
@@ -347,7 +363,10 @@
         db.vendorPayments = db.vendorPayments || []; 
         db.vendorSettlementOtps = db.vendorSettlementOtps || [];
         db.consignments.forEach(c => { if(!c.feeType) c.feeType = 'COD'; });
-        localStorage.setItem(DB_KEY, JSON.stringify(db));
+        
+        // Save to IndexedDB (localForage)
+        localforage.setItem(DB_KEY, JSON.stringify(db));
+        
         if (currentUser) {
           const u = db.users.find(x => x.id === currentUser.id || x.username.toLowerCase() === currentUser.username.toLowerCase());
           if (u) { 
@@ -395,17 +414,20 @@
     async function initDB() {
       const seedDB = await getDefaultSeedDB(); 
       let saved = null; 
-      try { saved = JSON.parse(localStorage.getItem(DB_KEY)); } catch (e) {}
+      try { 
+        const storedStr = await localforage.getItem(DB_KEY);
+        if(storedStr) saved = JSON.parse(storedStr);
+      } catch (e) {}
+      
       db = saved && saved.users && saved.users.length ? saved : seedDB;
       db.vendorPayments = db.vendorPayments || []; 
       db.vendorSettlementOtps = db.vendorSettlementOtps || []; 
       db.consignments.forEach(c => { if(!c.feeType) c.feeType = 'COD'; });
-      localStorage.setItem(DB_KEY, JSON.stringify(db));
+      await localforage.setItem(DB_KEY, JSON.stringify(db));
 
       const supabaseUrl = localStorage.getItem('NEXTWAY_SUPABASE_URL');
       const supabaseKey = localStorage.getItem('NEXTWAY_SUPABASE_KEY');
 
-      // Sync settings tab input values if elements exist
       const urlInput = document.getElementById('adminSupabaseUrlInput');
       const keyInput = document.getElementById('adminSupabaseKeyInput');
       if (urlInput && supabaseUrl) urlInput.value = supabaseUrl;
@@ -420,22 +442,17 @@
           supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
           updateSyncBadge('SYNCING', 'Connecting...');
 
-          // 1. Initial State Fetch
-          const { data, error } = await supabaseClient
-            .from('app_data')
-            .select('data')
-            .eq('id', 'nextway_state')
-            .maybeSingle();
+          // Fetch state
+          const { data, error } = await supabaseClient.from('app_data').select('data').eq('id', 'nextway_state').maybeSingle();
 
           if (data && data.data) {
             applyIncomingCloudState(data.data);
             updateSyncBadge('LIVE', 'Live Sync');
           } else if (!error && !data) {
-            // First run on new Supabase table: seed initial state
-            await pushLocalDBToCloud();
+            pushLocalDBToCloud();
           }
 
-          // 2. Setup Realtime Channel
+          // Realtime Channel
           if (realtimeChannel) realtimeChannel.unsubscribe();
           realtimeChannel = supabaseClient
             .channel('public:app_data')
@@ -451,13 +468,9 @@
               }
             )
             .subscribe((status) => {
-              if (status === 'SUBSCRIBED') {
-                updateSyncBadge('LIVE', 'Live Sync');
-              } else if (status === 'TIMED_OUT' || status === 'CHANNEL_ERROR') {
-                updateSyncBadge('ERROR', 'Sync Error');
-              } else if (status === 'CLOSED') {
-                updateSyncBadge('OFFLINE', 'Offline');
-              }
+              if (status === 'SUBSCRIBED') { updateSyncBadge('LIVE', 'Live Sync'); } 
+              else if (status === 'TIMED_OUT' || status === 'CHANNEL_ERROR') { updateSyncBadge('ERROR', 'Sync Error'); } 
+              else if (status === 'CLOSED') { updateSyncBadge('OFFLINE', 'Offline'); }
             });
 
         } catch (e) {
@@ -472,10 +485,7 @@
     function saveSupabaseConfigFromTab() { 
       const url = document.getElementById('adminSupabaseUrlInput').value.trim();
       const key = document.getElementById('adminSupabaseKeyInput').value.trim();
-      if (!url || !key) {
-        alert('Please enter both Supabase Project URL and Anon Key.');
-        return;
-      }
+      if (!url || !key) return alert('Please enter both Supabase Project URL and Anon Key.');
       localStorage.setItem('NEXTWAY_SUPABASE_URL', url);
       localStorage.setItem('NEXTWAY_SUPABASE_KEY', key);
       location.reload(); 
@@ -490,10 +500,30 @@
     }
 
     async function saveDB() { 
-      localStorage.setItem(DB_KEY, JSON.stringify(db)); 
+      await localforage.setItem(DB_KEY, JSON.stringify(db)); 
       if (!isApplyingRemoteUpdate && supabaseClient) {
         pushLocalDBToCloud();
       }
+    }
+
+    // ARCHIVE FUNCTION TO PREVENT DATABASE BLOAT
+    async function archiveOldDeliveries() {
+      if(!confirm('Archive delivered & returned consignments older than 24 hours? \n\nThis permanently removes them from the Live Sync feed to keep your app fast.')) return;
+      
+      const now = new Date();
+      let initialCount = db.consignments.length;
+      
+      db.consignments = db.consignments.filter(c => {
+        if(c.status !== 'Delivered' && c.status !== 'Returned') return true; 
+        const dDate = new Date(c.deliveredAt || c.createdAt);
+        const diffHours = (now - dDate) / (1000 * 60 * 60);
+        return diffHours < 24; 
+      });
+      
+      const removed = initialCount - db.consignments.length;
+      await saveDB();
+      refreshAllViews();
+      alert(removed + ' old consignments archived and removed from live sync.');
     }
 
     function getAgentName(id) { if (!id) return 'Unassigned'; const u = db.users.find(x => x.id === id); return u ? `${u.name} (${u.status})` : `Archived`; }
@@ -502,15 +532,17 @@
     // AUTH
     async function handleLogin(e) {
       e.preventDefault(); const uName = document.getElementById('loginUsername').value.trim(), pass = document.getElementById('loginPassword').value, errBox = document.getElementById('loginError'); errBox.classList.add('hidden');
-      if (!db || !db.users) { db = await getDefaultSeedDB(); saveDB(); }
+      if (!db || !db.users) { db = await getDefaultSeedDB(); await saveDB(); }
       const user = db.users.find(u => u && u.username && u.username.toLowerCase() === uName.toLowerCase());
       if (!user) { errBox.textContent = 'Invalid credentials.'; errBox.classList.remove('hidden'); return; }
       if (user.status !== 'ACTIVE') { errBox.textContent = `Account Deactivated.`; errBox.classList.remove('hidden'); return; }
       const inputHash = await hashPassword(pass); if (inputHash !== user.passwordHash && pass !== user.passwordHash && pass !== user.password) { errBox.textContent = 'Invalid credentials.'; errBox.classList.remove('hidden'); return; }
-      if (inputHash !== user.passwordHash) { user.passwordHash = inputHash; delete user.password; saveDB(); }
+      if (inputHash !== user.passwordHash) { user.passwordHash = inputHash; delete user.password; await saveDB(); }
       currentUser = user; document.getElementById('loginPassword').value = ''; enterWorkspace();
     }
+    
     function logout() { currentUser = null; document.getElementById('appView').classList.add('hidden'); document.getElementById('authView').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('hidden'); document.getElementById('logoutBtn').classList.add('hidden'); }
+    
     function enterWorkspace() {
       document.getElementById('authView').classList.add('hidden'); document.getElementById('appView').classList.remove('hidden'); document.getElementById('bottomNav').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('flex'); document.getElementById('logoutBtn').classList.remove('hidden');
       const isA = currentUser.role === 'ADMIN'; document.getElementById('roleBadge').textContent = isA ? `ADMIN: ${currentUser.username}` : `AGENT: ${currentUser.name}`;
@@ -522,10 +554,6 @@
         document.getElementById('adminReportSelect').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
         document.getElementById('adminReportDate').value = new Date().toISOString().split('T')[0]; 
       } 
-      const urlInput = document.getElementById('adminSupabaseUrlInput');
-      const keyInput = document.getElementById('adminSupabaseKeyInput');
-      if (urlInput) urlInput.value = localStorage.getItem('NEXTWAY_SUPABASE_URL') || '';
-      if (keyInput) keyInput.value = localStorage.getItem('NEXTWAY_SUPABASE_KEY') || '';
       switchTab('consignments'); refreshAllViews();
     }
 
@@ -561,7 +589,7 @@
     function generateRandomConsignmentId() { document.getElementById('cIdInput').value = 'NW-' + Math.floor(10000+Math.random()*90000); }
     function syncVendorPickupAddress() { const v = getVendorByCode(document.getElementById('cVendorSelect').value); if(v) document.getElementById('cPickupFrom').value = v.address; }
     
-    function bulkAssign() {
+    async function bulkAssign() {
       const ids = document.getElementById('bulkIds').value.split(',').map(s=>s.trim().toUpperCase()).filter(Boolean);
       const agent = document.getElementById('bulkAgent').value;
       if(!ids.length || !agent) return alert('Enter comma separated IDs and select an agent.');
@@ -570,14 +598,14 @@
         const c = db.consignments.find(x=>x.id.toUpperCase()===id);
         if(c && c.status !== 'Delivered' && c.status !== 'Returned') { c.assignedTo = agent; if(c.status === 'Created') c.status = 'Assigned'; updated++; }
       });
-      if(updated > 0) { saveDB(); renderConsignments(); document.getElementById('bulkIds').value=''; alert(updated + ' consignments assigned.'); }
+      if(updated > 0) { await saveDB(); renderConsignments(); document.getElementById('bulkIds').value=''; alert(updated + ' consignments assigned.'); }
     }
 
-    function saveNewConsignment(e) {
+    async function saveNewConsignment(e) {
       e.preventDefault(); const id = document.getElementById('cIdInput').value.trim().toUpperCase(); if (db.consignments.some(c=>c.id.toUpperCase()===id)) { alert('ID exists!'); return; }
       const ag = document.getElementById('cAgentSelect').value||null;
       db.consignments.unshift({ id, vendorCode: document.getElementById('cVendorSelect').value, pickupFrom: document.getElementById('cPickupFrom').value, customerName: document.getElementById('cCustomerName').value, customerPhone: document.getElementById('cCustomerPhone').value, deliveryAddress: document.getElementById('cDeliveryAddress').value, productAmount: parseFloat(document.getElementById('cProductAmt').value)||0, deliveryCharge: parseFloat(document.getElementById('cDeliveryFee').value)||0, feeType: document.getElementById('cFeeType').value, pendingModification: null, assignedTo: ag, status: ag?'Assigned':'Created', qrGenerated: false, otpCode: String(Math.floor(1000+Math.random()*9000)), otpVerified: false, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: null, deliveredAt: null });
-      saveDB(); closeModal('consignmentModal'); refreshAllViews();
+      await saveDB(); closeModal('consignmentModal'); refreshAllViews();
     }
     
     function renderConsignments() {
@@ -614,17 +642,46 @@
       }).join('');
     }
 
-    function adminAssignAgent(cid, aid) { if(currentUser.role!=='ADMIN') return; const c = db.consignments.find(x=>x.id===cid); if(!c||c.status==='Delivered') return; c.assignedTo = aid||null; if(c.status==='Created'&&aid) c.status='Assigned'; if(!aid&&c.status==='Assigned') c.status='Created'; saveDB(); renderConsignments(); }
+    async function adminAssignAgent(cid, aid) { if(currentUser.role!=='ADMIN') return; const c = db.consignments.find(x=>x.id===cid); if(!c||c.status==='Delivered') return; c.assignedTo = aid||null; if(c.status==='Created'&&aid) c.status='Assigned'; if(!aid&&c.status==='Assigned') c.status='Created'; await saveDB(); renderConsignments(); }
 
     function compressImageFile(file, cb) { const r = new FileReader(); r.onload=e=>{ const img=new Image(); img.onload=()=>{ const cvs=document.createElement('canvas'); let w=img.width, h=img.height, m=480; if(w>h&&w>m){h*=m/w;w=m;}else if(h>m){w*=m/h;h=m;} cvs.width=w; cvs.height=h; cvs.getContext('2d').drawImage(img,0,0,w,h); cb(cvs.toDataURL('image/jpeg',0.55)); }; img.src=e.target.result; }; r.readAsDataURL(file); }
     let tempPhotoData = null;
+
+    // DIRECT CLOUD UPLOAD FUNCTION
+    async function uploadImageToSupabase(base64Str, filename) {
+      if(!supabaseClient) return base64Str; // Falls back to local IndexedDB Base64 if offline
+      try {
+        const res = await fetch(base64Str);
+        const blob = await res.blob();
+        const { data, error } = await supabaseClient.storage.from('nextway-assets').upload(filename, blob, { contentType: 'image/jpeg', upsert: true });
+        if(error) return base64Str; 
+        return supabaseClient.storage.from('nextway-assets').getPublicUrl(filename).data.publicUrl;
+      } catch(e) { return base64Str; }
+    }
     
-    function openPickupModal(cid) { const c = db.consignments.find(x=>x.id===cid); tempPhotoData = c.pickupPhoto; document.getElementById('actionModalTitle').textContent = `Pickup: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-gray-500 mb-2">If fee is COC, collect ${formatAmt(c.deliveryCharge)} from Vendor.</p><label class="font-bold">Capture Photo</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-gray-50 p-2 rounded border text-xs" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded border mx-auto" /><button onclick="confirmPickup('${c.id}')" class="w-full bg-yellow-400 text-slate-900 font-bold py-2.5 rounded shadow">Confirm Pickup</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
+    function openPickupModal(cid) { const c = db.consignments.find(x=>x.id===cid); tempPhotoData = c.pickupPhoto; document.getElementById('actionModalTitle').textContent = `Pickup: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-gray-500 mb-2">If fee is COC, collect ${formatAmt(c.deliveryCharge)} from Vendor.</p><label class="font-bold">Capture Photo</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-gray-50 p-2 rounded border text-xs" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded border mx-auto" /><button id="btnConfirmAction" onclick="confirmPickup('${c.id}')" class="w-full bg-yellow-400 text-slate-900 font-bold py-2.5 rounded shadow">Confirm Pickup</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
     function handleModalPhoto(e) { if(e.target.files[0]) compressImageFile(e.target.files[0], b64 => { tempPhotoData = b64; document.getElementById('modalPhotoPreview').src=b64; document.getElementById('modalPhotoPreview').classList.remove('hidden'); }); }
-    function confirmPickup(cid) { const c = db.consignments.find(x=>x.id===cid); c.status = 'Out for delivery'; c.pickupPhoto = tempPhotoData; c.qrGenerated = true; c.pickedUpAt = new Date().toISOString(); saveDB(); closeModal('actionModal'); renderConsignments(); }
     
-    function openDeliveryModal(cid) { const c = db.consignments.find(x=>x.id===cid); document.getElementById('actionModalTitle').textContent = `Deliver: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<div class="mb-2 p-3 bg-gray-50 border border-emerald-200 rounded text-center"><p class="text-xs font-bold text-gray-500 uppercase">Collect from Customer</p><p class="text-2xl text-emerald-700 font-black">${formatAmt(c.productAmount)}</p></div><label class="font-bold">Capture Delivery Photo</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-gray-50 p-2 rounded border text-xs" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded border mx-auto" /><button onclick="confirmDelivery('${c.id}')" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded shadow">Confirm Delivery</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
-    function confirmDelivery(cid) { const c=db.consignments.find(x=>x.id===cid); c.status='Delivered'; c.deliveryPhoto=tempPhotoData; c.deliveredAt=new Date().toISOString(); saveDB(); closeModal('actionModal'); refreshAllViews(); }
+    async function confirmPickup(cid) { 
+      const btn = document.getElementById('btnConfirmAction');
+      btn.textContent = 'Uploading Photo...'; btn.disabled = true;
+      const c = db.consignments.find(x=>x.id===cid); 
+      const photoUrl = tempPhotoData ? await uploadImageToSupabase(tempPhotoData, `pickup_${cid}_${Date.now()}.jpg`) : null;
+      c.status = 'Out for delivery'; c.pickupPhoto = photoUrl; c.qrGenerated = true; c.pickedUpAt = new Date().toISOString(); 
+      await saveDB(); closeModal('actionModal'); renderConsignments(); 
+    }
+    
+    function openDeliveryModal(cid) { const c = db.consignments.find(x=>x.id===cid); document.getElementById('actionModalTitle').textContent = `Deliver: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<div class="mb-2 p-3 bg-gray-50 border border-emerald-200 rounded text-center"><p class="text-xs font-bold text-gray-500 uppercase">Collect from Customer</p><p class="text-2xl text-emerald-700 font-black">${formatAmt(c.productAmount)}</p></div><label class="font-bold">Capture Delivery Photo</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-gray-50 p-2 rounded border text-xs" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded border mx-auto" /><button id="btnConfirmAction" onclick="confirmDelivery('${c.id}')" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded shadow">Confirm Delivery</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
+    
+    async function confirmDelivery(cid) { 
+      const btn = document.getElementById('btnConfirmAction');
+      btn.textContent = 'Uploading Photo...'; btn.disabled = true;
+      const c=db.consignments.find(x=>x.id===cid); 
+      const photoUrl = tempPhotoData ? await uploadImageToSupabase(tempPhotoData, `delivery_${cid}_${Date.now()}.jpg`) : null;
+      c.status='Delivered'; c.deliveryPhoto=photoUrl; c.deliveredAt=new Date().toISOString(); 
+      await saveDB(); closeModal('actionModal'); refreshAllViews(); 
+    }
+    
     function sendWhatsAppStatus(cid) { const c=db.consignments.find(x=>x.id===cid); window.open(`https://wa.me/${c.customerPhone.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(`Order ${c.id} is ${c.status}. Total to pay: ${formatAmt(c.productAmount)}`)}`,'_blank'); }
     
     // CONFIRMATIONS & EDITS
@@ -635,8 +692,8 @@
       document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c=>`<div class="p-3 border rounded bg-yellow-50 mb-2 text-xs"><b>${c.id}</b>: Prod ${c.productAmount} -> <b class="text-emerald-700">${c.pendingModification.newProductAmount}</b> | Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${c.pendingModification.newDeliveryCharge}</b> ${currentUser.role==='AGENT'&&c.assignedTo===currentUser.id?`<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-yellow-400 font-bold px-3 py-1.5 rounded shadow">Confirm Edit</button>`:'<br/><span class="text-[10px] text-gray-500">Waiting for agent confirmation</span>'}</div>`).join('') : '<p class="text-xs text-gray-500">No pending modification requests.</p>';
     }
     function openAmountEditModal(cid) { const c = db.consignments.find(x=>x.id===cid); if(currentUser.role==='AGENT' && c.status==='Delivered') return alert('Cannot edit after delivery.'); document.getElementById('actionModalTitle').textContent = `Edit Financials: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-gray-500 mb-2">Edits to Delivered consignments require Agent confirmation.</p><label class="font-bold">Product Amt</label><input id="editProdAmt" type="number" step="0.01" value="${c.productAmount}" class="w-full border rounded px-3 py-2 mb-2 bg-gray-50" /><label class="font-bold">Delivery Fee</label><input id="editDelivFee" type="number" step="0.01" value="${c.deliveryCharge}" class="w-full border rounded px-3 py-2 mb-2 bg-gray-50" /><button onclick="saveAmountModification('${c.id}')" class="w-full bg-slate-900 text-yellow-400 font-bold py-2.5 rounded shadow">Send Modification</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
-    function saveAmountModification(cid) { const c=db.consignments.find(x=>x.id===cid), np=parseFloat(document.getElementById('editProdAmt').value)||0, nd=parseFloat(document.getElementById('editDelivFee').value)||0; if(currentUser.role==='ADMIN') { if(c.status==='Delivered' && c.assignedTo) { c.pendingModification={newProductAmount:np, newDeliveryCharge:nd, requestedBy:currentUser.username}; } else { c.productAmount=np; c.deliveryCharge=nd; } } else { c.productAmount=np; } saveDB(); closeModal('actionModal'); refreshAllViews(); }
-    function agentConfirmModification(cid) { const c=db.consignments.find(x=>x.id===cid); if(!c||!c.pendingModification) return; c.productAmount=c.pendingModification.newProductAmount; c.deliveryCharge=c.pendingModification.newDeliveryCharge; c.pendingModification=null; saveDB(); refreshAllViews(); }
+    async function saveAmountModification(cid) { const c=db.consignments.find(x=>x.id===cid), np=parseFloat(document.getElementById('editProdAmt').value)||0, nd=parseFloat(document.getElementById('editDelivFee').value)||0; if(currentUser.role==='ADMIN') { if(c.status==='Delivered' && c.assignedTo) { c.pendingModification={newProductAmount:np, newDeliveryCharge:nd, requestedBy:currentUser.username}; } else { c.productAmount=np; c.deliveryCharge=nd; } } else { c.productAmount=np; } await saveDB(); closeModal('actionModal'); refreshAllViews(); }
+    async function agentConfirmModification(cid) { const c=db.consignments.find(x=>x.id===cid); if(!c||!c.pendingModification) return; c.productAmount=c.pendingModification.newProductAmount; c.deliveryCharge=c.pendingModification.newDeliveryCharge; c.pendingModification=null; await saveDB(); refreshAllViews(); }
 
     function inspectConsignmentById() { const id=document.getElementById('globalConsignmentSearch').value.trim().toUpperCase(), c=db.consignments.find(x=>x.id.toUpperCase()===id); if(c) showConsignmentDetails(c.id); else alert('Not found'); }
     function showConsignmentDetails(cid) { 
@@ -656,8 +713,8 @@
           <div id="qrCodeCanvas" class="flex justify-center items-center p-2 rounded bg-white border shrink-0 min-w-[90px]"></div>
         </div>
         <div class="grid grid-cols-2 gap-3 text-xs">
-          <div class="border p-2 rounded bg-gray-50 text-center flex flex-col justify-between"><b>Pickup Photo:</b>${c.pickupPhoto?`<img src="${c.pickupPhoto}" class="h-24 object-cover mt-2 mx-auto rounded border" /><a href="${c.pickupPhoto}" download="${c.id}_pickup.jpg" class="mt-2 block w-full bg-slate-900 text-yellow-400 font-bold py-1.5 rounded shadow">Download</a>`:'<span class="text-gray-400 mt-2 block">None</span>'}</div>
-          <div class="border p-2 rounded bg-gray-50 text-center flex flex-col justify-between"><b>Delivery Photo:</b>${c.deliveryPhoto?`<img src="${c.deliveryPhoto}" class="h-24 object-cover mt-2 mx-auto rounded border" /><a href="${c.deliveryPhoto}" download="${c.id}_delivery.jpg" class="mt-2 block w-full bg-slate-900 text-yellow-400 font-bold py-1.5 rounded shadow">Download</a>`:'<span class="text-gray-400 mt-2 block">None</span>'}</div>
+          <div class="border p-2 rounded bg-gray-50 text-center flex flex-col justify-between"><b>Pickup Photo:</b>${c.pickupPhoto?`<img src="${c.pickupPhoto}" class="h-24 object-cover mt-2 mx-auto rounded border" /><a href="${c.pickupPhoto}" download="${c.id}_pickup.jpg" class="mt-2 block w-full bg-slate-900 text-yellow-400 font-bold py-1.5 rounded shadow" target="_blank">View / Download</a>`:'<span class="text-gray-400 mt-2 block">None</span>'}</div>
+          <div class="border p-2 rounded bg-gray-50 text-center flex flex-col justify-between"><b>Delivery Photo:</b>${c.deliveryPhoto?`<img src="${c.deliveryPhoto}" class="h-24 object-cover mt-2 mx-auto rounded border" /><a href="${c.deliveryPhoto}" download="${c.id}_delivery.jpg" class="mt-2 block w-full bg-slate-900 text-yellow-400 font-bold py-1.5 rounded shadow" target="_blank">View / Download</a>`:'<span class="text-gray-400 mt-2 block">None</span>'}</div>
         </div>`; 
       document.getElementById('inspectModal').classList.remove('hidden'); 
       if(c.qrGenerated){ setTimeout(()=>{ document.getElementById('qrCodeCanvas').innerHTML=''; new QRCode(document.getElementById('qrCodeCanvas'),{text:JSON.stringify({id:c.id}),width:80,height:80}); }, 100); }
@@ -749,22 +806,22 @@
     
     // UTILS
     function openVendorModal() { document.getElementById('vCode').value = 'VND-00'+(db.vendors.length+1); document.getElementById('vName').value=''; document.getElementById('vPhone').value=''; document.getElementById('vAddress').value=''; document.getElementById('vendorModal').classList.remove('hidden'); }
-    function saveVendor(e) { e.preventDefault(); db.vendors.push({code:document.getElementById('vCode').value.toUpperCase(), name:document.getElementById('vName').value, phone:document.getElementById('vPhone').value, address:document.getElementById('vAddress').value}); saveDB(); closeModal('vendorModal'); renderVendors(); }
+    async function saveVendor(e) { e.preventDefault(); db.vendors.push({code:document.getElementById('vCode').value.toUpperCase(), name:document.getElementById('vName').value, phone:document.getElementById('vPhone').value, address:document.getElementById('vAddress').value}); await saveDB(); closeModal('vendorModal'); renderVendors(); }
     function renderVendors() { document.getElementById('vendorTableBody').innerHTML = (document.getElementById('vendorCodeSearch').value ? db.vendors.filter(v=>v.code.includes(document.getElementById('vendorCodeSearch').value.toUpperCase())) : db.vendors).map(v=>`<tr><td class="p-2 font-bold">${v.code}</td><td class="p-2">${v.name}</td><td class="p-2">${v.phone}</td><td class="p-2">${v.address}</td><td class="p-2 font-bold">${db.consignments.filter(c=>c.vendorCode===v.code).length}</td></tr>`).join(''); }
     
     function openVendorPaymentModal() { document.getElementById('vpVendorSelect').innerHTML=db.vendors.map(v=>`<option value="${v.code}">${v.name}</option>`).join(''); document.getElementById('vendorPaymentModal').classList.remove('hidden'); }
-    function saveVendorLedgerEntry(e) { e.preventDefault(); db.vendorPayments.unshift({id:'LED-'+Date.now(), vendorCode:document.getElementById('vpVendorSelect').value, type:document.getElementById('vpType').value, amount:parseFloat(document.getElementById('vpAmount').value), date:document.getElementById('vpDate').value, notes:document.getElementById('vpNotes').value}); saveDB(); closeModal('vendorPaymentModal'); renderVendorLedger(); generateInvoicePreview(); }
+    async function saveVendorLedgerEntry(e) { e.preventDefault(); db.vendorPayments.unshift({id:'LED-'+Date.now(), vendorCode:document.getElementById('vpVendorSelect').value, type:document.getElementById('vpType').value, amount:parseFloat(document.getElementById('vpAmount').value), date:document.getElementById('vpDate').value, notes:document.getElementById('vpNotes').value}); await saveDB(); closeModal('vendorPaymentModal'); renderVendorLedger(); generateInvoicePreview(); }
     function renderVendorLedger() { document.getElementById('vendorLedgerTableBody').innerHTML=(db.vendorPayments||[]).map(p=>`<tr><td class="p-2">${p.date}</td><td class="p-2 font-bold">${p.vendorCode}</td><td class="p-2 text-[10px] font-bold ${p.type==='PAID'?'text-emerald-700':'text-blue-700'}">${p.type}</td><td class="p-2 font-black">${formatAmt(p.amount)}</td><td class="p-2">${p.notes}</td><td class="p-2"><button onclick="deleteLedger('${p.id}')" class="text-red-600 font-bold bg-red-50 px-2 py-1 rounded">Del</button></td></tr>`).join(''); }
-    function deleteLedger(id) { if(confirm('Delete ledger entry?')){ db.vendorPayments = db.vendorPayments.filter(x=>x.id!==id); saveDB(); renderVendorLedger(); generateInvoicePreview(); } }
+    async function deleteLedger(id) { if(confirm('Delete ledger entry?')){ db.vendorPayments = db.vendorPayments.filter(x=>x.id!==id); await saveDB(); renderVendorLedger(); generateInvoicePreview(); } }
     
     function openAgentModal() { document.getElementById('aName').value=''; document.getElementById('aUser').value=''; document.getElementById('aPhone').value=''; document.getElementById('aPass').value=''; document.getElementById('agentModal').classList.remove('hidden'); }
-    async function saveAgent(e) { e.preventDefault(); db.users.push({id:'AG-'+Math.floor(100+Math.random()*900), username:document.getElementById('aUser').value, name:document.getElementById('aName').value, phone:document.getElementById('aPhone').value, role:'AGENT', passwordHash:await hashPassword(document.getElementById('aPass').value), status:'ACTIVE'}); saveDB(); closeModal('agentModal'); renderAgents(); }
+    async function saveAgent(e) { e.preventDefault(); db.users.push({id:'AG-'+Math.floor(100+Math.random()*900), username:document.getElementById('aUser').value, name:document.getElementById('aName').value, phone:document.getElementById('aPhone').value, role:'AGENT', passwordHash:await hashPassword(document.getElementById('aPass').value), status:'ACTIVE'}); await saveDB(); closeModal('agentModal'); renderAgents(); }
     function renderAgents() { document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button></td></tr>`).join(''); }
-    function setAgentStatus(id, st) { const a=db.users.find(u=>u.id===id); if(a) a.status=st; saveDB(); renderAgents(); }
+    async function setAgentStatus(id, st) { const a=db.users.find(u=>u.id===id); if(a) a.status=st; await saveDB(); renderAgents(); }
 
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function downloadBackup() { const a=document.createElement('a'); a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(db)); a.download='Backup.json'; document.body.appendChild(a); a.click(); }
-    function restoreBackup(e) { const r=new FileReader(); r.onload=ev=>{db=JSON.parse(ev.target.result);saveDB();location.reload();}; r.readAsText(e.target.files[0]); }
+    function restoreBackup(e) { const r=new FileReader(); r.onload=async ev=>{db=JSON.parse(ev.target.result);await saveDB();location.reload();}; r.readAsText(e.target.files[0]); }
 
     // PWA INSTALLATION HELPER
     let deferredPrompt; const installBtn = document.getElementById('installPwaBtn');
