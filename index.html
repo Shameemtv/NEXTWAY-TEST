@@ -41,11 +41,8 @@
           <p class="text-[10px] text-gray-400">Premium Logistics Portal</p>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <span id="syncStatusBadge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-800 text-gray-200 flex items-center gap-1.5 cursor-pointer">
-          <span id="syncDot" class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
-          <span id="syncText">Offline</span>
-        </span>
+      <div class="flex items-center gap-3">
+        <span id="syncDot" class="w-3 h-3 rounded-full bg-red-500 shadow" title="Offline"></span>
         <button id="installPwaBtn" class="hidden bg-yellow-400 hover:bg-yellow-500 text-slate-900 text-[10px] font-bold px-2.5 py-1 rounded shadow animate-pulse">Install</button>
         <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-500 text-[10px] font-semibold px-2.5 py-1 rounded text-white shadow">Logout</button>
       </div>
@@ -252,6 +249,10 @@
           <h3 class="font-bold text-sm text-slate-900">Change My Password</h3>
           <div class="space-y-3 max-w-xl text-xs">
             <div>
+              <label class="font-semibold text-gray-700 block mb-1">Current Password</label>
+              <input id="selfCurrentPassword" type="password" placeholder="Enter current password..." class="w-full border rounded-lg px-3 py-2 bg-gray-50" />
+            </div>
+            <div>
               <label class="font-semibold text-gray-700 block mb-1">New Password</label>
               <input id="selfNewPassword" type="password" placeholder="Enter new password..." class="w-full border rounded-lg px-3 py-2 bg-gray-50" />
             </div>
@@ -341,12 +342,12 @@
     function formatAmt(value) { return (Number(value) || 0).toFixed(2); }
 
     function updateSyncBadge(state, label) {
-      const badge = document.getElementById('syncStatusBadge'), dot = document.getElementById('syncDot'), text = document.getElementById('syncText');
-      if (!badge || !dot || !text) return; text.textContent = label;
-      if (state === 'LIVE') { badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-900 text-emerald-100 flex items-center gap-1.5'; dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping'; }
-      else if (state === 'SYNCING') { badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-800 text-slate-100 flex items-center gap-1.5'; dot.className = 'w-2 h-2 rounded-full bg-yellow-400 animate-pulse'; }
-      else if (state === 'ERROR') { badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-900 text-red-100 flex items-center gap-1.5'; dot.className = 'w-2 h-2 rounded-full bg-red-400'; }
-      else { badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-800 text-gray-200 flex items-center gap-1.5'; dot.className = 'w-2 h-2 rounded-full bg-yellow-400'; }
+      const dot = document.getElementById('syncDot');
+      if (!dot) return; 
+      dot.title = label;
+      if (state === 'LIVE') { dot.className = 'w-3 h-3 rounded-full bg-emerald-500 shadow animate-pulse'; }
+      else if (state === 'SYNCING') { dot.className = 'w-3 h-3 rounded-full bg-yellow-400 shadow animate-pulse'; }
+      else { dot.className = 'w-3 h-3 rounded-full bg-red-500 shadow'; }
     }
 
     async function hashPassword(plain) {
@@ -485,7 +486,7 @@
             .subscribe((status) => {
               if (status === 'SUBSCRIBED') { updateSyncBadge('LIVE', 'Live Sync'); } 
               else if (status === 'TIMED_OUT' || status === 'CHANNEL_ERROR') { updateSyncBadge('ERROR', 'Sync Error'); } 
-              else if (status === 'CLOSED') { updateSyncBadge('OFFLINE', 'Offline'); }
+              else if (status === 'CLOSED') { updateSyncBadge('ERROR', 'Offline'); }
             });
 
         } catch (e) {
@@ -493,7 +494,7 @@
           updateSyncBadge('ERROR', 'DB Error');
         }
       } else {
-        updateSyncBadge('OFFLINE', 'Offline Mode');
+        updateSyncBadge('ERROR', 'Offline Mode');
       }
     }
 
@@ -745,7 +746,11 @@
     function generateAdminAgentReport() {
       const id = document.getElementById('adminReportSelect').value, d = document.getElementById('adminReportDate').value, stat = document.getElementById('adminReportStatus').value, ag = db.users.find(u=>u.id===id);
       const r = db.consignments.filter(c=>c.assignedTo===id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      let tc = 0; const tbody = r.map(c=>{const amt=c.status==='Delivered'?(c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount):0; tc+=amt; return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td></tr>`;}).join('');
+      let tc = 0; const tbody = r.map(c=>{
+          const amt = c.status === 'Delivered' ? (c.feeType === 'COC' ? c.productAmount + c.deliveryCharge : (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount)) : 0; 
+          tc+=amt; 
+          return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td></tr>`;
+      }).join('');
       document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-gray-200 pb-4"><div><h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-gray-500">Agent Finance Sheet</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-gray-600 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Deliveries</p><p class="text-lg font-bold text-slate-900">${r.length}</p></div><div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Collected</p><p class="text-lg font-black text-emerald-900">${formatAmt(tc)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Status</th><th class="p-2 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-gray-200">${tbody}</tbody></table></div>`;
       document.getElementById('printableAdminAgentReport').classList.remove('hidden');
     }
@@ -755,7 +760,11 @@
       if(!document.getElementById('agentFinanceDate').value) document.getElementById('agentFinanceDate').value=new Date().toISOString().split('T')[0];
       const d = document.getElementById('agentFinanceDate').value, stat = document.getElementById('agentFinanceStatus').value;
       const r = db.consignments.filter(c=>c.assignedTo===currentUser.id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      let tc = 0; document.getElementById('afTableBody').innerHTML = r.map(c=>{const amt=c.status==='Delivered'?(c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount):0; tc+=amt; return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td></tr>`;}).join('');
+      let tc = 0; document.getElementById('afTableBody').innerHTML = r.map(c=>{
+          const amt = c.status === 'Delivered' ? (c.feeType === 'COC' ? c.productAmount + c.deliveryCharge : (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount)) : 0; 
+          tc+=amt; 
+          return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td></tr>`;
+      }).join('');
       document.getElementById('afTotalCount').textContent=r.length; document.getElementById('afTotalCollected').textContent=formatAmt(tc) + ' AED';
       document.getElementById('afAgentNameDisplay').textContent = currentUser.name; document.getElementById('afDateDisplay').textContent = d;
     }
@@ -768,7 +777,7 @@
       const d = role==='admin' ? document.getElementById('adminReportDate').value : document.getElementById('agentFinanceDate').value;
       const stat = role==='admin' ? document.getElementById('adminReportStatus').value : document.getElementById('agentFinanceStatus').value;
       const ls = db.consignments.filter(c=>c.assignedTo===id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      const data = ls.map(c => ({ "ID": c.id, "Customer": c.customerName, "Status": c.status, "Amount Collected": c.status==='Delivered' ? (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount) : 0 }));
+      const data = ls.map(c => ({ "ID": c.id, "Customer": c.customerName, "Status": c.status, "Amount Collected": c.status==='Delivered' ? (c.feeType === 'COC' ? c.productAmount + c.deliveryCharge : (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount)) : 0 }));
       const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "AgentReport"); XLSX.writeFile(wb, `AgentReport_${d}.xlsx`);
     }
 
@@ -788,7 +797,7 @@
         text += `No deliveries found for this date.`;
       } else {
         r.forEach(c => {
-          const amt = c.status === 'Delivered' ? (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount) : 0;
+          const amt = c.status === 'Delivered' ? (c.feeType === 'COC' ? c.productAmount + c.deliveryCharge : (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount)) : 0;
           tc += amt;
           text += `• ${c.id} - ${c.status} - ${formatAmt(amt)}\n`;
         });
@@ -813,6 +822,7 @@
       document.getElementById('invPeriodHeader').textContent = period;
 
       const ls=db.consignments.filter(c => {
+        if(c.feeType === 'COC') return false; 
         if(vCode!=='ALL'&&c.vendorCode!==vCode) return false;
         if(c.productAmount === 0 && c.feeType === 'COD') return false; 
         const cd = c.createdAt;
@@ -847,6 +857,7 @@
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const v = document.getElementById('invVendorSelect').value; const type = document.getElementById('invFilterType').value; const sVal = document.getElementById('invSingleInput').value; const start = document.getElementById('invStartDate').value; const end = document.getElementById('invEndDate').value;
       const ls = db.consignments.filter(c => {
+        if(c.feeType === 'COC') return false; 
         if(v!=='ALL'&&c.vendorCode!==v) return false; if(c.productAmount === 0 && c.feeType === 'COD') return false; 
         const cd = c.createdAt; if(type==='DATE'&&sVal&&cd!==sVal) return false; if(type==='MONTH'&&sVal&&!cd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!cd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&cd<start) return false; if(end&&cd>end) return false; } return true;
       });
@@ -868,8 +879,28 @@
     
     function openAgentModal() { document.getElementById('aName').value=''; document.getElementById('aUser').value=''; document.getElementById('aPhone').value=''; document.getElementById('aPass').value=''; document.getElementById('agentModal').classList.remove('hidden'); }
     async function saveAgent(e) { e.preventDefault(); db.users.push({id:'AG-'+Math.floor(100+Math.random()*900), username:document.getElementById('aUser').value, name:document.getElementById('aName').value, phone:document.getElementById('aPhone').value, role:'AGENT', passwordHash:await hashPassword(document.getElementById('aPass').value), status:'ACTIVE'}); await saveDB(); closeModal('agentModal'); renderAgents(); }
-    function renderAgents() { document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminResetAgentPassword('${a.id}')" class="ml-1 text-slate-900 font-bold bg-yellow-400 px-2 py-1 rounded border shadow-sm">Reset Pass</button></td></tr>`).join(''); }
+    function renderAgents() { 
+      document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminEditAgentUsername('${a.id}')" class="ml-1 text-slate-900 font-bold bg-gray-200 px-2 py-1 rounded border shadow-sm">Edit User</button><button onclick="adminResetAgentPassword('${a.id}')" class="ml-1 text-slate-900 font-bold bg-yellow-400 px-2 py-1 rounded border shadow-sm">Reset Pass</button><button onclick="adminDeleteAgent('${a.id}')" class="ml-1 text-white font-bold bg-red-600 px-2 py-1 rounded border shadow-sm">Del</button></td></tr>`).join(''); 
+    }
     async function setAgentStatus(id, st) { const a=db.users.find(u=>u.id===id); if(a) a.status=st; await saveDB(); renderAgents(); }
+
+    async function adminEditAgentUsername(id) {
+        const u = db.users.find(x => x.id === id);
+        if(!u) return;
+        const nu = prompt('Enter new username for ' + u.name + ':', u.username);
+        if(!nu || nu.trim() === '' || nu === u.username) return;
+        if(db.users.some(x => x.username.toLowerCase() === nu.trim().toLowerCase() && x.id !== id)) return alert('Username already exists!');
+        u.username = nu.trim();
+        await saveDB();
+        renderAgents();
+    }
+
+    async function adminDeleteAgent(id) {
+        if(!confirm('Are you sure you want to permanently delete this agent?')) return;
+        db.users = db.users.filter(x => x.id !== id);
+        await saveDB();
+        renderAgents();
+    }
 
     async function adminResetAgentPassword(id) { 
       const newPass = prompt('Enter new password for this agent:'); 
@@ -883,12 +914,20 @@
     }
 
     async function changeOwnPassword() {
+      const current = document.getElementById('selfCurrentPassword').value;
       const pass = document.getElementById('selfNewPassword').value.trim();
-      if (!pass) return alert('Enter a new password');
+      if (!current || !pass) return alert('Enter both current and new passwords');
+
+      const currentHash = await hashPassword(current);
+      if (currentHash !== currentUser.passwordHash && current !== currentUser.passwordHash && current !== currentUser.password) {
+          return alert('Incorrect current password');
+      }
+
       currentUser.passwordHash = await hashPassword(pass);
       const userInDb = db.users.find(u => u.id === currentUser.id);
       if (userInDb) userInDb.passwordHash = currentUser.passwordHash;
       await saveDB();
+      document.getElementById('selfCurrentPassword').value = '';
       document.getElementById('selfNewPassword').value = '';
       alert('Password updated successfully');
     }
