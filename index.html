@@ -441,8 +441,12 @@
       db.consignments.forEach(c => { if(!c.feeType) c.feeType = 'COD'; });
       await localforage.setItem(DB_KEY, JSON.stringify(db));
 
-      const supabaseUrl = localStorage.getItem('NEXTWAY_SUPABASE_URL');
-      const supabaseKey = localStorage.getItem('NEXTWAY_SUPABASE_KEY');
+      const savedUrl = localStorage.getItem('NEXTWAY_SUPABASE_URL');
+      const savedKey = localStorage.getItem('NEXTWAY_SUPABASE_KEY');
+      
+      // Use manual input if available, fallback to hardcoded credentials, or null if explicitly disconnected
+      const supabaseUrl = savedUrl === 'OFFLINE' ? null : (savedUrl || 'https://hswhzctlpfjqwpvckxwm.supabase.co');
+      const supabaseKey = savedKey === 'OFFLINE' ? null : (savedKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzd2h6Y3RscGZqcXdwdmNreHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMwMDEyMjMsImV4cCI6MjEwODU3NzIyM30.jYqGM5_DhqFEGOGaiT_Mw7HQvVH0PKOjRyCONfwML60');
 
       const urlInput = document.getElementById('adminSupabaseUrlInput');
       const keyInput = document.getElementById('adminSupabaseKeyInput');
@@ -509,8 +513,9 @@
 
     function clearSupabaseConfig() {
       if (confirm('Disconnect from Supabase? The app will operate in local offline mode.')) {
-        localStorage.removeItem('NEXTWAY_SUPABASE_URL');
-        localStorage.removeItem('NEXTWAY_SUPABASE_KEY');
+        // Set to a specific 'OFFLINE' flag so the hardcoded fallback is bypassed
+        localStorage.setItem('NEXTWAY_SUPABASE_URL', 'OFFLINE');
+        localStorage.setItem('NEXTWAY_SUPABASE_KEY', 'OFFLINE');
         location.reload();
       }
     }
