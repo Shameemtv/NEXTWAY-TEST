@@ -27,6 +27,23 @@
     .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ================= COMPREHENSIVE DARK MODE OVERRIDES ================= */
+    body.dark-mode { background-color: #0f172a !important; color: #f8fafc !important; }
+    body.dark-mode .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+    body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100, body.dark-mode .bg-slate-100 { background-color: #0f172a !important; border-color: #334155 !important; }
+    body.dark-mode .text-slate-900, body.dark-mode .text-gray-800, body.dark-mode .text-gray-700 { color: #f8fafc !important; }
+    body.dark-mode .text-gray-600, body.dark-mode .text-gray-500 { color: #94a3b8 !important; }
+    body.dark-mode .border-gray-200, body.dark-mode .border-gray-300, body.dark-mode .border-gray-100, body.dark-mode .border-b, body.dark-mode .border-t { border-color: #334155 !important; }
+    body.dark-mode input, body.dark-mode select { background-color: #0f172a !important; color: #f8fafc !important; border-color: #334155 !important; }
+    body.dark-mode input::placeholder { color: #64748b !important; }
+    body.dark-mode .shadow-sm, body.dark-mode .shadow-md, body.dark-mode .shadow-xl { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important; }
+    body.dark-mode .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.1) !important; border-color: rgba(16, 185, 129, 0.2) !important; }
+    body.dark-mode .bg-yellow-50 { background-color: rgba(234, 179, 8, 0.1) !important; border-color: rgba(234, 179, 8, 0.2) !important; }
+    body.dark-mode .bg-red-50 { background-color: rgba(239, 68, 68, 0.1) !important; border-color: rgba(239, 68, 68, 0.2) !important; }
+    body.dark-mode .bg-blue-50 { background-color: rgba(59, 130, 246, 0.1) !important; border-color: rgba(59, 130, 246, 0.2) !important; }
+    body.dark-mode th { border-bottom-color: #334155 !important; background-color: #0f172a !important; color: #cbd5e1 !important; }
+    body.dark-mode .divide-gray-200 > :not([hidden]) ~ :not([hidden]) { border-color: #334155 !important; }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen font-sans antialiased">
@@ -344,6 +361,11 @@
     let isPushingToCloud = false;
     let pushSyncDebounceTimer = null;
 
+    // Initialize Dark Mode from localStorage on app load
+    if (localStorage.getItem('NEXTWAY_DARK_MODE') === 'enabled') {
+      document.body.classList.add('dark-mode');
+    }
+
     function formatAmt(value) { return (Number(value) || 0).toFixed(2); }
 
     function updateSyncBadge(state, label) {
@@ -571,10 +593,9 @@
     
     // Add the Dark Mode toggle logic
     function toggleDarkMode() { 
-      document.body.classList.toggle('bg-gray-100'); 
-      document.body.classList.toggle('bg-slate-800'); 
-      document.body.classList.toggle('text-gray-800'); 
-      document.body.classList.toggle('text-gray-100'); 
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('NEXTWAY_DARK_MODE', isDark ? 'enabled' : 'disabled');
     }
 
     function enterWorkspace() {
