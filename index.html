@@ -22,7 +22,7 @@
       .print-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0.5rem !important; }
       .no-print { display: none !important; }
     }
-    body { padding-bottom: 76px; } 
+    body { padding-bottom: 76px; transition: background-color 0.3s, color 0.3s; } 
     .tab-active { color: #facc15 !important; font-weight: 800; border-top: 3px solid #facc15; background: rgba(255,255,255,0.05); }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -44,7 +44,7 @@
       <div class="flex items-center gap-3">
         <span id="syncDot" class="w-3 h-3 rounded-full bg-red-500 shadow" title="Offline"></span>
         <button id="installPwaBtn" class="hidden bg-yellow-400 hover:bg-yellow-500 text-slate-900 text-[10px] font-bold px-2.5 py-1 rounded shadow animate-pulse">Install</button>
-        <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-500 text-[10px] font-semibold px-2.5 py-1 rounded text-white shadow">Logout</button>
+        <button id="darkModeBtn" onclick="toggleDarkMode()" class="hidden bg-gray-700 hover:bg-gray-600 text-[10px] font-semibold px-2.5 py-1 rounded text-white shadow">Dark Mode</button>
       </div>
     </div>
   </header>
@@ -245,6 +245,11 @@
       <!-- TAB 7: SYSTEM & SETTINGS (SUPABASE INTEGRATED) -->
       <div id="panel-system" class="hidden space-y-4">
         
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3">
+          <h3 class="font-bold text-sm text-slate-900">Account Actions</h3>
+          <button onclick="logout()" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold shadow w-full sm:w-auto">Logout from Portal</button>
+        </div>
+
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3">
           <h3 class="font-bold text-sm text-slate-900">Change My Password</h3>
           <div class="space-y-3 max-w-xl text-xs">
@@ -562,10 +567,18 @@
       currentUser = user; document.getElementById('loginPassword').value = ''; enterWorkspace();
     }
     
-    function logout() { currentUser = null; document.getElementById('appView').classList.add('hidden'); document.getElementById('authView').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('hidden'); document.getElementById('logoutBtn').classList.add('hidden'); }
+    function logout() { currentUser = null; document.getElementById('appView').classList.add('hidden'); document.getElementById('authView').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('hidden'); document.getElementById('darkModeBtn').classList.add('hidden'); }
     
+    // Add the Dark Mode toggle logic
+    function toggleDarkMode() { 
+      document.body.classList.toggle('bg-gray-100'); 
+      document.body.classList.toggle('bg-slate-800'); 
+      document.body.classList.toggle('text-gray-800'); 
+      document.body.classList.toggle('text-gray-100'); 
+    }
+
     function enterWorkspace() {
-      document.getElementById('authView').classList.add('hidden'); document.getElementById('appView').classList.remove('hidden'); document.getElementById('bottomNav').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('flex'); document.getElementById('logoutBtn').classList.remove('hidden');
+      document.getElementById('authView').classList.add('hidden'); document.getElementById('appView').classList.remove('hidden'); document.getElementById('bottomNav').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('flex'); document.getElementById('darkModeBtn').classList.remove('hidden');
       const isA = currentUser.role === 'ADMIN'; document.getElementById('roleBadge').innerHTML = isA ? `<span>${currentUser.username}</span>` : `<span>${currentUser.name}</span> <span class="ml-2 px-1.5 py-0.5 bg-gray-200 text-gray-700 rounded text-[9px] border border-gray-300 font-black">${currentUser.id}</span>`;
       document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', !isA)); document.querySelectorAll('.agent-only').forEach(el => el.classList.toggle('hidden', isA));
       document.getElementById('agentDashboardBanner').classList.toggle('hidden', isA);
