@@ -61,7 +61,9 @@
       <div class="flex items-center gap-3">
         <span id="syncDot" class="w-3 h-3 rounded-full bg-red-500 shadow" title="Offline"></span>
         <button id="installPwaBtn" class="hidden bg-yellow-400 hover:bg-yellow-500 text-slate-900 text-[10px] font-bold px-2.5 py-1 rounded shadow animate-pulse">Install</button>
-        <button id="darkModeBtn" onclick="toggleDarkMode()" class="hidden bg-gray-700 hover:bg-gray-600 text-[10px] font-semibold px-2.5 py-1 rounded text-white shadow">Dark Mode</button>
+        <button id="darkModeBtn" onclick="toggleDarkMode()" class="hidden bg-gray-700 hover:bg-gray-600 text-white p-1.5 rounded shadow transition" title="Toggle Dark Mode">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
       </div>
     </div>
   </header>
@@ -137,7 +139,7 @@
 
         <div class="admin-only bg-white p-3 rounded-xl shadow-sm border border-gray-200 flex flex-wrap gap-2 items-center">
            <span class="font-bold text-[10px] text-slate-800 uppercase">Bulk Assign:</span>
-           <input id="bulkIds" type="text" placeholder="e.g. NW-1001, NW-1002" class="flex-1 min-w-[150px] border border-gray-300 rounded-lg px-2 py-1.5 text-xs bg-gray-50">
+           <input id="bulkIds" type="text" placeholder="e.g. 10045, 10046" class="flex-1 min-w-[150px] border border-gray-300 rounded-lg px-2 py-1.5 text-xs bg-gray-50">
            <select id="bulkAgent" class="border border-gray-300 rounded-lg px-2 py-1.5 text-xs bg-gray-50"></select>
            <button onclick="bulkAssign()" class="bg-slate-900 text-yellow-400 font-bold px-3 py-1.5 rounded-lg text-xs shadow">Assign</button>
         </div>
@@ -346,7 +348,7 @@
   </nav>
 
   <!-- ================= MODALS ================= -->
-  <div id="consignmentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3 overflow-y-auto"><div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4 my-auto max-h-[92vh] flex flex-col"><div class="flex justify-between items-center border-b pb-3 shrink-0"><h3 class="font-black text-base text-slate-900">CREATE CONSIGNMENT</h3><button onclick="closeModal('consignmentModal')" class="text-gray-400 font-bold text-lg">✕</button></div><form onsubmit="saveNewConsignment(event)" class="space-y-3 text-xs overflow-y-auto pr-1 flex-1"><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">ID</label><div class="flex gap-1"><input id="cIdInput" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /><button type="button" onclick="generateRandomConsignmentId()" class="bg-gray-200 px-2.5 rounded-lg font-bold">Auto</button></div></div><div><label class="font-bold block">Vendor</label><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div></div><div><label class="font-bold block">Pick Up Address</label><input id="cPickupFrom" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">Customer Name</label><input id="cCustomerName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="cCustomerPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div></div><div><label class="font-bold block">Delivery Address</label><input id="cDeliveryAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block text-emerald-800">Product Amt (Customer Pays)</label><input id="cProductAmt" type="number" step="0.01" required value="0" class="w-full border rounded-lg px-3 py-2 bg-emerald-50" /></div><div><label class="font-bold block">Delivery Fee</label><input id="cDeliveryFee" type="number" step="0.01" required value="20" class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block text-blue-900">Fee Type</label><select id="cFeeType" class="w-full border rounded-lg px-3 py-2 bg-blue-50 font-bold text-blue-900"><option value="COD">COD (Cut from Vendor Net)</option><option value="CAD">CAD (Added to Invoice Later)</option><option value="COC">COC (Paid upfront at Pickup)</option></select></div><div><label class="font-bold block">Assign To</label><select id="cAgentSelect" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div></div><div class="flex justify-end gap-2 pt-4 border-t mt-2 shrink-0"><button type="button" onclick="closeModal('consignmentModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Save</button></div></form></div></div>
+  <div id="consignmentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3 overflow-y-auto"><div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4 my-auto max-h-[92vh] flex flex-col"><div class="flex justify-between items-center border-b pb-3 shrink-0"><h3 class="font-black text-base text-slate-900">CREATE CONSIGNMENT</h3><button onclick="closeModal('consignmentModal')" class="text-gray-400 font-bold text-lg">✕</button></div><form onsubmit="saveNewConsignment(event)" class="space-y-3 text-xs overflow-y-auto pr-1 flex-1"><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">ID</label><div class="flex gap-1"><input id="cIdInput" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /><button type="button" onclick="generateRandomConsignmentId()" class="bg-gray-200 px-2.5 rounded-lg font-bold">Auto</button></div></div><div><label class="font-bold block">Vendor</label><div class="flex gap-1"><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select><button type="button" onclick="openVendorModal()" class="bg-slate-900 text-yellow-400 font-bold px-3 rounded-lg shadow-sm" title="Add New Vendor">+</button></div></div></div><div><label class="font-bold block">Pick Up Address</label><input id="cPickupFrom" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">Customer Name</label><input id="cCustomerName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="cCustomerPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div></div><div><label class="font-bold block">Delivery Address</label><input id="cDeliveryAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block text-emerald-800">Product Amt (Customer Pays)</label><input id="cProductAmt" type="number" step="0.01" required value="0" class="w-full border rounded-lg px-3 py-2 bg-emerald-50" /></div><div><label class="font-bold block">Delivery Fee</label><input id="cDeliveryFee" type="number" step="0.01" required value="20" class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block text-blue-900">Fee Type</label><select id="cFeeType" class="w-full border rounded-lg px-3 py-2 bg-blue-50 font-bold text-blue-900"><option value="COD">COD (Cut from Vendor Net)</option><option value="CAD">CAD (Added to Invoice Later)</option><option value="COC">COC (Paid upfront at Pickup)</option></select></div><div id="agentSelectContainer"><label class="font-bold block">Assign To</label><select id="cAgentSelect" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div></div><div class="flex justify-end gap-2 pt-4 border-t mt-2 shrink-0"><button type="button" onclick="closeModal('consignmentModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Save</button></div></form></div></div>
   <div id="actionModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 flex flex-col text-xs"><div class="flex justify-between items-center border-b pb-3 shrink-0"><h3 id="actionModalTitle" class="font-bold text-base text-slate-900">Action</h3><button onclick="closeModal('actionModal')" class="text-gray-400 text-lg font-bold">✕</button></div><div id="actionModalBody" class="space-y-3"></div></div></div>
   <div id="inspectModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3"><div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-3 flex flex-col text-xs"><div class="flex justify-between items-center border-b pb-2.5 shrink-0"><h3 id="inspectTitle" class="font-bold text-base text-slate-900">Details</h3><button onclick="closeModal('inspectModal')" class="text-gray-500 font-bold w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">✕</button></div><div id="inspectContent" class="space-y-3"></div><div class="pt-2 border-t flex justify-end"><button onclick="closeModal('inspectModal')" class="bg-slate-900 text-yellow-400 font-bold px-4 py-1.5 rounded-lg">Close</button></div></div></div>
   <div id="vendorModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Add Vendor</h3><button onclick="closeModal('vendorModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveVendor(event)" class="space-y-3"><div><label class="font-bold block">Code</label><input id="vCode" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50 uppercase" /></div><div><label class="font-bold block">Name</label><input id="vName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="vPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Address</label><input id="vAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('vendorModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Save</button></div></form></div></div>
@@ -397,7 +399,7 @@
           { id: 'AG-101', username: 'agent1', name: 'Ramesh Kumar', role: 'AGENT', phone: '+971501112233', passwordHash: agentHash, status: 'ACTIVE' } 
         ],
         vendors: [{ code: 'VND-001', name: 'Gulf Horizon Trading LLC', phone: '+971500001111', address: 'Dubai' }],
-        consignments: [{ id: 'NW-1001', vendorCode: 'VND-001', pickupFrom: 'Dubai', customerName: 'Omar', customerPhone: '+971529876543', deliveryAddress: 'Villa 12', productAmount: 350, deliveryCharge: 25, feeType: 'COD', pendingModification: null, assignedTo: 'AG-101', status: 'Delivered', qrGenerated: true, otpCode: '4829', otpVerified: true, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: new Date().toISOString(), deliveredAt: new Date().toISOString() }],
+        consignments: [{ id: '10001', vendorCode: 'VND-001', pickupFrom: 'Dubai', customerName: 'Omar', customerPhone: '+971529876543', deliveryAddress: 'Villa 12', productAmount: 350, deliveryCharge: 25, feeType: 'COD', pendingModification: null, assignedTo: 'AG-101', status: 'Delivered', qrGenerated: true, otpCode: '4829', otpVerified: true, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: new Date().toISOString(), deliveredAt: new Date().toISOString() }],
         vendorPayments: [], vendorSettlementOtps: []
       };
     }
@@ -642,18 +644,20 @@
 
     // CONSIGNMENTS
     function openNewConsignmentModal() {
-      document.getElementById('cIdInput').value = 'NW-' + Math.floor(1000 + Math.random()*9000);
+      document.getElementById('cIdInput').value = Math.floor(10000 + Math.random()*90000).toString();
       document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join(''); syncVendorPickupAddress();
       
       if (currentUser.role === 'ADMIN') {
         document.getElementById('cAgentSelect').innerHTML = `<option value="">-- Pool --</option>`+db.users.filter(u=>u.role==='AGENT'&&u.status==='ACTIVE').map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
+        document.getElementById('agentSelectContainer').classList.remove('hidden');
       } else {
-        document.getElementById('cAgentSelect').innerHTML = `<option value="${currentUser.id}">${currentUser.name}</option>`;
+        document.getElementById('cAgentSelect').innerHTML = `<option value="">-- Unassigned Pool --</option>`;
+        document.getElementById('agentSelectContainer').classList.add('hidden');
       }
       
       document.getElementById('cCustomerName').value=''; document.getElementById('cCustomerPhone').value='+971'; document.getElementById('cDeliveryAddress').value=''; document.getElementById('consignmentModal').classList.remove('hidden');
     }
-    function generateRandomConsignmentId() { document.getElementById('cIdInput').value = 'NW-' + Math.floor(10000+Math.random()*90000); }
+    function generateRandomConsignmentId() { document.getElementById('cIdInput').value = Math.floor(10000+Math.random()*90000).toString(); }
     function syncVendorPickupAddress() { const v = getVendorByCode(document.getElementById('cVendorSelect').value); if(v) document.getElementById('cPickupFrom').value = v.address; }
     
     async function bulkAssign() {
@@ -670,9 +674,41 @@
 
     async function saveNewConsignment(e) {
       e.preventDefault(); const id = document.getElementById('cIdInput').value.trim().toUpperCase(); if (db.consignments.some(c=>c.id.toUpperCase()===id)) { alert('ID exists!'); return; }
-      const ag = document.getElementById('cAgentSelect').value||null;
-      db.consignments.unshift({ id, vendorCode: document.getElementById('cVendorSelect').value, pickupFrom: document.getElementById('cPickupFrom').value, customerName: document.getElementById('cCustomerName').value, customerPhone: document.getElementById('cCustomerPhone').value, deliveryAddress: document.getElementById('cDeliveryAddress').value, productAmount: parseFloat(document.getElementById('cProductAmt').value)||0, deliveryCharge: parseFloat(document.getElementById('cDeliveryFee').value)||0, feeType: document.getElementById('cFeeType').value, pendingModification: null, assignedTo: ag, status: ag?'Assigned':'Created', qrGenerated: false, otpCode: String(Math.floor(1000+Math.random()*9000)), otpVerified: false, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: null, deliveredAt: null });
-      await saveDB(); closeModal('consignmentModal'); refreshAllViews();
+      
+      const ag = document.getElementById('cAgentSelect').value || null;
+      const isAgent = currentUser.role === 'AGENT';
+      
+      db.consignments.unshift({ 
+        id, 
+        vendorCode: document.getElementById('cVendorSelect').value, 
+        pickupFrom: document.getElementById('cPickupFrom').value, 
+        customerName: document.getElementById('cCustomerName').value, 
+        customerPhone: document.getElementById('cCustomerPhone').value, 
+        deliveryAddress: document.getElementById('cDeliveryAddress').value, 
+        productAmount: parseFloat(document.getElementById('cProductAmt').value)||0, 
+        deliveryCharge: parseFloat(document.getElementById('cDeliveryFee').value)||0, 
+        feeType: document.getElementById('cFeeType').value, 
+        pendingModification: null, 
+        assignedTo: ag, 
+        status: ag ? 'Assigned' : 'Created', 
+        qrGenerated: false, 
+        otpCode: String(Math.floor(1000+Math.random()*9000)), 
+        otpVerified: false, 
+        pickupPhoto: null, 
+        deliveryPhoto: null, 
+        returnReason: '', 
+        createdAt: new Date().toISOString().split('T')[0], 
+        pickedUpAt: null, 
+        deliveredAt: null 
+      });
+      
+      await saveDB(); 
+      closeModal('consignmentModal'); 
+      refreshAllViews();
+
+      if (isAgent) {
+        alert("Consignment successfully added to the Unassigned Pool.");
+      }
     }
 
     // --- BULK IMPORT FEATURE ---
@@ -680,9 +716,9 @@
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const wb = XLSX.utils.book_new();
       const wsData = [
-        ["Vendor Code", "Customer Name", "Customer Phone", "Delivery Address", "Product Amount", "Delivery Fee", "Fee Type"],
-        ["VND-001", "John Doe", "+971501234567", "Dubai Marina", 150, 20, "COD"],
-        ["VND-001", "Jane Smith", "+971509876543", "Abu Dhabi", 0, 30, "COC"]
+        ["Consignment ID", "Vendor Code", "Customer Name", "Customer Phone", "Delivery Address", "Product Amount", "Delivery Fee", "Fee Type"],
+        ["10045", "VND-001", "John Doe", "+971501234567", "Dubai Marina", 150, 20, "COD"],
+        ["10046", "VND-001", "Jane Smith", "+971509876543", "Abu Dhabi", 0, 30, "COC"]
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       XLSX.utils.book_append_sheet(wb, ws, "Template");
@@ -708,6 +744,7 @@
           let errorCount = 0;
 
           for (const row of rows) {
+            let id = (row["Consignment ID"] || "").toString().trim();
             const vCode = (row["Vendor Code"] || "").toString().trim().toUpperCase();
             const cName = (row["Customer Name"] || "").toString().trim();
             const cPhone = (row["Customer Phone"] || "").toString().trim();
@@ -721,13 +758,23 @@
               errorCount++;
               continue;
             }
+            
+            // Auto generate ID if missing, or skip if provided ID is duplicate
+            if (!id) {
+               id = Math.floor(10000 + Math.random() * 90000).toString();
+               while(db.consignments.some(c => c.id === id)) {
+                   id = Math.floor(10000 + Math.random() * 90000).toString();
+               }
+            } else {
+               if(db.consignments.some(c => c.id.toUpperCase() === id.toUpperCase())) {
+                   errorCount++; continue; 
+               }
+            }
 
             // Fallback to empty string if vendor not in system yet
             const v = getVendorByCode(vCode);
             const pickup = v ? v.address : "";
 
-            const id = 'NW-' + Math.floor(10000 + Math.random() * 90000);
-            
             db.consignments.unshift({ 
               id, 
               vendorCode: vCode, 
@@ -1006,7 +1053,27 @@
     
     // UTILS
     function openVendorModal() { document.getElementById('vCode').value = 'VND-00'+(db.vendors.length+1); document.getElementById('vName').value=''; document.getElementById('vPhone').value=''; document.getElementById('vAddress').value=''; document.getElementById('vendorModal').classList.remove('hidden'); }
-    async function saveVendor(e) { e.preventDefault(); db.vendors.push({code:document.getElementById('vCode').value.toUpperCase(), name:document.getElementById('vName').value, phone:document.getElementById('vPhone').value, address:document.getElementById('vAddress').value}); await saveDB(); closeModal('vendorModal'); renderVendors(); }
+    async function saveVendor(e) { 
+      e.preventDefault(); 
+      db.vendors.push({
+        code: document.getElementById('vCode').value.toUpperCase(), 
+        name: document.getElementById('vName').value, 
+        phone: document.getElementById('vPhone').value, 
+        address: document.getElementById('vAddress').value
+      }); 
+      await saveDB(); 
+      closeModal('vendorModal'); 
+      if (currentUser && currentUser.role === 'ADMIN') renderVendors(); 
+
+      // If the consignment modal is open, immediately update its dropdown
+      if (!document.getElementById('consignmentModal').classList.contains('hidden')) {
+        const newCode = document.getElementById('vCode').value.toUpperCase();
+        document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join('');
+        document.getElementById('cVendorSelect').value = newCode;
+        syncVendorPickupAddress();
+      }
+    }
+    
     function renderVendors() { document.getElementById('vendorTableBody').innerHTML = (document.getElementById('vendorCodeSearch').value ? db.vendors.filter(v=>v.code.includes(document.getElementById('vendorCodeSearch').value.toUpperCase())) : db.vendors).map(v=>`<tr><td class="p-2 font-bold">${v.code}</td><td class="p-2">${v.name}</td><td class="p-2">${v.phone}</td><td class="p-2">${v.address}</td><td class="p-2 font-bold">${db.consignments.filter(c=>c.vendorCode===v.code).length}</td></tr>`).join(''); }
     
     function openVendorPaymentModal() { document.getElementById('vpVendorSelect').innerHTML=db.vendors.map(v=>`<option value="${v.code}">${v.name}</option>`).join(''); document.getElementById('vendorPaymentModal').classList.remove('hidden'); }
