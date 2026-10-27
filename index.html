@@ -111,8 +111,8 @@
 
       <!-- TAB 1: CONSIGNMENTS & DISPATCH -->
       <div id="panel-consignments" class="space-y-4">
-        <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+        <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
             <select id="filterStatus" onchange="renderConsignments()" class="text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-gray-50 font-medium">
               <option value="ALL">All Statuses</option>
               <option value="PENDING_ALL">Pending (Not Delivered)</option>
@@ -126,7 +126,13 @@
             <div id="adminAgentSlicerWrap" class="hidden"><select id="filterAgentSlicer" onchange="renderConsignments()" class="text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-gray-50 font-medium"><option value="ALL">All Agents</option></select></div>
             <input id="filterSearchText" oninput="renderConsignments()" type="text" placeholder="Filter List..." class="flex-1 sm:w-48 text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-gray-50" />
           </div>
-          <button onclick="openNewConsignmentModal()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-yellow-400 text-xs font-bold px-3 py-2 rounded-lg shadow uppercase">+ New Consignment</button>
+          
+          <div class="flex flex-wrap gap-2 w-full lg:w-auto shrink-0">
+            <button onclick="downloadImportTemplate()" class="admin-only bg-gray-200 hover:bg-gray-300 text-slate-900 text-xs font-bold px-3 py-2 rounded-lg shadow flex-1 sm:flex-none transition" title="Download Excel Template">Template</button>
+            <input type="file" id="importExcelInput" accept=".xlsx,.xls,.csv" onchange="importConsignmentsFromExcel(event)" class="hidden" />
+            <button onclick="document.getElementById('importExcelInput').click()" class="admin-only bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-lg shadow flex-1 sm:flex-none transition">+ Bulk Import</button>
+            <button onclick="openNewConsignmentModal()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-yellow-400 text-xs font-bold px-3 py-2 rounded-lg shadow uppercase flex-1 sm:flex-none transition">+ New</button>
+          </div>
         </div>
 
         <div class="admin-only bg-white p-3 rounded-xl shadow-sm border border-gray-200 flex flex-wrap gap-2 items-center">
@@ -667,6 +673,98 @@
       const ag = document.getElementById('cAgentSelect').value||null;
       db.consignments.unshift({ id, vendorCode: document.getElementById('cVendorSelect').value, pickupFrom: document.getElementById('cPickupFrom').value, customerName: document.getElementById('cCustomerName').value, customerPhone: document.getElementById('cCustomerPhone').value, deliveryAddress: document.getElementById('cDeliveryAddress').value, productAmount: parseFloat(document.getElementById('cProductAmt').value)||0, deliveryCharge: parseFloat(document.getElementById('cDeliveryFee').value)||0, feeType: document.getElementById('cFeeType').value, pendingModification: null, assignedTo: ag, status: ag?'Assigned':'Created', qrGenerated: false, otpCode: String(Math.floor(1000+Math.random()*9000)), otpVerified: false, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: null, deliveredAt: null });
       await saveDB(); closeModal('consignmentModal'); refreshAllViews();
+    }
+
+    // --- BULK IMPORT FEATURE ---
+    function downloadImportTemplate() {
+      if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
+      const wb = XLSX.utils.book_new();
+      const wsData = [
+        ["Vendor Code", "Customer Name", "Customer Phone", "Delivery Address", "Product Amount", "Delivery Fee", "Fee Type"],
+        ["VND-001", "John Doe", "+971501234567", "Dubai Marina", 150, 20, "COD"],
+        ["VND-001", "Jane Smith", "+971509876543", "Abu Dhabi", 0, 30, "COC"]
+      ];
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      XLSX.utils.book_append_sheet(wb, ws, "Template");
+      XLSX.writeFile(wb, "Consignment_Import_Template.xlsx");
+    }
+
+    function importConsignmentsFromExcel(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (typeof XLSX === 'undefined') { alert("Excel library is still loading. Please try again."); return; }
+      
+      const reader = new FileReader();
+      reader.onload = async (evt) => {
+        try {
+          const data = new Uint8Array(evt.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.SheetNames[0];
+          const rows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
+          
+          if(rows.length === 0) { alert("The uploaded spreadsheet is empty."); return; }
+          
+          let importedCount = 0;
+          let errorCount = 0;
+
+          for (const row of rows) {
+            const vCode = (row["Vendor Code"] || "").toString().trim().toUpperCase();
+            const cName = (row["Customer Name"] || "").toString().trim();
+            const cPhone = (row["Customer Phone"] || "").toString().trim();
+            const dAddress = (row["Delivery Address"] || "").toString().trim();
+            const pAmt = parseFloat(row["Product Amount"]) || 0;
+            const dFee = parseFloat(row["Delivery Fee"]) || 0;
+            const fType = (row["Fee Type"] || "COD").toString().trim().toUpperCase();
+
+            // Skip row if required fields are missing
+            if(!vCode || !cName || !dAddress) {
+              errorCount++;
+              continue;
+            }
+
+            // Fallback to empty string if vendor not in system yet
+            const v = getVendorByCode(vCode);
+            const pickup = v ? v.address : "";
+
+            const id = 'NW-' + Math.floor(10000 + Math.random() * 90000);
+            
+            db.consignments.unshift({ 
+              id, 
+              vendorCode: vCode, 
+              pickupFrom: pickup, 
+              customerName: cName, 
+              customerPhone: cPhone, 
+              deliveryAddress: dAddress, 
+              productAmount: pAmt, 
+              deliveryCharge: dFee, 
+              feeType: fType, 
+              pendingModification: null, 
+              assignedTo: null, 
+              status: 'Created', 
+              qrGenerated: false, 
+              otpCode: String(Math.floor(1000 + Math.random() * 9000)), 
+              otpVerified: false, 
+              pickupPhoto: null, 
+              deliveryPhoto: null, 
+              returnReason: '', 
+              createdAt: new Date().toISOString().split('T')[0], 
+              pickedUpAt: null, 
+              deliveredAt: null 
+            });
+            importedCount++;
+          }
+          
+          await saveDB();
+          refreshAllViews();
+          alert(`Successfully imported ${importedCount} consignments.\nSkipped ${errorCount} invalid rows.`);
+        } catch (err) {
+          console.error(err);
+          alert("Error parsing the file. Please ensure it follows the downloaded template format.");
+        } finally {
+          e.target.value = ""; // Reset the input so the same file can be uploaded again if needed
+        }
+      };
+      reader.readAsArrayBuffer(file);
     }
     
     function renderConsignments() {
