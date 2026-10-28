@@ -156,6 +156,11 @@
             <div id="agentPendingOtpsList" class="space-y-2"></div>
           </div>
           <div id="confirmationsList" class="mt-4 space-y-3"></div>
+          
+          <div id="adminSettlementOtpCard" class="admin-only hidden mt-4 pt-4 border-t">
+            <h4 class="font-bold text-xs text-slate-900 mb-2">Vendor Settlement Handover (Admin Verification)</h4>
+            <div id="adminSettlementOtpList" class="space-y-2"></div>
+          </div>
         </div>
       </div>
 
@@ -262,7 +267,13 @@
         </div>
 
         <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 space-y-4 no-print">
-          <div class="flex justify-between border-b pb-3"><div><h3 class="font-bold text-sm text-slate-900">Payment Ledger</h3></div><button onclick="openVendorPaymentModal()" class="bg-slate-900 text-yellow-400 text-xs font-bold px-3.5 py-2 rounded-lg">Record Payment</button></div>
+          <div class="flex justify-between border-b pb-3 items-center">
+            <div><h3 class="font-bold text-sm text-slate-900">Payment Ledger</h3></div>
+            <div class="flex gap-2">
+              <button onclick="openVendorSettlementOtpModal()" class="bg-green-600 hover:bg-green-700 text-white text-[10px] sm:text-xs font-bold px-3 py-2 rounded-lg shadow">Send OTP</button>
+              <button onclick="openVendorPaymentModal()" class="bg-slate-900 text-yellow-400 text-[10px] sm:text-xs font-bold px-3 py-2 rounded-lg shadow">Record Payment</button>
+            </div>
+          </div>
           <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-gray-100 uppercase border-b"><th class="p-2.5">Date</th><th class="p-2.5">Vendor</th><th class="p-2.5">Type</th><th class="p-2.5">Amount</th><th class="p-2.5">Ref</th><th class="p-2.5">Action</th></thead><tbody id="vendorLedgerTableBody" class="divide-y"></tbody></table></div>
         </div>
       </div>
@@ -329,6 +340,14 @@
             <button onclick="downloadBackup()" class="bg-slate-900 text-yellow-400 text-xs font-bold px-4 py-2.5 rounded-lg mt-2">Download .json Backup</button>
           </div>
           <div class="md:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3"><h3 class="font-bold text-sm text-slate-900">Restore Backup</h3><input id="restoreFileInput" type="file" accept=".json" onchange="restoreBackup(event)" class="block w-full text-xs bg-gray-100 p-2 rounded-lg" /></div>
+          
+          <div class="md:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-sm text-red-600">Clear All Consignments</h3>
+              <p class="text-xs text-gray-500 mt-1">Permanently remove all consignments (Test mode cleanup).</p>
+            </div>
+            <button onclick="clearAllConsignments()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg mt-2 transition w-full sm:w-auto self-start">Clear All Data</button>
+          </div>
         </div>
         <div class="admin-only bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex justify-between gap-3"><div><h3 class="font-bold text-sm">Personnel Directory</h3></div><button onclick="openAgentModal()" class="bg-slate-900 text-yellow-400 text-xs font-bold px-4 py-2 rounded-lg">+ Add Personnel</button></div>
         <div class="admin-only bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-gray-100 border-b"><th class="p-3">ID</th><th class="p-3">Name</th><th class="p-3">Username</th><th class="p-3">Status</th><th class="p-3">Action</th></thead><tbody id="agentTableBody" class="divide-y"></tbody></table></div>
@@ -354,6 +373,30 @@
   <div id="vendorModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Add Vendor</h3><button onclick="closeModal('vendorModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveVendor(event)" class="space-y-3"><div><label class="font-bold block">Code</label><input id="vCode" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50 uppercase" /></div><div><label class="font-bold block">Name</label><input id="vName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="vPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Address</label><input id="vAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('vendorModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Save</button></div></form></div></div>
   <div id="agentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Add Agent</h3><button onclick="closeModal('agentModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveAgent(event)" class="space-y-3"><div><label class="font-bold block">Name</label><input id="aName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Username</label><input id="aUser" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="aPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Password</label><input id="aPass" type="password" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('agentModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Create</button></div></form></div></div>
   <div id="vendorPaymentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Ledger Entry</h3><button onclick="closeModal('vendorPaymentModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveVendorLedgerEntry(event)" class="space-y-3"><div><label class="font-bold block">Vendor</label><select id="vpVendorSelect" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div><div><label class="font-bold block">Type</label><select id="vpType" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"><option value="PAID">Paid To</option><option value="RECEIVED">Received From</option></select></div><div><label class="font-bold block">Amount</label><input id="vpAmount" type="number" step="0.01" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Date</label><input id="vpDate" type="date" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Ref</label><input id="vpNotes" type="text" class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('vendorPaymentModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Record</button></div></form></div></div>
+
+  <!-- VENDOR SETTLEMENT OTP MODAL -->
+  <div id="vendorSettlementOtpModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-base text-slate-900">Send Settlement OTP</h3>
+        <button onclick="closeModal('vendorSettlementOtpModal')" class="text-gray-400 font-bold text-lg">✕</button>
+      </div>
+      <form onsubmit="sendSettlementOtp(event)" class="space-y-3">
+        <div>
+          <label class="font-bold block">Vendor</label>
+          <select id="vsoVendorSelect" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select>
+        </div>
+        <div>
+          <label class="font-bold block">Settlement Amount (AED)</label>
+          <input id="vsoAmount" type="number" step="0.01" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" />
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="closeModal('vendorSettlementOtpModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold flex gap-1 items-center transition">Send WhatsApp</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ================= JAVASCRIPT ENGINE (SUPABASE POWERED) ================= -->
   <script>
@@ -582,6 +625,17 @@
       alert(removed + ' old consignments archived and removed from live sync.');
     }
 
+    // --- CLEAR ALL CONSIGNMENTS LOGIC ---
+    async function clearAllConsignments() {
+      if(!confirm('WARNING: This will permanently delete ALL consignments without retaining any history or archive.\n\nAre you sure you want to proceed?')) return;
+      if(!confirm('Are you absolutely sure? This action cannot be undone.')) return;
+      
+      db.consignments = [];
+      await saveDB();
+      refreshAllViews();
+      alert('All consignments have been successfully cleared.');
+    }
+
     function getAgentName(id) { if (!id) return 'Unassigned'; const u = db.users.find(x => x.id === id); return u ? `${u.name} (${u.status})` : `Archived`; }
     function getVendorByCode(code) { return db.vendors.find(v => v.code.toUpperCase() === (code || '').toUpperCase()); }
 
@@ -639,6 +693,70 @@
         const ac = db.consignments.filter(c => c.assignedTo===currentUser.id);
         document.getElementById('agentPendingCount').textContent = ac.filter(c => ['Assigned','Picked Up','Out for delivery'].includes(c.status)).length;
         document.getElementById('agentCompletedCount').textContent = ac.filter(c => c.status==='Delivered').length;
+      }
+    }
+
+    // --- VENDOR SETTLEMENT OTP LOGIC ---
+    function openVendorSettlementOtpModal() {
+      document.getElementById('vsoVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join('');
+      document.getElementById('vsoAmount').value = '';
+      document.getElementById('vendorSettlementOtpModal').classList.remove('hidden');
+    }
+
+    async function sendSettlementOtp(e) {
+      e.preventDefault();
+      const vendorCode = document.getElementById('vsoVendorSelect').value;
+      const amt = document.getElementById('vsoAmount').value;
+      const v = getVendorByCode(vendorCode);
+      if (!v) return;
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+
+      db.vendorSettlementOtps.push({
+        id: 'S-OTP-' + Date.now(),
+        vendorCode: vendorCode,
+        amount: parseFloat(amt),
+        otp: otp,
+        status: 'PENDING',
+        date: new Date().toISOString()
+      });
+
+      await saveDB();
+      closeModal('vendorSettlementOtpModal');
+      refreshAllViews();
+
+      // Redirect to WhatsApp with pre-filled instruction
+      const msg = `Hello ${v.name},\n\nA settlement amount of *${formatAmt(amt)} AED* is being processed for handover by our Delivery Agent.\n\nPlease share this OTP: *${otp}* with the Delivery Agent ONLY after you have received the exact amount.\n\nThank you,\nNEXT WAY DELIVERY`;
+      window.open(`https://wa.me/${v.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    async function verifySettlementOtp(otpId) {
+      const o = db.vendorSettlementOtps.find(x => x.id === otpId);
+      if (!o) return;
+      
+      const input = document.getElementById(`verifyOtpInput_${otpId}`).value.trim();
+      if (input !== o.otp) {
+        alert('Invalid OTP!');
+        return;
+      }
+
+      // Record payment to ledger on successful OTP verification
+      o.status = 'VERIFIED';
+      db.vendorPayments.unshift({
+        id: 'LED-' + Date.now(),
+        vendorCode: o.vendorCode,
+        type: 'PAID',
+        amount: o.amount,
+        date: new Date().toISOString().split('T')[0],
+        notes: 'Settlement Handover (OTP Verified)'
+      });
+
+      await saveDB();
+      alert('OTP Verified successfully! Payment has been recorded in the ledger.');
+      refreshAllViews();
+      if (document.getElementById('tab-invoices').classList.contains('tab-active')) {
+        generateInvoicePreview(); 
+        renderVendorLedger();
       }
     }
 
@@ -896,7 +1014,30 @@
       const badge = document.getElementById('navConfirmBadge');
       if (p.length > 0) { badge.textContent = p.length; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
       document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c=>`<div class="p-3 border rounded bg-yellow-50 mb-2 text-xs"><b>${c.id}</b>: Prod ${c.productAmount} -> <b class="text-emerald-700">${c.pendingModification.newProductAmount}</b> | Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${c.pendingModification.newDeliveryCharge}</b> ${currentUser.role==='AGENT'&&c.assignedTo===currentUser.id?`<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-yellow-400 font-bold px-3 py-1.5 rounded shadow">Confirm Edit</button>`:'<br/><span class="text-[10px] text-gray-500">Waiting for agent confirmation</span>'}</div>`).join('') : '<p class="text-xs text-gray-500">No pending modification requests.</p>';
+
+      // NEW: Render Admin Vendor Settlement OTPs
+      if (currentUser.role === 'ADMIN') {
+        const pendingOtps = db.vendorSettlementOtps.filter(o => o.status === 'PENDING');
+        const otpCard = document.getElementById('adminSettlementOtpCard');
+        if (otpCard) {
+          otpCard.classList.toggle('hidden', pendingOtps.length === 0);
+          document.getElementById('adminSettlementOtpList').innerHTML = pendingOtps.map(o => {
+            const v = getVendorByCode(o.vendorCode);
+            return `<div class="p-3 border border-gray-200 rounded-lg bg-gray-50 mb-2 text-xs flex justify-between items-center gap-2">
+              <div>
+                <b>${v ? v.name : o.vendorCode}</b><br/>
+                <span class="text-gray-500">Amount: <b class="text-emerald-700">${formatAmt(o.amount)}</b></span>
+              </div>
+              <div class="flex gap-1 shrink-0">
+                <input id="verifyOtpInput_${o.id}" type="text" placeholder="OTP" class="w-16 border border-gray-300 rounded px-2 py-1 text-xs text-center font-bold" />
+                <button onclick="verifySettlementOtp('${o.id}')" class="bg-slate-900 hover:bg-slate-800 text-yellow-400 font-bold px-3 py-1.5 rounded shadow transition">Verify</button>
+              </div>
+            </div>`;
+          }).join('');
+        }
+      }
     }
+    
     function openAmountEditModal(cid) { const c = db.consignments.find(x=>x.id===cid); if(currentUser.role==='AGENT' && c.status==='Delivered') return alert('Cannot edit after delivery.'); document.getElementById('actionModalTitle').textContent = `Edit Financials: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-gray-500 mb-2">Edits to Delivered consignments require Agent confirmation.</p><label class="font-bold">Product Amt</label><input id="editProdAmt" type="number" step="0.01" value="${c.productAmount}" class="w-full border rounded px-3 py-2 mb-2 bg-gray-50" /><label class="font-bold">Delivery Fee</label><input id="editDelivFee" type="number" step="0.01" value="${c.deliveryCharge}" class="w-full border rounded px-3 py-2 mb-2 bg-gray-50" /><button onclick="saveAmountModification('${c.id}')" class="w-full bg-slate-900 text-yellow-400 font-bold py-2.5 rounded shadow">Send Modification</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
     async function saveAmountModification(cid) { const c=db.consignments.find(x=>x.id===cid), np=parseFloat(document.getElementById('editProdAmt').value)||0, nd=parseFloat(document.getElementById('editDelivFee').value)||0; if(currentUser.role==='ADMIN') { if(c.status==='Delivered' && c.assignedTo) { c.pendingModification={newProductAmount:np, newDeliveryCharge:nd, requestedBy:currentUser.username}; } else { c.productAmount=np; c.deliveryCharge=nd; } } else { c.productAmount=np; } await saveDB(); closeModal('actionModal'); refreshAllViews(); }
     async function agentConfirmModification(cid) { const c=db.consignments.find(x=>x.id===cid); if(!c||!c.pendingModification) return; c.productAmount=c.pendingModification.newProductAmount; c.deliveryCharge=c.pendingModification.newDeliveryCharge; c.pendingModification=null; await saveDB(); refreshAllViews(); }
@@ -1084,20 +1225,9 @@
     function openAgentModal() { document.getElementById('aName').value=''; document.getElementById('aUser').value=''; document.getElementById('aPhone').value=''; document.getElementById('aPass').value=''; document.getElementById('agentModal').classList.remove('hidden'); }
     async function saveAgent(e) { e.preventDefault(); db.users.push({id:'AG-'+Math.floor(100+Math.random()*900), username:document.getElementById('aUser').value, name:document.getElementById('aName').value, phone:document.getElementById('aPhone').value, role:'AGENT', passwordHash:await hashPassword(document.getElementById('aPass').value), status:'ACTIVE'}); await saveDB(); closeModal('agentModal'); renderAgents(); }
     function renderAgents() { 
-      document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminEditAgentUsername('${a.id}')" class="ml-1 text-slate-900 font-bold bg-gray-200 px-2 py-1 rounded border shadow-sm">Edit User</button><button onclick="adminResetAgentPassword('${a.id}')" class="ml-1 text-slate-900 font-bold bg-yellow-400 px-2 py-1 rounded border shadow-sm">Reset Pass</button><button onclick="adminDeleteAgent('${a.id}')" class="ml-1 text-white font-bold bg-red-600 px-2 py-1 rounded border shadow-sm">Del</button></td></tr>`).join(''); 
+      document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminResetAgentPassword('${a.id}')" class="ml-1 text-slate-900 font-bold bg-yellow-400 px-2 py-1 rounded border shadow-sm">Reset Pass</button><button onclick="adminDeleteAgent('${a.id}')" class="ml-1 text-white font-bold bg-red-600 px-2 py-1 rounded border shadow-sm">Del</button></td></tr>`).join(''); 
     }
     async function setAgentStatus(id, st) { const a=db.users.find(u=>u.id===id); if(a) a.status=st; await saveDB(); renderAgents(); }
-
-    async function adminEditAgentUsername(id) {
-        const u = db.users.find(x => x.id === id);
-        if(!u) return;
-        const nu = prompt('Enter new username for ' + u.name + ':', u.username);
-        if(!nu || nu.trim() === '' || nu === u.username) return;
-        if(db.users.some(x => x.username.toLowerCase() === nu.trim().toLowerCase() && x.id !== id)) return alert('Username already exists!');
-        u.username = nu.trim();
-        await saveDB();
-        renderAgents();
-    }
 
     async function adminDeleteAgent(id) {
         if(!confirm('Are you sure you want to permanently delete this agent?')) return;
