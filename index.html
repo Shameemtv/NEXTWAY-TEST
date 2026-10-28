@@ -215,7 +215,12 @@
           <div><input id="vendorCodeSearch" oninput="renderVendors()" type="text" placeholder="Search Vendor..." class="text-xs border rounded-lg px-3 py-2 bg-gray-50 w-full sm:w-64" /></div>
           <button onclick="openVendorModal()" class="bg-slate-900 text-yellow-400 text-xs font-bold px-4 py-2 rounded-lg">+ Add Vendor</button>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-gray-100 border-b"><th class="p-3">Code</th><th class="p-3">Name</th><th class="p-3">Phone</th><th class="p-3">Address</th><th class="p-3">Orders</th></thead><tbody id="vendorTableBody" class="divide-y"></tbody></table></div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-100 border-b"><th class="p-3">Code</th><th class="p-3">Name</th><th class="p-3">Phone</th><th class="p-3">Address</th><th class="p-3">Orders</th><th class="p-3">Action</th></thead>
+            <tbody id="vendorTableBody" class="divide-y"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- TAB 6: INVOICES & SETTLEMENTS (ADMIN) -->
@@ -370,7 +375,26 @@
   <div id="consignmentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3 overflow-y-auto"><div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4 my-auto max-h-[92vh] flex flex-col"><div class="flex justify-between items-center border-b pb-3 shrink-0"><h3 class="font-black text-base text-slate-900">CREATE CONSIGNMENT</h3><button onclick="closeModal('consignmentModal')" class="text-gray-400 font-bold text-lg">✕</button></div><form onsubmit="saveNewConsignment(event)" class="space-y-3 text-xs overflow-y-auto pr-1 flex-1"><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">ID</label><div class="flex gap-1"><input id="cIdInput" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /><button type="button" onclick="generateRandomConsignmentId()" class="bg-gray-200 px-2.5 rounded-lg font-bold">Auto</button></div></div><div><label class="font-bold block">Vendor</label><div class="flex gap-1"><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select><button type="button" onclick="openVendorModal()" class="bg-slate-900 text-yellow-400 font-bold px-3 rounded-lg shadow-sm" title="Add New Vendor">+</button></div></div></div><div><label class="font-bold block">Pick Up Address</label><input id="cPickupFrom" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">Customer Name</label><input id="cCustomerName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="cCustomerPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div></div><div><label class="font-bold block">Delivery Address</label><input id="cDeliveryAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block text-emerald-800">Product Amt (Customer Pays)</label><input id="cProductAmt" type="number" step="0.01" required value="0" class="w-full border rounded-lg px-3 py-2 bg-emerald-50" /></div><div><label class="font-bold block">Delivery Fee</label><input id="cDeliveryFee" type="number" step="0.01" required value="20" class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block text-blue-900">Fee Type</label><select id="cFeeType" class="w-full border rounded-lg px-3 py-2 bg-blue-50 font-bold text-blue-900"><option value="COD">COD (Cut from Vendor Net)</option><option value="CAD">CAD (Added to Invoice Later)</option><option value="COC">COC (Paid upfront at Pickup)</option></select></div><div id="agentSelectContainer"><label class="font-bold block">Assign To</label><select id="cAgentSelect" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div></div><div class="flex justify-end gap-2 pt-4 border-t mt-2 shrink-0"><button type="button" onclick="closeModal('consignmentModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Save</button></div></form></div></div>
   <div id="actionModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 flex flex-col text-xs"><div class="flex justify-between items-center border-b pb-3 shrink-0"><h3 id="actionModalTitle" class="font-bold text-base text-slate-900">Action</h3><button onclick="closeModal('actionModal')" class="text-gray-400 text-lg font-bold">✕</button></div><div id="actionModalBody" class="space-y-3"></div></div></div>
   <div id="inspectModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3"><div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-3 flex flex-col text-xs"><div class="flex justify-between items-center border-b pb-2.5 shrink-0"><h3 id="inspectTitle" class="font-bold text-base text-slate-900">Details</h3><button onclick="closeModal('inspectModal')" class="text-gray-500 font-bold w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">✕</button></div><div id="inspectContent" class="space-y-3"></div><div class="pt-2 border-t flex justify-end"><button onclick="closeModal('inspectModal')" class="bg-slate-900 text-yellow-400 font-bold px-4 py-1.5 rounded-lg">Close</button></div></div></div>
-  <div id="vendorModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Add Vendor</h3><button onclick="closeModal('vendorModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveVendor(event)" class="space-y-3"><div><label class="font-bold block">Code</label><input id="vCode" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50 uppercase" /></div><div><label class="font-bold block">Name</label><input id="vName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="vPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Address</label><input id="vAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('vendorModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Save</button></div></form></div></div>
+  
+  <div id="vendorModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 id="vendorModalTitle" class="font-bold text-base text-slate-900">Add Vendor</h3>
+        <button onclick="closeModal('vendorModal')" class="text-gray-400 font-bold">✕</button>
+      </div>
+      <form onsubmit="saveVendor(event)" class="space-y-3">
+        <div><label class="font-bold block">Code</label><input id="vCode" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50 uppercase" /></div>
+        <div><label class="font-bold block">Name</label><input id="vName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div>
+        <div><label class="font-bold block">Phone</label><input id="vPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div>
+        <div><label class="font-bold block">Address</label><input id="vAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div>
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="closeModal('vendorModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="agentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Add Agent</h3><button onclick="closeModal('agentModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveAgent(event)" class="space-y-3"><div><label class="font-bold block">Name</label><input id="aName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Username</label><input id="aUser" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="aPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Password</label><input id="aPass" type="password" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('agentModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Create</button></div></form></div></div>
   <div id="vendorPaymentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Ledger Entry</h3><button onclick="closeModal('vendorPaymentModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveVendorLedgerEntry(event)" class="space-y-3"><div><label class="font-bold block">Vendor</label><select id="vpVendorSelect" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div><div><label class="font-bold block">Type</label><select id="vpType" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"><option value="PAID">Paid To</option><option value="RECEIVED">Received From</option></select></div><div><label class="font-bold block">Amount</label><input id="vpAmount" type="number" step="0.01" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Date</label><input id="vpDate" type="date" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Ref</label><input id="vpNotes" type="text" class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('vendorPaymentModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Record</button></div></form></div></div>
 
@@ -404,6 +428,7 @@
     const CLIENT_INSTANCE_ID = 'CLIENT_' + Math.random().toString(36).substring(2, 9);
     let db = null; 
     let currentUser = null;
+    let editingVendorCode = null; // New variable to track edit mode for vendors
 
     // Supabase variables
     let supabaseClient = null;
@@ -1192,30 +1217,76 @@
 
     function printVendorInvoice() { document.querySelectorAll('.print-area').forEach(e=>e.classList.remove('print-area')); document.getElementById('printableInvoice').classList.add('print-area'); window.print(); }
     
-    // UTILS
-    function openVendorModal() { document.getElementById('vCode').value = 'VND-00'+(db.vendors.length+1); document.getElementById('vName').value=''; document.getElementById('vPhone').value=''; document.getElementById('vAddress').value=''; document.getElementById('vendorModal').classList.remove('hidden'); }
+    // --- VENDOR MANAGEMENT (ADD / EDIT / DELETE) ---
+    function openVendorModal() { 
+      editingVendorCode = null;
+      document.getElementById('vendorModalTitle').textContent = 'Add Vendor';
+      document.getElementById('vCode').value = 'VND-00'+(db.vendors.length+1); 
+      document.getElementById('vCode').readOnly = false;
+      document.getElementById('vCode').classList.remove('bg-gray-200');
+      document.getElementById('vName').value=''; 
+      document.getElementById('vPhone').value=''; 
+      document.getElementById('vAddress').value=''; 
+      document.getElementById('vendorModal').classList.remove('hidden'); 
+    }
+
+    function openEditVendorModal(code) {
+      const v = getVendorByCode(code);
+      if(!v) return;
+      editingVendorCode = code;
+      document.getElementById('vendorModalTitle').textContent = 'Edit Vendor';
+      document.getElementById('vCode').value = v.code;
+      document.getElementById('vCode').readOnly = true;
+      document.getElementById('vCode').classList.add('bg-gray-200'); // Gray out code so it can't be changed
+      document.getElementById('vName').value = v.name;
+      document.getElementById('vPhone').value = v.phone;
+      document.getElementById('vAddress').value = v.address;
+      document.getElementById('vendorModal').classList.remove('hidden');
+    }
+
+    async function deleteVendor(code) {
+      if(!confirm(`Are you sure you want to permanently delete vendor ${code} without retaining any history or archive? \n\nThis action cannot be undone.`)) return;
+      db.vendors = db.vendors.filter(v => v.code !== code);
+      await saveDB();
+      renderVendors();
+    }
+
     async function saveVendor(e) { 
       e.preventDefault(); 
-      db.vendors.push({
-        code: document.getElementById('vCode').value.toUpperCase(), 
-        name: document.getElementById('vName').value, 
-        phone: document.getElementById('vPhone').value, 
-        address: document.getElementById('vAddress').value
-      }); 
+      if (editingVendorCode) {
+        const v = db.vendors.find(x => x.code === editingVendorCode);
+        if(v) {
+          v.name = document.getElementById('vName').value;
+          v.phone = document.getElementById('vPhone').value;
+          v.address = document.getElementById('vAddress').value;
+        }
+      } else {
+        const newCode = document.getElementById('vCode').value.toUpperCase();
+        if (db.vendors.some(x => x.code === newCode)) return alert('Vendor code already exists!');
+        db.vendors.push({
+          code: newCode, 
+          name: document.getElementById('vName').value, 
+          phone: document.getElementById('vPhone').value, 
+          address: document.getElementById('vAddress').value
+        }); 
+      }
+      
       await saveDB(); 
       closeModal('vendorModal'); 
       if (currentUser && currentUser.role === 'ADMIN') renderVendors(); 
 
       // If the consignment modal is open, immediately update its dropdown
       if (!document.getElementById('consignmentModal').classList.contains('hidden')) {
-        const newCode = document.getElementById('vCode').value.toUpperCase();
+        const currentSelected = document.getElementById('cVendorSelect').value;
         document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join('');
-        document.getElementById('cVendorSelect').value = newCode;
+        document.getElementById('cVendorSelect').value = editingVendorCode ? currentSelected : document.getElementById('vCode').value.toUpperCase();
         syncVendorPickupAddress();
       }
     }
     
-    function renderVendors() { document.getElementById('vendorTableBody').innerHTML = (document.getElementById('vendorCodeSearch').value ? db.vendors.filter(v=>v.code.includes(document.getElementById('vendorCodeSearch').value.toUpperCase())) : db.vendors).map(v=>`<tr><td class="p-2 font-bold">${v.code}</td><td class="p-2">${v.name}</td><td class="p-2">${v.phone}</td><td class="p-2">${v.address}</td><td class="p-2 font-bold">${db.consignments.filter(c=>c.vendorCode===v.code).length}</td></tr>`).join(''); }
+    function renderVendors() { 
+      document.getElementById('vendorTableBody').innerHTML = (document.getElementById('vendorCodeSearch').value ? db.vendors.filter(v=>v.code.includes(document.getElementById('vendorCodeSearch').value.toUpperCase())) : db.vendors).map(v=>`<tr><td class="p-2 font-bold">${v.code}</td><td class="p-2">${v.name}</td><td class="p-2">${v.phone}</td><td class="p-2">${v.address}</td><td class="p-2 font-bold">${db.consignments.filter(c=>c.vendorCode===v.code).length}</td><td class="p-2 flex gap-1"><button onclick="openEditVendorModal('${v.code}')" class="text-slate-900 font-bold bg-gray-200 px-2 py-1 rounded border shadow-sm">Edit</button><button onclick="deleteVendor('${v.code}')" class="text-white font-bold bg-red-600 px-2 py-1 rounded border shadow-sm">Del</button></td></tr>`).join(''); 
+    }
     
     function openVendorPaymentModal() { document.getElementById('vpVendorSelect').innerHTML=db.vendors.map(v=>`<option value="${v.code}">${v.name}</option>`).join(''); document.getElementById('vendorPaymentModal').classList.remove('hidden'); }
     async function saveVendorLedgerEntry(e) { e.preventDefault(); db.vendorPayments.unshift({id:'LED-'+Date.now(), vendorCode:document.getElementById('vpVendorSelect').value, type:document.getElementById('vpType').value, amount:parseFloat(document.getElementById('vpAmount').value), date:document.getElementById('vpDate').value, notes:document.getElementById('vpNotes').value}); await saveDB(); closeModal('vendorPaymentModal'); renderVendorLedger(); generateInvoicePreview(); }
