@@ -118,7 +118,7 @@
             <select id="filterStatus" onchange="renderConsignments()" class="text-xs border border-gray-300 rounded-lg px-2 py-1.5 bg-gray-50 font-medium">
               <option value="ALL">All Statuses</option>
               <option value="PENDING_ALL">Pending (Not Delivered)</option>
-              <option value="Created">Created</option>
+              <option value="Created">Created (Unassigned)</option>
               <option value="Assigned">Assigned</option>
               <option value="Picked Up">Picked Up</option>
               <option value="Out for delivery">Out for delivery</option>
@@ -151,11 +151,19 @@
       <div id="panel-confirmations" class="hidden space-y-4">
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
           <h3 class="font-bold text-base text-slate-900">Pending Approvals & Handover OTPs</h3>
+          
           <div id="agentOtpSubmissionCard" class="hidden mt-4 pt-4 border-t">
             <h4 class="font-bold text-xs text-yellow-900 mb-2">Vendor Net Payable Handover (Agent OTP Verify)</h4>
             <div id="agentPendingOtpsList" class="space-y-2"></div>
           </div>
+          
           <div id="confirmationsList" class="mt-4 space-y-3"></div>
+
+          <!-- ADMIN: OFFICE RECEIPT FOR COC -->
+          <div id="adminCocHandoverCard" class="admin-only hidden mt-4 pt-4 border-t">
+            <h4 class="font-bold text-xs text-blue-900 mb-2">Pending COC Handovers (Office Receipt)</h4>
+            <div id="adminCocHandoverList" class="space-y-2"></div>
+          </div>
           
           <div id="adminSettlementOtpCard" class="admin-only hidden mt-4 pt-4 border-t">
             <h4 class="font-bold text-xs text-slate-900 mb-2">Vendor Settlement Handover (Admin Verification)</h4>
@@ -175,10 +183,24 @@
           </div>
           <div class="flex flex-wrap gap-2 pt-1">
             <button onclick="generateAdminAgentReport()" class="bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-lg">Generate View</button>
-            <button onclick="printAgentFinanceReport('admin')" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg">Print Report</button>
+            <button onclick="printAdminAgentReport()" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg">Print Report</button>
             <button onclick="exportAgentDailyExcel('admin')" class="bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-lg">Download .xlsx</button>
           </div>
         </div>
+
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-4 no-print mt-4">
+          <div><h3 class="font-bold text-sm text-slate-900">Admin: Pending COC Report</h3></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Select Agent</label>
+              <select id="adminCocReportSelect" class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 bg-gray-50"></select>
+            </div>
+            <div class="flex items-end">
+              <button onclick="printAdminCocReport()" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg">Print PDF Report</button>
+            </div>
+          </div>
+        </div>
+
         <div id="printableAdminAgentReport" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6"></div>
       </div>
 
@@ -191,7 +213,7 @@
             <div><label class="block text-xs font-semibold text-gray-600 mb-1">Status</label><select id="agentFinanceStatus" onchange="generateAgentFinanceReport()" class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 bg-gray-50"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
           </div>
           <div class="flex flex-wrap gap-2 pt-1">
-            <button onclick="printAgentFinanceReport('agent')" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg shadow">Print Report</button>
+            <button onclick="printAgentFinanceReport()" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg shadow">Print Report</button>
             <button onclick="exportAgentDailyExcel('agent')" class="bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow">Download .xlsx</button>
             <button onclick="sendAgentReportWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white text-xs font-bold px-4 py-2 rounded-lg shadow transition">WhatsApp Report</button>
           </div>
@@ -202,10 +224,10 @@
             <div class="text-right"><p id="afAgentNameDisplay" class="text-sm font-bold text-slate-900"></p><p id="afDateDisplay" class="text-xs text-gray-600 font-semibold"></p></div>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Deliveries</p><p id="afTotalCount" class="text-lg font-bold text-slate-900">0</p></div>
+            <div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Total Entries</p><p id="afTotalCount" class="text-lg font-bold text-slate-900">0</p></div>
             <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Collected</p><p id="afTotalCollected" class="text-lg font-black text-emerald-900">0.00 AED</p></div>
           </div>
-          <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Status</th><th class="p-2 text-right">Amt Collected</th></tr></thead><tbody id="afTableBody" class="divide-y divide-gray-200"></tbody></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Type</th><th class="p-2 text-right">Amt Collected</th></tr></thead><tbody id="afTableBody" class="divide-y divide-gray-200"></tbody></table></div>
         </div>
       </div>
 
@@ -257,7 +279,7 @@
           </div>
           <div class="md:col-span-3 space-y-4 overflow-x-auto">
             <table class="w-full text-left text-xs border-collapse">
-              <thead><tr class="bg-gray-100 text-gray-700 border-b border-gray-300"><th class="p-2">Date</th><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2 text-right text-red-700">Del. Fee</th><th class="p-2 text-right">Product Amt</th></tr></thead>
+              <thead><tr class="bg-gray-100 text-gray-700 border-b border-gray-300"><th class="p-2">Date</th><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2 text-right text-red-700">Del. Fee / Pend. COC</th><th class="p-2 text-right">Product Amt</th></tr></thead>
               <tbody id="invTableBody" class="divide-y divide-gray-200"></tbody>
             </table>
             <div id="invSettledLedgerWrap" class="hidden pt-3 border-t"><p class="text-xs font-bold text-slate-800 mb-1.5">Ledger Deductions (Payments to Vendor)</p><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 text-gray-700 border-b"><th class="p-1.5">Date</th><th class="p-1.5">Type</th><th class="p-1.5">Ref</th><th class="p-1.5 text-right">Amount</th></tr></thead><tbody id="invSettledTableBody" class="divide-y divide-gray-200"></tbody></table></div>
@@ -432,16 +454,14 @@
     const CLIENT_INSTANCE_ID = 'CLIENT_' + Math.random().toString(36).substring(2, 9);
     let db = null; 
     let currentUser = null;
-    let editingVendorCode = null; // New variable to track edit mode for vendors
+    let editingVendorCode = null; 
 
-    // Supabase variables
     let supabaseClient = null;
     let realtimeChannel = null;
     let isApplyingRemoteUpdate = false;
     let isPushingToCloud = false;
     let pushSyncDebounceTimer = null;
 
-    // Initialize Dark Mode from localStorage on app load
     if (localStorage.getItem('NEXTWAY_DARK_MODE') === 'enabled') {
       document.body.classList.add('dark-mode');
     }
@@ -471,23 +491,27 @@
           { id: 'AG-101', username: 'agent1', name: 'Ramesh Kumar', role: 'AGENT', phone: '+971501112233', passwordHash: agentHash, status: 'ACTIVE' } 
         ],
         vendors: [{ code: 'VND-001', name: 'Gulf Horizon Trading LLC', phone: '+971500001111', address: 'Dubai' }],
-        consignments: [{ id: '10001', vendorCode: 'VND-001', pickupFrom: 'Dubai', customerName: 'Omar', customerPhone: '+971529876543', deliveryAddress: 'Villa 12', productAmount: 350, deliveryCharge: 25, feeType: 'COD', pendingModification: null, assignedTo: 'AG-101', status: 'Delivered', qrGenerated: true, otpCode: '4829', otpVerified: true, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: new Date().toISOString(), deliveredAt: new Date().toISOString() }],
+        consignments: [{ id: '10001', vendorCode: 'VND-001', pickupFrom: 'Dubai', customerName: 'Omar', customerPhone: '+971529876543', deliveryAddress: 'Villa 12', productAmount: 350, deliveryCharge: 25, feeType: 'COD', pendingModification: null, assignedTo: 'AG-101', pickedUpBy: 'AG-101', cocPendingAmount: 0, cocStatus: null, status: 'Delivered', qrGenerated: true, otpCode: '4829', otpVerified: true, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: new Date().toISOString(), deliveredAt: new Date().toISOString() }],
         vendorPayments: [], vendorSettlementOtps: []
       };
     }
 
     function applyIncomingCloudState(remoteData) {
       if (!remoteData || !Array.isArray(remoteData.users) || remoteData.users.length === 0) return false;
-      if (remoteData._lastUpdatedBy === CLIENT_INSTANCE_ID) return false; // Prevent echo
+      if (remoteData._lastUpdatedBy === CLIENT_INSTANCE_ID) return false;
 
       isApplyingRemoteUpdate = true;
       try {
         db = remoteData; 
         db.vendorPayments = db.vendorPayments || []; 
         db.vendorSettlementOtps = db.vendorSettlementOtps || [];
-        db.consignments.forEach(c => { if(!c.feeType) c.feeType = 'COD'; });
+        db.consignments.forEach(c => { 
+          if(!c.feeType) c.feeType = 'COD'; 
+          if(typeof c.cocPendingAmount === 'undefined') c.cocPendingAmount = 0;
+          if(typeof c.cocStatus === 'undefined') c.cocStatus = null;
+          if(typeof c.pickedUpBy === 'undefined') c.pickedUpBy = null;
+        });
         
-        // Save to IndexedDB (localForage)
         localforage.setItem(DB_KEY, JSON.stringify(db));
         
         if (currentUser) {
@@ -515,43 +539,32 @@
           const payload = JSON.parse(JSON.stringify(db));
           payload._lastUpdatedBy = CLIENT_INSTANCE_ID;
           
-          const { error } = await supabaseClient
-            .from('app_data')
-            .upsert({ id: 'nextway_state', data: payload, updated_at: new Date().toISOString() });
-
-          if (error) {
-            console.error('Supabase Sync error:', error);
-            updateSyncBadge('ERROR', 'Sync Error');
-          } else {
-            updateSyncBadge('LIVE', 'Live Sync');
-          }
-        } catch (err) {
-          console.error('Supabase exception:', err);
-          updateSyncBadge('ERROR', 'Sync Error');
-        } finally {
-          setTimeout(() => { isPushingToCloud = false; }, 400);
-        }
+          const { error } = await supabaseClient.from('app_data').upsert({ id: 'nextway_state', data: payload, updated_at: new Date().toISOString() });
+          if (error) updateSyncBadge('ERROR', 'Sync Error');
+          else updateSyncBadge('LIVE', 'Live Sync');
+        } catch (err) { updateSyncBadge('ERROR', 'Sync Error'); } finally { setTimeout(() => { isPushingToCloud = false; }, 400); }
       }, 300);
     }
 
     async function initDB() {
       const seedDB = await getDefaultSeedDB(); 
       let saved = null; 
-      try { 
-        const storedStr = await localforage.getItem(DB_KEY);
-        if(storedStr) saved = JSON.parse(storedStr);
-      } catch (e) {}
+      try { const storedStr = await localforage.getItem(DB_KEY); if(storedStr) saved = JSON.parse(storedStr); } catch (e) {}
       
       db = saved && saved.users && saved.users.length ? saved : seedDB;
       db.vendorPayments = db.vendorPayments || []; 
       db.vendorSettlementOtps = db.vendorSettlementOtps || []; 
-      db.consignments.forEach(c => { if(!c.feeType) c.feeType = 'COD'; });
+      db.consignments.forEach(c => { 
+        if(!c.feeType) c.feeType = 'COD';
+        if(typeof c.cocPendingAmount === 'undefined') c.cocPendingAmount = 0;
+        if(typeof c.cocStatus === 'undefined') c.cocStatus = null;
+        if(typeof c.pickedUpBy === 'undefined') c.pickedUpBy = null;
+      });
       await localforage.setItem(DB_KEY, JSON.stringify(db));
 
       const savedUrl = localStorage.getItem('NEXTWAY_SUPABASE_URL');
       const savedKey = localStorage.getItem('NEXTWAY_SUPABASE_KEY');
       
-      // Use manual input if available, fallback to hardcoded credentials, or null if explicitly disconnected
       const supabaseUrl = savedUrl === 'OFFLINE' ? null : (savedUrl || 'https://hswhzctlpfjqwpvckxwm.supabase.co');
       const supabaseKey = savedKey === 'OFFLINE' ? null : (savedKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzd2h6Y3RscGZqcXdwdmNreHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMwMDEyMjMsImV4cCI6MjEwODU3NzIyM30.jYqGM5_DhqFEGOGaiT_Mw7HQvVH0PKOjRyCONfwML60');
 
@@ -562,113 +575,63 @@
 
       if (supabaseUrl && supabaseKey) {
         try {
-          if (typeof window.supabase === 'undefined' || !window.supabase.createClient) {
-            updateSyncBadge('ERROR', 'SDK Missing');
-            return;
-          }
+          if (typeof window.supabase === 'undefined' || !window.supabase.createClient) { updateSyncBadge('ERROR', 'SDK Missing'); return; }
           supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
           updateSyncBadge('SYNCING', 'Connecting...');
 
-          // Fetch state
           const { data, error } = await supabaseClient.from('app_data').select('data').eq('id', 'nextway_state').maybeSingle();
 
-          if (data && data.data) {
-            applyIncomingCloudState(data.data);
-            updateSyncBadge('LIVE', 'Live Sync');
-          } else if (!error && !data) {
-            pushLocalDBToCloud();
-          }
+          if (data && data.data) { applyIncomingCloudState(data.data); updateSyncBadge('LIVE', 'Live Sync'); } else if (!error && !data) { pushLocalDBToCloud(); }
 
-          // Realtime Channel
           if (realtimeChannel) realtimeChannel.unsubscribe();
-          realtimeChannel = supabaseClient
-            .channel('public:app_data')
-            .on(
-              'postgres_changes',
-              { event: '*', schema: 'public', table: 'app_data', filter: 'id=eq.nextway_state' },
-              (payload) => {
+          realtimeChannel = supabaseClient.channel('public:app_data').on('postgres_changes', { event: '*', schema: 'public', table: 'app_data', filter: 'id=eq.nextway_state' }, (payload) => {
                 if (isPushingToCloud) return;
-                if (payload.new && payload.new.data) {
-                  const applied = applyIncomingCloudState(payload.new.data);
-                  if (applied) updateSyncBadge('LIVE', 'Live Sync');
-                }
-              }
-            )
-            .subscribe((status) => {
+                if (payload.new && payload.new.data) { const applied = applyIncomingCloudState(payload.new.data); if (applied) updateSyncBadge('LIVE', 'Live Sync'); }
+            }).subscribe((status) => {
               if (status === 'SUBSCRIBED') { updateSyncBadge('LIVE', 'Live Sync'); } 
               else if (status === 'TIMED_OUT' || status === 'CHANNEL_ERROR') { updateSyncBadge('ERROR', 'Sync Error'); } 
               else if (status === 'CLOSED') { updateSyncBadge('ERROR', 'Offline'); }
             });
-
-        } catch (e) {
-          console.error(e);
-          updateSyncBadge('ERROR', 'DB Error');
-        }
-      } else {
-        updateSyncBadge('ERROR', 'Offline Mode');
-      }
+        } catch (e) { updateSyncBadge('ERROR', 'DB Error'); }
+      } else { updateSyncBadge('ERROR', 'Offline Mode'); }
     }
 
     function saveSupabaseConfigFromTab() { 
-      const url = document.getElementById('adminSupabaseUrlInput').value.trim();
-      const key = document.getElementById('adminSupabaseKeyInput').value.trim();
+      const url = document.getElementById('adminSupabaseUrlInput').value.trim(); const key = document.getElementById('adminSupabaseKeyInput').value.trim();
       if (!url || !key) return alert('Please enter both Supabase Project URL and Anon Key.');
-      localStorage.setItem('NEXTWAY_SUPABASE_URL', url);
-      localStorage.setItem('NEXTWAY_SUPABASE_KEY', key);
-      location.reload(); 
+      localStorage.setItem('NEXTWAY_SUPABASE_URL', url); localStorage.setItem('NEXTWAY_SUPABASE_KEY', key); location.reload(); 
     }
 
     function clearSupabaseConfig() {
       if (confirm('Disconnect from Supabase? The app will operate in local offline mode.')) {
-        // Set to a specific 'OFFLINE' flag so the hardcoded fallback is bypassed
-        localStorage.setItem('NEXTWAY_SUPABASE_URL', 'OFFLINE');
-        localStorage.setItem('NEXTWAY_SUPABASE_KEY', 'OFFLINE');
-        location.reload();
+        localStorage.setItem('NEXTWAY_SUPABASE_URL', 'OFFLINE'); localStorage.setItem('NEXTWAY_SUPABASE_KEY', 'OFFLINE'); location.reload();
       }
     }
 
     async function saveDB() { 
       await localforage.setItem(DB_KEY, JSON.stringify(db)); 
-      if (!isApplyingRemoteUpdate && supabaseClient) {
-        pushLocalDBToCloud();
-      }
+      if (!isApplyingRemoteUpdate && supabaseClient) { pushLocalDBToCloud(); }
     }
 
-    // ARCHIVE FUNCTION TO PREVENT DATABASE BLOAT
     async function archiveOldDeliveries() {
       if(!confirm('Archive delivered & returned consignments older than 24 hours? \n\nThis permanently removes them from the Live Sync feed to keep your app fast.')) return;
-      
-      const now = new Date();
-      let initialCount = db.consignments.length;
-      
+      const now = new Date(); let initialCount = db.consignments.length;
       db.consignments = db.consignments.filter(c => {
         if(c.status !== 'Delivered' && c.status !== 'Returned') return true; 
-        const dDate = new Date(c.deliveredAt || c.createdAt);
-        const diffHours = (now - dDate) / (1000 * 60 * 60);
-        return diffHours < 24; 
+        const dDate = new Date(c.deliveredAt || c.createdAt); return ((now - dDate) / (1000 * 60 * 60)) < 24; 
       });
-      
-      const removed = initialCount - db.consignments.length;
-      await saveDB();
-      refreshAllViews();
-      alert(removed + ' old consignments archived and removed from live sync.');
+      const removed = initialCount - db.consignments.length; await saveDB(); refreshAllViews(); alert(removed + ' old consignments archived.');
     }
 
-    // --- CLEAR ALL CONSIGNMENTS LOGIC ---
     async function clearAllConsignments() {
       if(!confirm('WARNING: This will permanently delete ALL consignments without retaining any history or archive.\n\nAre you sure you want to proceed?')) return;
       if(!confirm('Are you absolutely sure? This action cannot be undone.')) return;
-      
-      db.consignments = [];
-      await saveDB();
-      refreshAllViews();
-      alert('All consignments have been successfully cleared.');
+      db.consignments = []; await saveDB(); refreshAllViews(); alert('All consignments have been successfully cleared.');
     }
 
     function getAgentName(id) { if (!id) return 'Unassigned'; const u = db.users.find(x => x.id === id); return u ? `${u.name} (${u.status})` : `Archived`; }
     function getVendorByCode(code) { return db.vendors.find(v => v.code.toUpperCase() === (code || '').toUpperCase()); }
 
-    // AUTH
     async function handleLogin(e) {
       e.preventDefault(); const uName = document.getElementById('loginUsername').value.trim(), pass = document.getElementById('loginPassword').value, errBox = document.getElementById('loginError'); errBox.classList.add('hidden');
       if (!db || !db.users) { db = await getDefaultSeedDB(); await saveDB(); }
@@ -681,13 +644,7 @@
     }
     
     function logout() { currentUser = null; document.getElementById('appView').classList.add('hidden'); document.getElementById('authView').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('hidden'); document.getElementById('darkModeBtn').classList.add('hidden'); }
-    
-    // Add the Dark Mode toggle logic
-    function toggleDarkMode() { 
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      localStorage.setItem('NEXTWAY_DARK_MODE', isDark ? 'enabled' : 'disabled');
-    }
+    function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('NEXTWAY_DARK_MODE', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled'); }
 
     function enterWorkspace() {
       document.getElementById('authView').classList.add('hidden'); document.getElementById('appView').classList.remove('hidden'); document.getElementById('bottomNav').classList.remove('hidden'); document.getElementById('bottomNav').classList.add('flex'); document.getElementById('darkModeBtn').classList.remove('hidden');
@@ -697,7 +654,12 @@
       if (isA) { 
         document.getElementById('bulkAgent').innerHTML = `<option value="">Agent...</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
         document.getElementById('filterAgentSlicer').innerHTML = `<option value="ALL">All Agents</option><option value="UNASSIGNED">Unassigned</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
+        
+        // Report Dropdowns
+        const agentOptions = `<option value="ALL">All Agents</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
         document.getElementById('adminReportSelect').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
+        document.getElementById('adminCocReportSelect').innerHTML = agentOptions;
+
         document.getElementById('adminReportDate').value = new Date().toISOString().split('T')[0]; 
       } 
       switchTab('consignments'); refreshAllViews();
@@ -719,16 +681,14 @@
       renderConsignments(); renderConfirmations();
       if(currentUser.role==='ADMIN'){ renderVendors(); renderAgents(); }
       else {
-        const ac = db.consignments.filter(c => c.assignedTo===currentUser.id);
+        const ac = db.consignments.filter(c => c.assignedTo===currentUser.id || c.pickedUpBy===currentUser.id);
         document.getElementById('agentPendingCount').textContent = ac.filter(c => ['Assigned','Picked Up','Out for delivery'].includes(c.status)).length;
         document.getElementById('agentCompletedCount').textContent = ac.filter(c => c.status==='Delivered').length;
       }
     }
 
-    // --- VENDOR SETTLEMENT OTP LOGIC ---
     function openVendorSettlementOtpModal() {
       document.getElementById('vsoVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join('');
-      // Populate active delivery agents
       document.getElementById('vsoAgentSelect').innerHTML = db.users.filter(u => u.role === 'AGENT' && u.status === 'ACTIVE').map(a => `<option value="${a.id}">${a.name}</option>`).join('');
       document.getElementById('vsoAmount').value = '';
       document.getElementById('vendorSettlementOtpModal').classList.remove('hidden');
@@ -739,73 +699,34 @@
       const vendorCode = document.getElementById('vsoVendorSelect').value;
       const agentId = document.getElementById('vsoAgentSelect').value;
       const amt = document.getElementById('vsoAmount').value;
-      
-      const v = getVendorByCode(vendorCode);
-      const a = db.users.find(u => u.id === agentId);
-      
+      const v = getVendorByCode(vendorCode); const a = db.users.find(u => u.id === agentId);
       if (!v || !a) return;
 
-      const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      db.vendorSettlementOtps.push({ id: 'S-OTP-' + Date.now(), vendorCode: vendorCode, agentId: agentId, amount: parseFloat(amt), otp: otp, status: 'PENDING', date: new Date().toISOString() });
+      await saveDB(); closeModal('vendorSettlementOtpModal'); refreshAllViews();
 
-      db.vendorSettlementOtps.push({
-        id: 'S-OTP-' + Date.now(),
-        vendorCode: vendorCode,
-        agentId: agentId,
-        amount: parseFloat(amt),
-        otp: otp,
-        status: 'PENDING',
-        date: new Date().toISOString()
-      });
-
-      await saveDB();
-      closeModal('vendorSettlementOtpModal');
-      refreshAllViews();
-
-      // Redirect to WhatsApp with pre-filled instruction mentioning the agent's name
       const msg = `Hello ${v.name},\n\nA settlement amount of *${formatAmt(amt)} AED* is being processed for handover by our Delivery Agent, *${a.name}*.\n\nPlease share this OTP: *${otp}* with the agent ONLY after you have received the exact amount.\n\nThank you,\nNEXT WAY DELIVERY`;
       window.open(`https://wa.me/${v.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     async function verifySettlementOtp(otpId) {
-      const o = db.vendorSettlementOtps.find(x => x.id === otpId);
-      if (!o) return;
-      
+      const o = db.vendorSettlementOtps.find(x => x.id === otpId); if (!o) return;
       const input = document.getElementById(`verifyOtpInput_${otpId}`).value.trim();
-      if (input !== o.otp) {
-        alert('Invalid OTP!');
-        return;
-      }
+      if (input !== o.otp) return alert('Invalid OTP!');
 
       const a = db.users.find(u => u.id === o.agentId);
-
-      // Record payment to ledger on successful OTP verification
       o.status = 'VERIFIED';
-      db.vendorPayments.unshift({
-        id: 'LED-' + Date.now(),
-        vendorCode: o.vendorCode,
-        type: 'PAID',
-        amount: o.amount,
-        date: new Date().toISOString().split('T')[0],
-        notes: `Settlement Handover (Agent: ${a ? a.name : 'Unknown'}) - OTP Verified`
-      });
-
-      await saveDB();
-      alert('OTP Verified successfully! Payment has been recorded in the ledger.');
-      refreshAllViews();
-      if (document.getElementById('tab-invoices').classList.contains('tab-active')) {
-        generateInvoicePreview(); 
-        renderVendorLedger();
-      }
+      db.vendorPayments.unshift({ id: 'LED-' + Date.now(), vendorCode: o.vendorCode, type: 'PAID', amount: o.amount, date: new Date().toISOString().split('T')[0], notes: `Settlement Handover (Agent: ${a ? a.name : 'Unknown'}) - OTP Verified` });
+      await saveDB(); alert('OTP Verified successfully! Payment has been recorded in the ledger.'); refreshAllViews();
+      if (document.getElementById('tab-invoices').classList.contains('tab-active')) { generateInvoicePreview(); renderVendorLedger(); }
     }
 
     async function cancelSettlementOtp(otpId) {
       if(!confirm('Are you sure you want to cancel and delete this OTP?')) return;
-      db.vendorSettlementOtps = db.vendorSettlementOtps.filter(x => x.id !== otpId);
-      await saveDB();
-      refreshAllViews();
+      db.vendorSettlementOtps = db.vendorSettlementOtps.filter(x => x.id !== otpId); await saveDB(); refreshAllViews();
     }
 
-    // CONSIGNMENTS
     function openNewConsignmentModal() {
       document.getElementById('cIdInput').value = Math.floor(10000 + Math.random()*90000).toString();
       document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join(''); syncVendorPickupAddress();
@@ -830,16 +751,19 @@
       let updated = 0;
       ids.forEach(id => {
         const c = db.consignments.find(x=>x.id.toUpperCase()===id);
-        if(c && c.status !== 'Delivered' && c.status !== 'Returned') { c.assignedTo = agent; if(c.status === 'Created') c.status = 'Assigned'; updated++; }
+        if(c && c.status !== 'Delivered' && c.status !== 'Returned') { 
+          c.assignedTo = agent; 
+          if(c.status === 'Created') c.status = 'Assigned'; 
+          if(c.status === 'Picked Up') c.status = 'Out for delivery';
+          updated++; 
+        }
       });
       if(updated > 0) { await saveDB(); renderConsignments(); document.getElementById('bulkIds').value=''; alert(updated + ' consignments assigned.'); }
     }
 
     async function saveNewConsignment(e) {
       e.preventDefault(); const id = document.getElementById('cIdInput').value.trim().toUpperCase(); if (db.consignments.some(c=>c.id.toUpperCase()===id)) { alert('ID exists!'); return; }
-      
-      const ag = document.getElementById('cAgentSelect').value || null;
-      const isAgent = currentUser.role === 'AGENT';
+      const ag = document.getElementById('cAgentSelect').value || null; const isAgent = currentUser.role === 'AGENT';
       
       db.consignments.unshift({ 
         id, 
@@ -853,6 +777,9 @@
         feeType: document.getElementById('cFeeType').value, 
         pendingModification: null, 
         assignedTo: ag, 
+        pickedUpBy: null,
+        cocPendingAmount: 0,
+        cocStatus: null,
         status: ag ? 'Assigned' : 'Created', 
         qrGenerated: false, 
         otpCode: String(Math.floor(1000+Math.random()*9000)), 
@@ -865,16 +792,10 @@
         deliveredAt: null 
       });
       
-      await saveDB(); 
-      closeModal('consignmentModal'); 
-      refreshAllViews();
-
-      if (isAgent) {
-        alert("Consignment successfully added to the Unassigned Pool.");
-      }
+      await saveDB(); closeModal('consignmentModal'); refreshAllViews();
+      if (isAgent) { alert("Consignment successfully added to the Unassigned Pool."); }
     }
 
-    // --- BULK IMPORT FEATURE ---
     function downloadImportTemplate() {
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const wb = XLSX.utils.book_new();
@@ -884,27 +805,21 @@
         ["10046", "VND-001", "Jane Smith", "+971509876543", "Abu Dhabi", 0, 30, "COC"]
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
-      XLSX.utils.book_append_sheet(wb, ws, "Template");
-      XLSX.writeFile(wb, "Consignment_Import_Template.xlsx");
+      XLSX.utils.book_append_sheet(wb, ws, "Template"); XLSX.writeFile(wb, "Consignment_Import_Template.xlsx");
     }
 
     function importConsignmentsFromExcel(e) {
-      const file = e.target.files[0];
-      if (!file) return;
+      const file = e.target.files[0]; if (!file) return;
       if (typeof XLSX === 'undefined') { alert("Excel library is still loading. Please try again."); return; }
       
       const reader = new FileReader();
       reader.onload = async (evt) => {
         try {
-          const data = new Uint8Array(evt.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheet = workbook.SheetNames[0];
-          const rows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
-          
+          const workbook = XLSX.read(new Uint8Array(evt.target.result), { type: 'array' });
+          const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
           if(rows.length === 0) { alert("The uploaded spreadsheet is empty."); return; }
           
-          let importedCount = 0;
-          let errorCount = 0;
+          let importedCount = 0; let errorCount = 0;
 
           for (const row of rows) {
             let id = (row["Consignment ID"] || "").toString().trim();
@@ -916,63 +831,21 @@
             const dFee = parseFloat(row["Delivery Fee"]) || 0;
             const fType = (row["Fee Type"] || "COD").toString().trim().toUpperCase();
 
-            // Skip row if required fields are missing
-            if(!vCode || !cName || !dAddress) {
-              errorCount++;
-              continue;
-            }
-            
-            // Auto generate ID if missing, or skip if provided ID is duplicate
-            if (!id) {
-               id = Math.floor(10000 + Math.random() * 90000).toString();
-               while(db.consignments.some(c => c.id === id)) {
-                   id = Math.floor(10000 + Math.random() * 90000).toString();
-               }
-            } else {
-               if(db.consignments.some(c => c.id.toUpperCase() === id.toUpperCase())) {
-                   errorCount++; continue; 
-               }
-            }
+            if(!vCode || !cName || !dAddress) { errorCount++; continue; }
+            if (!id) { id = Math.floor(10000 + Math.random() * 90000).toString(); while(db.consignments.some(c => c.id === id)) { id = Math.floor(10000 + Math.random() * 90000).toString(); } } 
+            else { if(db.consignments.some(c => c.id.toUpperCase() === id.toUpperCase())) { errorCount++; continue; } }
 
-            // Fallback to empty string if vendor not in system yet
             const v = getVendorByCode(vCode);
-            const pickup = v ? v.address : "";
-
             db.consignments.unshift({ 
-              id, 
-              vendorCode: vCode, 
-              pickupFrom: pickup, 
-              customerName: cName, 
-              customerPhone: cPhone, 
-              deliveryAddress: dAddress, 
-              productAmount: pAmt, 
-              deliveryCharge: dFee, 
-              feeType: fType, 
-              pendingModification: null, 
-              assignedTo: null, 
-              status: 'Created', 
-              qrGenerated: false, 
-              otpCode: String(Math.floor(1000 + Math.random() * 9000)), 
-              otpVerified: false, 
-              pickupPhoto: null, 
-              deliveryPhoto: null, 
-              returnReason: '', 
-              createdAt: new Date().toISOString().split('T')[0], 
-              pickedUpAt: null, 
-              deliveredAt: null 
+              id, vendorCode: vCode, pickupFrom: v ? v.address : "", customerName: cName, customerPhone: cPhone, deliveryAddress: dAddress, 
+              productAmount: pAmt, deliveryCharge: dFee, feeType: fType, pendingModification: null, assignedTo: null, pickedUpBy: null, cocPendingAmount: 0, cocStatus: null,
+              status: 'Created', qrGenerated: false, otpCode: String(Math.floor(1000 + Math.random() * 9000)), otpVerified: false, 
+              pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: null, deliveredAt: null 
             });
             importedCount++;
           }
-          
-          await saveDB();
-          refreshAllViews();
-          alert(`Successfully imported ${importedCount} consignments.\nSkipped ${errorCount} invalid rows.`);
-        } catch (err) {
-          console.error(err);
-          alert("Error parsing the file. Please ensure it follows the downloaded template format.");
-        } finally {
-          e.target.value = ""; // Reset the input so the same file can be uploaded again if needed
-        }
+          await saveDB(); refreshAllViews(); alert(`Successfully imported ${importedCount} consignments.\nSkipped ${errorCount} invalid rows.`);
+        } catch (err) { alert("Error parsing the file. Please ensure it follows the downloaded template format."); } finally { e.target.value = ""; }
       };
       reader.readAsArrayBuffer(file);
     }
@@ -980,19 +853,33 @@
     function renderConsignments() {
       const g = document.getElementById('consignmentsGrid'), stat = document.getElementById('filterStatus').value, slc = document.getElementById('filterAgentSlicer')?.value||'ALL', q = document.getElementById('filterSearchText').value.toLowerCase(), isA = currentUser.role==='ADMIN';
       const ls = db.consignments.filter(c => {
-        if (!isA && c.assignedTo!==currentUser.id) return false;
+        if (!isA) {
+            const isAssigned = c.assignedTo === currentUser.id;
+            const isPicker = c.pickedUpBy === currentUser.id;
+            const isPool = c.status === 'Created';
+            if (!isAssigned && !isPicker && !isPool) return false;
+        }
         if (stat === 'PENDING_ALL') { if(c.status === 'Delivered' || c.status === 'Returned') return false; } else if (stat!=='ALL' && c.status!==stat) return false;
         if (isA && slc!=='ALL') { if(slc==='UNASSIGNED'&&c.assignedTo) return false; if(slc!=='UNASSIGNED'&&c.assignedTo!==slc) return false; }
         if (q && !`${c.id} ${c.customerName} ${c.vendorCode}`.toLowerCase().includes(q)) return false; return true;
       });
+      
       if (ls.length===0) { g.innerHTML=`<div class="col-span-full p-6 bg-white border rounded-lg text-center font-bold">No orders found.</div>`; return; }
       const ags = db.users.filter(u=>u.role==='AGENT'&&u.status==='ACTIVE');
       g.innerHTML = ls.map(c => {
         const v = getVendorByCode(c.vendorCode), isDel = c.status==='Delivered';
+        const canPickup = !['Picked Up','Out for delivery','Delivered','Returned'].includes(c.status) && (!c.assignedTo || c.assignedTo === currentUser.id);
+        const canDeliver = ['Picked Up','Out for delivery'].includes(c.status) && c.assignedTo === currentUser.id;
+
         return `
           <div class="bg-white rounded-xl shadow-md border border-gray-200 p-4 flex flex-col justify-between">
             <div class="border-b border-gray-100 pb-2 mb-2 flex justify-between items-center"><span class="font-black text-slate-900">${c.id}</span> <span class="px-2 py-0.5 rounded bg-gray-100 text-[10px] font-bold">${c.status}</span></div>
-            <div class="text-xs text-gray-600 space-y-1"><p><b>Vendor:</b> ${v?v.name:c.vendorCode}</p><p><b>Customer:</b> ${c.customerName}</p><p><b>Address:</b> ${c.deliveryAddress}</p><p><b>Agent:</b> ${getAgentName(c.assignedTo)}</p></div>
+            <div class="text-xs text-gray-600 space-y-1">
+              <p><b>Vendor:</b> ${v?v.name:c.vendorCode}</p><p><b>Customer:</b> ${c.customerName}</p><p><b>Address:</b> ${c.deliveryAddress}</p>
+              <p><b>Delivery Agent:</b> ${getAgentName(c.assignedTo)}</p>
+              ${c.pickedUpBy ? `<p><b>Picked Up By:</b> ${getAgentName(c.pickedUpBy)}</p>` : ''}
+              ${c.cocPendingAmount > 0 ? `<p class="text-[10px] font-bold uppercase p-1 rounded inline-block mt-1 border ${c.cocStatus === 'COLLECTED' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-red-50 text-red-600 border-red-200'}">${c.cocStatus === 'COLLECTED' ? 'COC Held by Agent' : 'COC Pending Vendor'}: ${formatAmt(c.cocPendingAmount)}</p>` : ''}
+            </div>
             <div class="mt-2 p-2 bg-gray-50 border border-gray-200 rounded text-xs">
               <div class="flex justify-between items-center"><p class="text-gray-500">Collect from Customer:</p><p class="font-black text-emerald-700 text-sm">${formatAmt(c.productAmount)}</p></div>
               <div class="flex justify-between items-center mt-1 border-t border-gray-200 pt-1"><p class="text-gray-500">Delivery Fee (${c.feeType}):</p><p class="font-bold text-slate-700">${formatAmt(c.deliveryCharge)}</p></div>
@@ -1001,8 +888,9 @@
             <div class="mt-3 space-y-2">
               ${isA ? (isDel?`<div class="flex gap-2"><p class="flex-1 text-[10px] font-bold text-emerald-700 text-center uppercase py-1 border border-emerald-200 rounded bg-emerald-50">Delivered</p><button onclick="openAmountEditModal('${c.id}')" class="bg-slate-900 text-yellow-400 text-xs font-bold px-3 rounded shadow">Edit</button></div>`:`<select onchange="adminAssignAgent('${c.id}',this.value)" class="w-full border rounded px-2 py-1.5 text-xs font-bold bg-gray-50"><option value="">-Pool-</option>${ags.map(a=>`<option value="${a.id}" ${c.assignedTo===a.id?'selected':''}>${a.name}</option>`).join('')}</select>`) : ''}
               <div class="flex gap-1.5 mt-1">
-                ${!['Picked Up','Out for delivery','Delivered','Returned'].includes(c.status) && c.assignedTo===currentUser.id ? `<button onclick="openPickupModal('${c.id}')" class="flex-1 bg-yellow-400 font-bold text-slate-900 py-1.5 rounded text-xs shadow-sm">Pickup</button>` : ''}
-                ${['Picked Up','Out for delivery'].includes(c.status) && c.assignedTo===currentUser.id ? `<button onclick="openDeliveryModal('${c.id}')" class="flex-1 bg-emerald-600 text-white font-bold py-1.5 rounded text-xs shadow-sm">Deliver</button>` : ''}
+                ${canPickup ? `<button onclick="openPickupModal('${c.id}')" class="flex-1 bg-yellow-400 font-bold text-slate-900 py-1.5 rounded text-xs shadow-sm">Pickup</button>` : ''}
+                ${canDeliver ? `<button onclick="openDeliveryModal('${c.id}')" class="flex-1 bg-emerald-600 text-white font-bold py-1.5 rounded text-xs shadow-sm">Deliver</button>` : ''}
+                ${c.feeType === 'COC' && c.cocPendingAmount > 0 && c.cocStatus === 'PENDING' && c.pickedUpBy === currentUser.id ? `<button onclick="agentMarkCocCollected('${c.id}')" class="flex-1 bg-blue-600 text-white font-bold py-1.5 rounded text-xs shadow-sm">Mark COC Recv</button>` : ''}
                 <button onclick="sendWhatsAppStatus('${c.id}')" class="bg-green-500 text-white px-2.5 py-1.5 rounded text-xs font-bold shadow-sm">WA</button>
                 <button onclick="showConsignmentDetails('${c.id}')" class="bg-gray-800 text-white px-2.5 py-1.5 rounded text-xs font-bold shadow-sm">View</button>
               </div>
@@ -1011,77 +899,138 @@
       }).join('');
     }
 
-    async function adminAssignAgent(cid, aid) { if(currentUser.role!=='ADMIN') return; const c = db.consignments.find(x=>x.id===cid); if(!c||c.status==='Delivered') return; c.assignedTo = aid||null; if(c.status==='Created'&&aid) c.status='Assigned'; if(!aid&&c.status==='Assigned') c.status='Created'; await saveDB(); renderConsignments(); }
+    async function agentMarkCocCollected(cid) {
+      if(!confirm('Mark this pending COC amount as collected from the vendor?')) return;
+      const c = db.consignments.find(x => x.id === cid);
+      if(c) {
+        c.cocStatus = 'COLLECTED';
+        await saveDB();
+        refreshAllViews();
+        alert('Marked as collected. The Admin must now confirm receipt in the office.');
+      }
+    }
+
+    async function adminConfirmPendingCoc(cid) {
+      if(!confirm('Confirm physical receipt of this pending COC amount in the office?')) return;
+      const c = db.consignments.find(x => x.id === cid);
+      if(c) {
+        c.cocStatus = 'SETTLED';
+        c.cocPendingAmount = 0; // Clears the deduction for the vendor
+        await saveDB();
+        refreshAllViews();
+        if (document.getElementById('tab-invoices').classList.contains('tab-active')) generateInvoicePreview(); 
+      }
+    }
+
+    async function adminAssignAgent(cid, aid) { 
+      if(currentUser.role!=='ADMIN') return; const c = db.consignments.find(x=>x.id===cid); if(!c||c.status==='Delivered') return; 
+      c.assignedTo = aid||null; 
+      if(c.status==='Created'&&aid) c.status='Assigned'; 
+      if(!aid&&c.status==='Assigned') c.status='Created'; 
+      if(c.status==='Picked Up'&&aid) c.status='Out for delivery';
+      await saveDB(); renderConsignments(); 
+    }
 
     function compressImageFile(file, cb) { const r = new FileReader(); r.onload=e=>{ const img=new Image(); img.onload=()=>{ const cvs=document.createElement('canvas'); let w=img.width, h=img.height, m=480; if(w>h&&w>m){h*=m/w;w=m;}else if(h>m){w*=m/h;h=m;} cvs.width=w; cvs.height=h; cvs.getContext('2d').drawImage(img,0,0,w,h); cb(cvs.toDataURL('image/jpeg',0.55)); }; img.src=e.target.result; }; r.readAsDataURL(file); }
     let tempPhotoData = null;
 
-    // DIRECT CLOUD UPLOAD FUNCTION
     async function uploadImageToSupabase(base64Str, filename) {
-      if(!supabaseClient) return base64Str; // Falls back to local IndexedDB Base64 if offline
-      try {
-        const res = await fetch(base64Str);
-        const blob = await res.blob();
-        const { data, error } = await supabaseClient.storage.from('nextway-assets').upload(filename, blob, { contentType: 'image/jpeg', upsert: true });
-        if(error) return base64Str; 
-        return supabaseClient.storage.from('nextway-assets').getPublicUrl(filename).data.publicUrl;
-      } catch(e) { return base64Str; }
+      if(!supabaseClient) return base64Str;
+      try { const res = await fetch(base64Str); const blob = await res.blob(); const { data, error } = await supabaseClient.storage.from('nextway-assets').upload(filename, blob, { contentType: 'image/jpeg', upsert: true }); if(error) return base64Str; return supabaseClient.storage.from('nextway-assets').getPublicUrl(filename).data.publicUrl; } catch(e) { return base64Str; }
     }
     
-    function openPickupModal(cid) { const c = db.consignments.find(x=>x.id===cid); tempPhotoData = c.pickupPhoto; document.getElementById('actionModalTitle').textContent = `Pickup: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-gray-500 mb-2">If fee is COC, collect ${formatAmt(c.deliveryCharge)} from Vendor.</p><label class="font-bold">Capture Photo</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-gray-50 p-2 rounded border text-xs" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded border mx-auto" /><button id="btnConfirmAction" onclick="confirmPickup('${c.id}')" class="w-full bg-yellow-400 text-slate-900 font-bold py-2.5 rounded shadow">Confirm Pickup</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
+    function openPickupModal(cid) { 
+      const c = db.consignments.find(x=>x.id===cid); tempPhotoData = c.pickupPhoto; 
+      let cocHtml = '';
+      if (c.feeType === 'COC') {
+        cocHtml = `<div class="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded text-center">
+            <p class="text-[10px] font-bold text-yellow-800 uppercase">Collect from Vendor (COC)</p>
+            <p class="text-2xl text-yellow-700 font-black">${formatAmt(c.deliveryCharge)}</p>
+            <label class="flex items-center justify-center gap-2 mt-2 text-xs font-bold text-red-600 cursor-pointer">
+              <input type="checkbox" id="modalCocPending" class="w-4 h-4"> Amount not received (Pending)
+            </label>
+          </div>`;
+      }
+      document.getElementById('actionModalTitle').textContent = `Pickup: ${c.id}`; 
+      document.getElementById('actionModalBody').innerHTML = `
+        ${cocHtml}
+        <label class="font-bold">Capture Photo</label>
+        <input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-gray-50 p-2 rounded border text-xs" />
+        <img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded border mx-auto" />
+        <button id="btnConfirmAction" onclick="confirmPickup('${c.id}')" class="w-full bg-yellow-400 text-slate-900 font-bold py-2.5 rounded shadow">Confirm Pickup</button>
+      `; 
+      document.getElementById('actionModal').classList.remove('hidden'); 
+    }
+
     function handleModalPhoto(e) { if(e.target.files[0]) compressImageFile(e.target.files[0], b64 => { tempPhotoData = b64; document.getElementById('modalPhotoPreview').src=b64; document.getElementById('modalPhotoPreview').classList.remove('hidden'); }); }
     
     async function confirmPickup(cid) { 
-      const btn = document.getElementById('btnConfirmAction');
-      btn.textContent = 'Uploading Photo...'; btn.disabled = true;
+      const btn = document.getElementById('btnConfirmAction'); btn.textContent = 'Uploading Photo...'; btn.disabled = true;
       const c = db.consignments.find(x=>x.id===cid); 
       const photoUrl = tempPhotoData ? await uploadImageToSupabase(tempPhotoData, `pickup_${cid}_${Date.now()}.jpg`) : null;
-      c.status = 'Out for delivery'; c.pickupPhoto = photoUrl; c.qrGenerated = true; c.pickedUpAt = new Date().toISOString(); 
+      c.status = 'Picked Up'; 
+      c.pickupPhoto = photoUrl; 
+      c.qrGenerated = true; 
+      c.pickedUpAt = new Date().toISOString(); 
+      c.pickedUpBy = currentUser.id;
+      
+      if (c.feeType === 'COC') {
+        if (document.getElementById('modalCocPending')?.checked) {
+          c.cocPendingAmount = c.deliveryCharge;
+          c.cocStatus = 'PENDING';
+        } else {
+          c.cocPendingAmount = 0;
+          c.cocStatus = 'SETTLED';
+        }
+      }
+
       await saveDB(); closeModal('actionModal'); renderConsignments(); 
     }
     
     function openDeliveryModal(cid) { const c = db.consignments.find(x=>x.id===cid); document.getElementById('actionModalTitle').textContent = `Deliver: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<div class="mb-2 p-3 bg-gray-50 border border-emerald-200 rounded text-center"><p class="text-xs font-bold text-gray-500 uppercase">Collect from Customer</p><p class="text-2xl text-emerald-700 font-black">${formatAmt(c.productAmount)}</p></div><label class="font-bold">Capture Delivery Photo</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-gray-50 p-2 rounded border text-xs" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded border mx-auto" /><button id="btnConfirmAction" onclick="confirmDelivery('${c.id}')" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded shadow">Confirm Delivery</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
     
     async function confirmDelivery(cid) { 
-      const btn = document.getElementById('btnConfirmAction');
-      btn.textContent = 'Uploading Photo...'; btn.disabled = true;
-      const c=db.consignments.find(x=>x.id===cid); 
-      const photoUrl = tempPhotoData ? await uploadImageToSupabase(tempPhotoData, `delivery_${cid}_${Date.now()}.jpg`) : null;
+      const btn = document.getElementById('btnConfirmAction'); btn.textContent = 'Uploading Photo...'; btn.disabled = true;
+      const c=db.consignments.find(x=>x.id===cid); const photoUrl = tempPhotoData ? await uploadImageToSupabase(tempPhotoData, `delivery_${cid}_${Date.now()}.jpg`) : null;
       c.status='Delivered'; c.deliveryPhoto=photoUrl; c.deliveredAt=new Date().toISOString(); 
       await saveDB(); closeModal('actionModal'); refreshAllViews(); 
     }
     
     function sendWhatsAppStatus(cid) { const c=db.consignments.find(x=>x.id===cid); window.open(`https://wa.me/${c.customerPhone.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(`Order ${c.id} is ${c.status}. Total to pay: ${formatAmt(c.productAmount)}`)}`,'_blank'); }
     
-    // CONFIRMATIONS & EDITS
     function renderConfirmations() {
       const p = db.consignments.filter(c=>c.pendingModification && (currentUser.role==='ADMIN' || c.assignedTo===currentUser.id));
       const badge = document.getElementById('navConfirmBadge');
       if (p.length > 0) { badge.textContent = p.length; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
       document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c=>`<div class="p-3 border rounded bg-yellow-50 mb-2 text-xs"><b>${c.id}</b>: Prod ${c.productAmount} -> <b class="text-emerald-700">${c.pendingModification.newProductAmount}</b> | Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${c.pendingModification.newDeliveryCharge}</b> ${currentUser.role==='AGENT'&&c.assignedTo===currentUser.id?`<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-yellow-400 font-bold px-3 py-1.5 rounded shadow">Confirm Edit</button>`:'<br/><span class="text-[10px] text-gray-500">Waiting for agent confirmation</span>'}</div>`).join('') : '<p class="text-xs text-gray-500">No pending modification requests.</p>';
 
-      // NEW: Render Admin Vendor Settlement OTPs with Agent Tracking and Cancel feature
       if (currentUser.role === 'ADMIN') {
         const pendingOtps = db.vendorSettlementOtps.filter(o => o.status === 'PENDING');
         const otpCard = document.getElementById('adminSettlementOtpCard');
         if (otpCard) {
           otpCard.classList.toggle('hidden', pendingOtps.length === 0);
           document.getElementById('adminSettlementOtpList').innerHTML = pendingOtps.map(o => {
-            const v = getVendorByCode(o.vendorCode);
-            const a = db.users.find(u => u.id === o.agentId);
-            const agentName = a ? a.name : 'Unknown Agent';
-            
+            const v = getVendorByCode(o.vendorCode); const a = db.users.find(u => u.id === o.agentId); const agentName = a ? a.name : 'Unknown Agent';
             return `<div class="p-3 border border-gray-200 rounded-lg bg-gray-50 mb-2 text-xs flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+              <div><b>${v ? v.name : o.vendorCode}</b><br/><span class="text-gray-500">Amount: <b class="text-emerald-700">${formatAmt(o.amount)}</b></span><br/><span class="text-gray-500">Agent: <b>${agentName}</b></span></div>
+              <div class="flex gap-1 shrink-0"><input id="verifyOtpInput_${o.id}" type="text" placeholder="OTP" class="w-16 border border-gray-300 rounded px-2 py-1 text-xs text-center font-bold" /><button onclick="verifySettlementOtp('${o.id}')" class="bg-slate-900 hover:bg-slate-800 text-yellow-400 font-bold px-3 py-1.5 rounded shadow transition">Verify</button><button onclick="cancelSettlementOtp('${o.id}')" class="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1.5 rounded shadow transition">Cancel</button></div>
+            </div>`;
+          }).join('');
+        }
+
+        // Render Pending COC Office Handovers
+        const cocHandovers = db.consignments.filter(c => c.feeType === 'COC' && c.cocStatus === 'COLLECTED');
+        const cocCard = document.getElementById('adminCocHandoverCard');
+        if (cocCard) {
+          cocCard.classList.toggle('hidden', cocHandovers.length === 0);
+          document.getElementById('adminCocHandoverList').innerHTML = cocHandovers.map(c => {
+            const ag = db.users.find(u => u.id === c.pickedUpBy);
+            return `<div class="p-3 border border-blue-200 rounded-lg bg-blue-50 mb-2 text-xs flex justify-between items-center gap-3">
               <div>
-                <b>${v ? v.name : o.vendorCode}</b><br/>
-                <span class="text-gray-500">Amount: <b class="text-emerald-700">${formatAmt(o.amount)}</b></span><br/>
-                <span class="text-gray-500">Agent: <b>${agentName}</b></span>
+                <b>${c.id}</b> - Agent: <b>${ag ? ag.name : c.pickedUpBy}</b><br/>
+                Amount: <b class="text-blue-800">${formatAmt(c.cocPendingAmount)}</b>
               </div>
-              <div class="flex gap-1 shrink-0">
-                <input id="verifyOtpInput_${o.id}" type="text" placeholder="OTP" class="w-16 border border-gray-300 rounded px-2 py-1 text-xs text-center font-bold" />
-                <button onclick="verifySettlementOtp('${o.id}')" class="bg-slate-900 hover:bg-slate-800 text-yellow-400 font-bold px-3 py-1.5 rounded shadow transition">Verify</button>
-                <button onclick="cancelSettlementOtp('${o.id}')" class="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1.5 rounded shadow transition">Cancel</button>
-              </div>
+              <button onclick="adminConfirmPendingCoc('${c.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1.5 rounded shadow shrink-0">Confirm Office Receipt</button>
             </div>`;
           }).join('');
         }
@@ -1106,6 +1055,8 @@
             <p><b>Address:</b> ${c.deliveryAddress}</p>
             <p><b>Cust Pay:</b> <span class="text-emerald-700 font-bold">${formatAmt(c.productAmount)}</span></p>
             <p><b>Fee Type:</b> ${c.feeType}</p>
+            <p><b>Picked Up By:</b> ${getAgentName(c.pickedUpBy)}</p>
+            ${c.cocPendingAmount > 0 ? `<p class="text-red-600 font-bold border border-red-200 bg-red-50 p-1 rounded inline-block mt-1">COC Pending: ${formatAmt(c.cocPendingAmount)} (${c.cocStatus})</p>` : ''}
           </div>
           <div id="qrCodeCanvas" class="flex justify-center items-center p-2 rounded bg-white border shrink-0 min-w-[90px]"></div>
         </div>
@@ -1117,42 +1068,111 @@
       if(c.qrGenerated){ setTimeout(()=>{ document.getElementById('qrCodeCanvas').innerHTML=''; new QRCode(document.getElementById('qrCodeCanvas'),{text:JSON.stringify({id:c.id}),width:80,height:80}); }, 100); }
     }
 
-    // DAILY REPORTS & EXCEL
+    // SHARED AGENT FINANCE LOGIC (Handles pickup vs delivery decoupling)
+    function getAgentFinanceRows(agentId, dateStr, statusFilter) {
+      const rows = []; let totalCollected = 0;
+      db.consignments.forEach(c => {
+          let rowAmt = 0; let typeLabel = [];
+          const deliveredToday = c.status === 'Delivered' && c.assignedTo === agentId && c.deliveredAt && c.deliveredAt.split('T')[0] === dateStr;
+          const pickedUpTodayCOC = c.pickedUpBy === agentId && c.feeType === 'COC' && c.pickedUpAt && c.pickedUpAt.split('T')[0] === dateStr && c.cocPendingAmount === 0;
+
+          if (statusFilter !== 'ALL' && c.status !== statusFilter) return;
+
+          if (deliveredToday) {
+              if (c.feeType === 'COC') { rowAmt += c.productAmount; typeLabel.push('Delivery (Prod)'); } 
+              else if (c.feeType === 'COD') { rowAmt += (c.productAmount === 0 ? c.deliveryCharge : c.productAmount); typeLabel.push('Delivery (COD)'); } 
+              else if (c.feeType === 'CAD') { rowAmt += c.productAmount; typeLabel.push('Delivery (CAD)'); }
+          }
+          if (pickedUpTodayCOC) { rowAmt += c.deliveryCharge; typeLabel.push('Pickup (COC)'); }
+
+          if (rowAmt > 0 || typeLabel.length > 0) {
+              totalCollected += rowAmt;
+              rows.push({ id: c.id, customer: c.customerName, type: typeLabel.join(' + ') || c.status, amount: rowAmt });
+          }
+      });
+      return { rows, totalCollected };
+    }
+
     function generateAdminAgentReport() {
       const id = document.getElementById('adminReportSelect').value, d = document.getElementById('adminReportDate').value, stat = document.getElementById('adminReportStatus').value, ag = db.users.find(u=>u.id===id);
-      const r = db.consignments.filter(c=>c.assignedTo===id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      let tc = 0; const tbody = r.map(c=>{
-          const amt = c.status === 'Delivered' ? (c.feeType === 'COC' ? c.productAmount + c.deliveryCharge : (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount)) : 0; 
-          tc+=amt; 
-          return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td></tr>`;
-      }).join('');
-      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-gray-200 pb-4"><div><h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-gray-500">Agent Finance Sheet</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-gray-600 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Deliveries</p><p class="text-lg font-bold text-slate-900">${r.length}</p></div><div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Collected</p><p class="text-lg font-black text-emerald-900">${formatAmt(tc)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Status</th><th class="p-2 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-gray-200">${tbody}</tbody></table></div>`;
+      const { rows, totalCollected } = getAgentFinanceRows(id, d, stat);
+      const tbody = rows.map(r=>`<tr><td class="p-2 font-bold">${r.id}</td><td class="p-2">${r.customer}</td><td class="p-2">${r.type}</td><td class="p-2 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
+      
+      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-gray-200 pb-4"><div><h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-gray-500">Agent Finance Sheet</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-gray-600 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Total Entries</p><p class="text-lg font-bold text-slate-900">${rows.length}</p></div><div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Collected</p><p class="text-lg font-black text-emerald-900">${formatAmt(totalCollected)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Customer</th><th class="p-2">Type</th><th class="p-2 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-gray-200">${tbody}</tbody></table></div>`;
       document.getElementById('printableAdminAgentReport').classList.remove('hidden');
+    }
+
+    function printAdminAgentReport() {
+      document.querySelectorAll('.print-area').forEach(e=>e.classList.remove('print-area'));
+      document.getElementById('printableAdminAgentReport').classList.add('print-area'); 
+      window.print();
+    }
+
+    function printAdminCocReport() {
+      const aid = document.getElementById('adminCocReportSelect').value;
+      const ag = aid === 'ALL' ? null : db.users.find(u=>u.id===aid);
+      const ls = db.consignments.filter(c => c.feeType === 'COC' && c.cocPendingAmount > 0 && (aid === 'ALL' || c.pickedUpBy === aid));
+      
+      let tot = 0;
+      const tbody = ls.map(c => {
+        tot += c.cocPendingAmount;
+        const v = getVendorByCode(c.vendorCode);
+        const a = db.users.find(u=>u.id===c.pickedUpBy);
+        return `<tr>
+          <td class="p-2 font-bold">${c.id}</td>
+          <td class="p-2">${v ? v.name : c.vendorCode}</td>
+          <td class="p-2">${a ? a.name : c.pickedUpBy}</td>
+          <td class="p-2">${c.cocStatus === 'COLLECTED' ? 'Agent Holds Cash' : 'Pending Vendor'}</td>
+          <td class="p-2 text-right font-black text-red-700">${formatAmt(c.cocPendingAmount)}</td>
+        </tr>`;
+      }).join('');
+
+      document.getElementById('printableAdminAgentReport').innerHTML = `
+        <div class="flex justify-between border-b border-gray-200 pb-4">
+          <div><h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-gray-500">Pending COC Tracking Report</p></div>
+          <div class="text-right"><p class="text-sm font-bold text-slate-900">${ag ? ag.name : 'ALL AGENTS'}</p><p class="text-xs text-gray-600 font-semibold">${new Date().toISOString().split('T')[0]}</p></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 my-4">
+          <div class="p-3 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs text-gray-500">Total Pending Orders</p><p class="text-lg font-bold text-slate-900">${ls.length}</p></div>
+          <div class="p-3 rounded-lg bg-red-50 border border-red-200"><p class="text-xs font-bold text-red-800">Total Pending Amount</p><p class="text-lg font-black text-red-900">${formatAmt(tot)} AED</p></div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead><tr class="bg-gray-100 border-b"><th class="p-2">ID</th><th class="p-2">Vendor</th><th class="p-2">Agent</th><th class="p-2">Status</th><th class="p-2 text-right">Pending Amt</th></tr></thead>
+            <tbody class="divide-y divide-gray-200">${tbody}</tbody>
+          </table>
+        </div>`;
+        
+      document.querySelectorAll('.print-area').forEach(e=>e.classList.remove('print-area')); 
+      document.getElementById('printableAdminAgentReport').classList.remove('hidden');
+      document.getElementById('printableAdminAgentReport').classList.add('print-area'); 
+      window.print();
     }
 
     function generateAgentFinanceReport() {
       if(currentUser.role !== 'AGENT') return;
       if(!document.getElementById('agentFinanceDate').value) document.getElementById('agentFinanceDate').value=new Date().toISOString().split('T')[0];
       const d = document.getElementById('agentFinanceDate').value, stat = document.getElementById('agentFinanceStatus').value;
-      const r = db.consignments.filter(c=>c.assignedTo===currentUser.id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      let tc = 0; document.getElementById('afTableBody').innerHTML = r.map(c=>{
-          const amt = c.status === 'Delivered' ? (c.feeType === 'COC' ? c.productAmount + c.deliveryCharge : (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount)) : 0; 
-          tc+=amt; 
-          return `<tr><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2">${c.status}</td><td class="p-2 text-right font-black">${formatAmt(amt)}</td></tr>`;
-      }).join('');
-      document.getElementById('afTotalCount').textContent=r.length; document.getElementById('afTotalCollected').textContent=formatAmt(tc) + ' AED';
+      const { rows, totalCollected } = getAgentFinanceRows(currentUser.id, d, stat);
+      
+      document.getElementById('afTableBody').innerHTML = rows.map(r=>`<tr><td class="p-2 font-bold">${r.id}</td><td class="p-2">${r.customer}</td><td class="p-2">${r.type}</td><td class="p-2 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
+      document.getElementById('afTotalCount').textContent = rows.length; document.getElementById('afTotalCollected').textContent = formatAmt(totalCollected) + ' AED';
       document.getElementById('afAgentNameDisplay').textContent = currentUser.name; document.getElementById('afDateDisplay').textContent = d;
     }
     
-    function printAgentFinanceReport(role) { document.querySelectorAll('.print-area').forEach(e=>e.classList.remove('print-area')); if(role==='admin'){document.getElementById('printableAdminAgentReport').classList.add('print-area');} else {document.getElementById('printableAgentFinance').classList.add('print-area');} window.print(); }
+    function printAgentFinanceReport() { 
+      document.querySelectorAll('.print-area').forEach(e=>e.classList.remove('print-area')); 
+      document.getElementById('printableAgentFinance').classList.add('print-area'); 
+      window.print(); 
+    }
     
     function exportAgentDailyExcel(role) {
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const id = role==='admin' ? document.getElementById('adminReportSelect').value : currentUser.id;
       const d = role==='admin' ? document.getElementById('adminReportDate').value : document.getElementById('agentFinanceDate').value;
       const stat = role==='admin' ? document.getElementById('adminReportStatus').value : document.getElementById('agentFinanceStatus').value;
-      const ls = db.consignments.filter(c=>c.assignedTo===id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
-      const data = ls.map(c => ({ "ID": c.id, "Customer": c.customerName, "Status": c.status, "Amount Collected": c.status==='Delivered' ? (c.feeType === 'COC' ? c.productAmount + c.deliveryCharge : (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount)) : 0 }));
+      const { rows } = getAgentFinanceRows(id, d, stat);
+      const data = rows.map(r => ({ "ID": r.id, "Customer": r.customer, "Type": r.type, "Amount Collected": r.amount }));
       const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "AgentReport"); XLSX.writeFile(wb, `AgentReport_${d}.xlsx`);
     }
 
@@ -1160,31 +1180,16 @@
       if(currentUser.role !== 'AGENT') return;
       if(!document.getElementById('agentFinanceDate').value) document.getElementById('agentFinanceDate').value=new Date().toISOString().split('T')[0];
       const d = document.getElementById('agentFinanceDate').value, stat = document.getElementById('agentFinanceStatus').value;
-      const r = db.consignments.filter(c=>c.assignedTo===currentUser.id && (c.deliveredAt?c.deliveredAt.split('T')[0]:c.createdAt)===d && (stat==='ALL' || c.status===stat));
+      const { rows, totalCollected } = getAgentFinanceRows(currentUser.id, d, stat);
       
-      let tc = 0;
-      let text = `*Daily Finance Report*\n`;
-      text += `*Name:* ${currentUser.name}\n`;
-      text += `*ID:* ${currentUser.id}\n`;
-      text += `*Date:* ${d}\n\n`;
-      
-      if(r.length === 0) {
-        text += `No deliveries found for this date.`;
-      } else {
-        r.forEach(c => {
-          const amt = c.status === 'Delivered' ? (c.feeType === 'COC' ? c.productAmount + c.deliveryCharge : (c.productAmount === 0 && c.feeType === 'COD' ? c.deliveryCharge : c.productAmount)) : 0;
-          tc += amt;
-          text += `• ${c.id} - ${c.status} - ${formatAmt(amt)}\n`;
-        });
-        text += `\n*Total Deliveries:* ${r.length}\n`;
-        text += `*Total Collected:* ${formatAmt(tc)} AED`;
-      }
-      
+      let text = `*Daily Finance Report*\n*Name:* ${currentUser.name}\n*ID:* ${currentUser.id}\n*Date:* ${d}\n\n`;
+      if(rows.length === 0) { text += `No deliveries found for this date.`; } 
+      else { rows.forEach(r => { text += `• ${r.id} - ${r.type} - ${formatAmt(r.amount)}\n`; }); text += `\n*Total Entries:* ${rows.length}\n*Total Collected:* ${formatAmt(totalCollected)} AED`; }
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    // INVOICES & EXCEL
     function updateInvoiceFilterInputs() { const t=document.getElementById('invFilterType').value; document.getElementById('invSingleDateWrap').classList.toggle('hidden',!['DATE','MONTH','YEAR'].includes(t)); document.getElementById('invRangeStartWrap').classList.toggle('hidden',t!=='RANGE'); document.getElementById('invRangeEndWrap').classList.toggle('hidden',t!=='RANGE'); if(t==='MONTH') document.getElementById('invSingleInput').type='month'; else if(t==='YEAR') document.getElementById('invSingleInput').type='number'; else document.getElementById('invSingleInput').type='date'; generateInvoicePreview(); }
+    
     function generateInvoicePreview() { 
       const vCode = document.getElementById('invVendorSelect').value; const type = document.getElementById('invFilterType').value; const sVal = document.getElementById('invSingleInput').value; const start = document.getElementById('invStartDate').value; const end = document.getElementById('invEndDate').value;
       
@@ -1197,21 +1202,19 @@
       document.getElementById('invPeriodHeader').textContent = period;
 
       const ls=db.consignments.filter(c => {
-        if(c.feeType === 'COC') return false; 
+        if(c.feeType === 'COC' && !(c.cocPendingAmount > 0)) return false; 
         if(vCode!=='ALL'&&c.vendorCode!==vCode) return false;
         if(c.productAmount === 0 && c.feeType === 'COD') return false; 
         const cd = c.createdAt;
-        if(type==='DATE'&&sVal&&cd!==sVal) return false;
-        if(type==='MONTH'&&sVal&&!cd.startsWith(sVal)) return false;
-        if(type==='YEAR'&&sVal&&!cd.startsWith(String(sVal))) return false;
-        if(type==='RANGE') { if(start&&cd<start) return false; if(end&&cd>end) return false; }
+        if(type==='DATE'&&sVal&&cd!==sVal) return false; if(type==='MONTH'&&sVal&&!cd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!cd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&cd<start) return false; if(end&&cd>end) return false; }
         return true;
       }); 
       
       let tp=0, td=0; 
       document.getElementById('invTableBody').innerHTML = ls.map(c=>{
-        tp+=c.productAmount; if(c.feeType === 'COD' || c.feeType === 'CAD') td+=c.deliveryCharge;
-        return `<tr><td class="p-2">${c.createdAt}</td><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2 text-right text-red-700">${formatAmt(c.deliveryCharge)}</td><td class="p-2 text-right font-black">${formatAmt(c.productAmount)}</td></tr>`;
+        tp+=c.productAmount; if(c.feeType === 'COD' || c.feeType === 'CAD' || (c.feeType === 'COC' && c.cocPendingAmount > 0)) td+=c.deliveryCharge;
+        const feeDisplay = c.feeType === 'COC' ? c.cocPendingAmount : c.deliveryCharge;
+        return `<tr><td class="p-2">${c.createdAt}</td><td class="p-2 font-bold">${c.id}</td><td class="p-2">${c.customerName}</td><td class="p-2 text-right text-red-700">${formatAmt(feeDisplay)}</td><td class="p-2 text-right font-black">${formatAmt(c.productAmount)}</td></tr>`;
       }).join(''); 
       
       let lp=0; const pL = db.vendorPayments.filter(p=>{
@@ -1220,11 +1223,7 @@
       });
       if(pL.length>0) { document.getElementById('invSettledLedgerWrap').classList.remove('hidden'); document.getElementById('invSettledTableBody').innerHTML = pL.map(p=>{ if(p.type==='PAID') lp+=p.amount; else lp-=p.amount; return `<tr><td class="p-1.5">${p.date}</td><td class="p-1.5 font-bold ${p.type==='PAID'?'text-emerald-700':'text-blue-700'}">${p.type}</td><td class="p-1.5">${p.notes}</td><td class="p-1.5 text-right font-bold">${formatAmt(p.amount)}</td></tr>`;}).join(''); } else { document.getElementById('invSettledLedgerWrap').classList.add('hidden'); }
       
-      document.getElementById('invTotalProduct').textContent=formatAmt(tp) + ' AED'; 
-      document.getElementById('invTotalDeductions').textContent=formatAmt(td) + ' AED'; 
-      document.getElementById('invSettledAmount').textContent=formatAmt(lp) + ' AED'; 
-      document.getElementById('invNetAmount').textContent=formatAmt(tp-td-lp) + ' AED'; 
-      
+      document.getElementById('invTotalProduct').textContent=formatAmt(tp) + ' AED'; document.getElementById('invTotalDeductions').textContent=formatAmt(td) + ' AED'; document.getElementById('invSettledAmount').textContent=formatAmt(lp) + ' AED'; document.getElementById('invNetAmount').textContent=formatAmt(tp-td-lp) + ' AED'; 
       setTimeout(()=>{ document.getElementById('pdfQrCodeCanvas').innerHTML=''; new QRCode(document.getElementById('pdfQrCodeCanvas'), { text: JSON.stringify({ Vendor: vCode, NetPayable: formatAmt(tp-td-lp), Date: new Date().toISOString() }), width: 64, height: 64 }); }, 100);
     }
     
@@ -1232,86 +1231,42 @@
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const v = document.getElementById('invVendorSelect').value; const type = document.getElementById('invFilterType').value; const sVal = document.getElementById('invSingleInput').value; const start = document.getElementById('invStartDate').value; const end = document.getElementById('invEndDate').value;
       const ls = db.consignments.filter(c => {
-        if(c.feeType === 'COC') return false; 
+        if(c.feeType === 'COC' && !(c.cocPendingAmount > 0)) return false; 
         if(v!=='ALL'&&c.vendorCode!==v) return false; if(c.productAmount === 0 && c.feeType === 'COD') return false; 
         const cd = c.createdAt; if(type==='DATE'&&sVal&&cd!==sVal) return false; if(type==='MONTH'&&sVal&&!cd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!cd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&cd<start) return false; if(end&&cd>end) return false; } return true;
       });
-      const data = ls.map(c => ({ "Date": c.createdAt, "ID": c.id, "Customer": c.customerName, "Delivery Fee": c.deliveryCharge, "Product Amount": c.productAmount }));
+      const data = ls.map(c => ({ "Date": c.createdAt, "ID": c.id, "Customer": c.customerName, "Delivery Fee / Pend. COC": c.feeType === 'COC' ? c.cocPendingAmount : c.deliveryCharge, "Product Amount": c.productAmount }));
       const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Invoice"); XLSX.writeFile(wb, `NEXTWAY_Invoice_${v}.xlsx`);
     }
 
     function printVendorInvoice() { document.querySelectorAll('.print-area').forEach(e=>e.classList.remove('print-area')); document.getElementById('printableInvoice').classList.add('print-area'); window.print(); }
     
-    // --- VENDOR MANAGEMENT (ADD / EDIT / DELETE) ---
     function openVendorModal() { 
-      editingVendorCode = null;
-      document.getElementById('vendorModalTitle').textContent = 'Add Vendor';
-      document.getElementById('vCode').value = 'VND-00'+(db.vendors.length+1); 
-      document.getElementById('vCode').readOnly = false;
-      document.getElementById('vCode').classList.remove('bg-gray-200');
-      document.getElementById('vName').value=''; 
-      document.getElementById('vPhone').value=''; 
-      document.getElementById('vAddress').value=''; 
-      document.getElementById('vendorModal').classList.remove('hidden'); 
+      editingVendorCode = null; document.getElementById('vendorModalTitle').textContent = 'Add Vendor'; document.getElementById('vCode').value = 'VND-00'+(db.vendors.length+1); 
+      document.getElementById('vCode').readOnly = false; document.getElementById('vCode').classList.remove('bg-gray-200');
+      document.getElementById('vName').value=''; document.getElementById('vPhone').value=''; document.getElementById('vAddress').value=''; document.getElementById('vendorModal').classList.remove('hidden'); 
     }
 
     function openEditVendorModal(code) {
-      const v = getVendorByCode(code);
-      if(!v) return;
-      editingVendorCode = code;
-      document.getElementById('vendorModalTitle').textContent = 'Edit Vendor';
-      document.getElementById('vCode').value = v.code;
-      document.getElementById('vCode').readOnly = true;
-      document.getElementById('vCode').classList.add('bg-gray-200'); // Gray out code so it can't be changed
-      document.getElementById('vName').value = v.name;
-      document.getElementById('vPhone').value = v.phone;
-      document.getElementById('vAddress').value = v.address;
-      document.getElementById('vendorModal').classList.remove('hidden');
+      const v = getVendorByCode(code); if(!v) return; editingVendorCode = code; document.getElementById('vendorModalTitle').textContent = 'Edit Vendor';
+      document.getElementById('vCode').value = v.code; document.getElementById('vCode').readOnly = true; document.getElementById('vCode').classList.add('bg-gray-200'); 
+      document.getElementById('vName').value = v.name; document.getElementById('vPhone').value = v.phone; document.getElementById('vAddress').value = v.address; document.getElementById('vendorModal').classList.remove('hidden');
     }
 
-    async function deleteVendor(code) {
-      if(!confirm(`Are you sure you want to permanently delete vendor ${code} without retaining any history or archive? \n\nThis action cannot be undone.`)) return;
-      db.vendors = db.vendors.filter(v => v.code !== code);
-      await saveDB();
-      renderVendors();
-    }
+    async function deleteVendor(code) { if(!confirm(`Are you sure you want to permanently delete vendor ${code} without retaining any history or archive? \n\nThis action cannot be undone.`)) return; db.vendors = db.vendors.filter(v => v.code !== code); await saveDB(); renderVendors(); }
 
     async function saveVendor(e) { 
       e.preventDefault(); 
-      if (editingVendorCode) {
-        const v = db.vendors.find(x => x.code === editingVendorCode);
-        if(v) {
-          v.name = document.getElementById('vName').value;
-          v.phone = document.getElementById('vPhone').value;
-          v.address = document.getElementById('vAddress').value;
-        }
-      } else {
-        const newCode = document.getElementById('vCode').value.toUpperCase();
-        if (db.vendors.some(x => x.code === newCode)) return alert('Vendor code already exists!');
-        db.vendors.push({
-          code: newCode, 
-          name: document.getElementById('vName').value, 
-          phone: document.getElementById('vPhone').value, 
-          address: document.getElementById('vAddress').value
-        }); 
+      if (editingVendorCode) { const v = db.vendors.find(x => x.code === editingVendorCode); if(v) { v.name = document.getElementById('vName').value; v.phone = document.getElementById('vPhone').value; v.address = document.getElementById('vAddress').value; } } 
+      else {
+        const newCode = document.getElementById('vCode').value.toUpperCase(); if (db.vendors.some(x => x.code === newCode)) return alert('Vendor code already exists!');
+        db.vendors.push({ code: newCode, name: document.getElementById('vName').value, phone: document.getElementById('vPhone').value, address: document.getElementById('vAddress').value }); 
       }
-      
-      await saveDB(); 
-      closeModal('vendorModal'); 
-      if (currentUser && currentUser.role === 'ADMIN') renderVendors(); 
-
-      // If the consignment modal is open, immediately update its dropdown
-      if (!document.getElementById('consignmentModal').classList.contains('hidden')) {
-        const currentSelected = document.getElementById('cVendorSelect').value;
-        document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join('');
-        document.getElementById('cVendorSelect').value = editingVendorCode ? currentSelected : document.getElementById('vCode').value.toUpperCase();
-        syncVendorPickupAddress();
-      }
+      await saveDB(); closeModal('vendorModal'); if (currentUser && currentUser.role === 'ADMIN') renderVendors(); 
+      if (!document.getElementById('consignmentModal').classList.contains('hidden')) { const currentSelected = document.getElementById('cVendorSelect').value; document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join(''); document.getElementById('cVendorSelect').value = editingVendorCode ? currentSelected : document.getElementById('vCode').value.toUpperCase(); syncVendorPickupAddress(); }
     }
     
-    function renderVendors() { 
-      document.getElementById('vendorTableBody').innerHTML = (document.getElementById('vendorCodeSearch').value ? db.vendors.filter(v=>v.code.includes(document.getElementById('vendorCodeSearch').value.toUpperCase())) : db.vendors).map(v=>`<tr><td class="p-2 font-bold">${v.code}</td><td class="p-2">${v.name}</td><td class="p-2">${v.phone}</td><td class="p-2">${v.address}</td><td class="p-2 font-bold">${db.consignments.filter(c=>c.vendorCode===v.code).length}</td><td class="p-2 flex gap-1"><button onclick="openEditVendorModal('${v.code}')" class="text-slate-900 font-bold bg-gray-200 px-2 py-1 rounded border shadow-sm">Edit</button><button onclick="deleteVendor('${v.code}')" class="text-white font-bold bg-red-600 px-2 py-1 rounded border shadow-sm">Del</button></td></tr>`).join(''); 
-    }
+    function renderVendors() { document.getElementById('vendorTableBody').innerHTML = (document.getElementById('vendorCodeSearch').value ? db.vendors.filter(v=>v.code.includes(document.getElementById('vendorCodeSearch').value.toUpperCase())) : db.vendors).map(v=>`<tr><td class="p-2 font-bold">${v.code}</td><td class="p-2">${v.name}</td><td class="p-2">${v.phone}</td><td class="p-2">${v.address}</td><td class="p-2 font-bold">${db.consignments.filter(c=>c.vendorCode===v.code).length}</td><td class="p-2 flex gap-1"><button onclick="openEditVendorModal('${v.code}')" class="text-slate-900 font-bold bg-gray-200 px-2 py-1 rounded border shadow-sm">Edit</button><button onclick="deleteVendor('${v.code}')" class="text-white font-bold bg-red-600 px-2 py-1 rounded border shadow-sm">Del</button></td></tr>`).join(''); }
     
     function openVendorPaymentModal() { document.getElementById('vpVendorSelect').innerHTML=db.vendors.map(v=>`<option value="${v.code}">${v.name}</option>`).join(''); document.getElementById('vendorPaymentModal').classList.remove('hidden'); }
     async function saveVendorLedgerEntry(e) { e.preventDefault(); db.vendorPayments.unshift({id:'LED-'+Date.now(), vendorCode:document.getElementById('vpVendorSelect').value, type:document.getElementById('vpType').value, amount:parseFloat(document.getElementById('vpAmount').value), date:document.getElementById('vpDate').value, notes:document.getElementById('vpNotes').value}); await saveDB(); closeModal('vendorPaymentModal'); renderVendorLedger(); generateInvoicePreview(); }
@@ -1320,53 +1275,16 @@
     
     function openAgentModal() { document.getElementById('aName').value=''; document.getElementById('aUser').value=''; document.getElementById('aPhone').value=''; document.getElementById('aPass').value=''; document.getElementById('agentModal').classList.remove('hidden'); }
     async function saveAgent(e) { e.preventDefault(); db.users.push({id:'AG-'+Math.floor(100+Math.random()*900), username:document.getElementById('aUser').value, name:document.getElementById('aName').value, phone:document.getElementById('aPhone').value, role:'AGENT', passwordHash:await hashPassword(document.getElementById('aPass').value), status:'ACTIVE'}); await saveDB(); closeModal('agentModal'); renderAgents(); }
-    function renderAgents() { 
-      document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminResetAgentPassword('${a.id}')" class="ml-1 text-slate-900 font-bold bg-yellow-400 px-2 py-1 rounded border shadow-sm">Reset Pass</button><button onclick="adminDeleteAgent('${a.id}')" class="ml-1 text-white font-bold bg-red-600 px-2 py-1 rounded border shadow-sm">Del</button></td></tr>`).join(''); 
-    }
+    function renderAgents() { document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-2 font-bold">${a.id}</td><td class="p-2">${a.name}</td><td class="p-2">${a.username}</td><td class="p-2 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-red-600'}">${a.status}</td><td class="p-2"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded border">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminResetAgentPassword('${a.id}')" class="ml-1 text-slate-900 font-bold bg-yellow-400 px-2 py-1 rounded border shadow-sm">Reset Pass</button><button onclick="adminDeleteAgent('${a.id}')" class="ml-1 text-white font-bold bg-red-600 px-2 py-1 rounded border shadow-sm">Del</button></td></tr>`).join(''); }
     async function setAgentStatus(id, st) { const a=db.users.find(u=>u.id===id); if(a) a.status=st; await saveDB(); renderAgents(); }
-
-    async function adminDeleteAgent(id) {
-        if(!confirm('Are you sure you want to permanently delete this agent?')) return;
-        db.users = db.users.filter(x => x.id !== id);
-        await saveDB();
-        renderAgents();
-    }
-
-    async function adminResetAgentPassword(id) { 
-      const newPass = prompt('Enter new password for this agent:'); 
-      if (!newPass) return; 
-      const a = db.users.find(u => u.id === id); 
-      if (a) { 
-        a.passwordHash = await hashPassword(newPass); 
-        await saveDB(); 
-        alert('Password updated successfully.'); 
-      } 
-    }
-
-    async function changeOwnPassword() {
-      const current = document.getElementById('selfCurrentPassword').value;
-      const pass = document.getElementById('selfNewPassword').value.trim();
-      if (!current || !pass) return alert('Enter both current and new passwords');
-
-      const currentHash = await hashPassword(current);
-      if (currentHash !== currentUser.passwordHash && current !== currentUser.passwordHash && current !== currentUser.password) {
-          return alert('Incorrect current password');
-      }
-
-      currentUser.passwordHash = await hashPassword(pass);
-      const userInDb = db.users.find(u => u.id === currentUser.id);
-      if (userInDb) userInDb.passwordHash = currentUser.passwordHash;
-      await saveDB();
-      document.getElementById('selfCurrentPassword').value = '';
-      document.getElementById('selfNewPassword').value = '';
-      alert('Password updated successfully');
-    }
+    async function adminDeleteAgent(id) { if(!confirm('Are you sure you want to permanently delete this agent?')) return; db.users = db.users.filter(x => x.id !== id); await saveDB(); renderAgents(); }
+    async function adminResetAgentPassword(id) { const newPass = prompt('Enter new password for this agent:'); if (!newPass) return; const a = db.users.find(u => u.id === id); if (a) { a.passwordHash = await hashPassword(newPass); await saveDB(); alert('Password updated successfully.'); } }
+    async function changeOwnPassword() { const current = document.getElementById('selfCurrentPassword').value; const pass = document.getElementById('selfNewPassword').value.trim(); if (!current || !pass) return alert('Enter both current and new passwords'); const currentHash = await hashPassword(current); if (currentHash !== currentUser.passwordHash && current !== currentUser.passwordHash && current !== currentUser.password) { return alert('Incorrect current password'); } currentUser.passwordHash = await hashPassword(pass); const userInDb = db.users.find(u => u.id === currentUser.id); if (userInDb) userInDb.passwordHash = currentUser.passwordHash; await saveDB(); document.getElementById('selfCurrentPassword').value = ''; document.getElementById('selfNewPassword').value = ''; alert('Password updated successfully'); }
 
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function downloadBackup() { const a=document.createElement('a'); a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(db)); a.download='Backup.json'; document.body.appendChild(a); a.click(); }
     function restoreBackup(e) { const r=new FileReader(); r.onload=async ev=>{db=JSON.parse(ev.target.result);await saveDB();location.reload();}; r.readAsText(e.target.files[0]); }
 
-    // PWA INSTALLATION HELPER
     let deferredPrompt; const installBtn = document.getElementById('installPwaBtn');
     if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && !window.navigator.standalone) { installBtn.classList.remove('hidden'); installBtn.textContent = 'Setup iOS'; installBtn.onclick = () => alert("To install on iPhone: \n\n1. Tap 'Share' at the bottom of Safari.\n2. Tap 'Add to Home Screen'."); }
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBtn.classList.remove('hidden'); installBtn.onclick = async () => { deferredPrompt.prompt(); await deferredPrompt.userChoice; installBtn.classList.add('hidden'); deferredPrompt = null; }; });
