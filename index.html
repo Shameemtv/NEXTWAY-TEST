@@ -32,7 +32,8 @@
     body.dark-mode { background-color: #0f172a !important; color: #f8fafc !important; }
     body.dark-mode .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
     body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100, body.dark-mode .bg-slate-100 { background-color: #0f172a !important; border-color: #334155 !important; }
-    body.dark-mode .text-slate-900, body.dark-mode .text-gray-800, body.dark-mode .text-gray-700 { color: #f8fafc !important; }
+    body.dark-mode .bg-gray-200, body.dark-mode .bg-gray-300 { background-color: #334155 !important; color: #f8fafc !important; border-color: #475569 !important; }
+    body.dark-mode .text-slate-900, body.dark-mode .text-slate-800, body.dark-mode .text-gray-800, body.dark-mode .text-gray-700 { color: #f8fafc !important; }
     body.dark-mode .text-gray-600, body.dark-mode .text-gray-500 { color: #94a3b8 !important; }
     body.dark-mode .border-gray-200, body.dark-mode .border-gray-300, body.dark-mode .border-gray-100, body.dark-mode .border-b, body.dark-mode .border-t { border-color: #334155 !important; }
     body.dark-mode input, body.dark-mode select { background-color: #0f172a !important; color: #f8fafc !important; border-color: #334155 !important; }
@@ -189,7 +190,7 @@
         </div>
 
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-4 no-print mt-4">
-          <div><h3 class="font-bold text-sm text-slate-900">Admin: Pending COC Report</h3></div>
+          <div><h3 class="font-bold text-sm text-slate-900">Admin: Pending Deficit (COC/CAD) Report</h3></div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-gray-600 mb-1">Select Agent</label>
@@ -394,14 +395,14 @@
   </nav>
 
   <!-- ================= MODALS ================= -->
-  <div id="consignmentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3 overflow-y-auto"><div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4 my-auto max-h-[92vh] flex flex-col"><div class="flex justify-between items-center border-b pb-3 shrink-0"><h3 class="font-black text-base text-slate-900">CREATE CONSIGNMENT</h3><button onclick="closeModal('consignmentModal')" class="text-gray-400 font-bold text-lg">✕</button></div><form onsubmit="saveNewConsignment(event)" class="space-y-3 text-xs overflow-y-auto pr-1 flex-1"><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">ID</label><div class="flex gap-1"><input id="cIdInput" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /><button type="button" onclick="generateRandomConsignmentId()" class="bg-gray-200 px-2.5 rounded-lg font-bold">Auto</button></div></div><div><label class="font-bold block">Vendor</label><div class="flex gap-1"><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select><button type="button" onclick="openVendorModal()" class="bg-slate-900 text-yellow-400 font-bold px-3 rounded-lg shadow-sm" title="Add New Vendor">+</button></div></div></div><div><label class="font-bold block">Pick Up Address</label><input id="cPickupFrom" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">Customer Name</label><input id="cCustomerName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="cCustomerPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div></div><div><label class="font-bold block">Delivery Address</label><input id="cDeliveryAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div>
+  <div id="consignmentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3 overflow-y-auto"><div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4 my-auto max-h-[92vh] flex flex-col"><div class="flex justify-between items-center border-b pb-3 shrink-0"><h3 class="font-black text-base text-slate-900">CREATE CONSIGNMENT</h3><button onclick="closeModal('consignmentModal')" class="text-gray-400 font-bold text-lg">✕</button></div><form onsubmit="saveNewConsignment(event)" class="space-y-3 text-xs overflow-y-auto pr-1 flex-1"><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">ID</label><div class="flex gap-1"><input id="cIdInput" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /><button type="button" onclick="generateRandomConsignmentId()" class="bg-gray-200 px-2.5 rounded-lg font-bold text-slate-900">Auto</button></div></div><div><label class="font-bold block">Vendor</label><div class="flex gap-1"><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select><button type="button" onclick="openVendorModal()" class="bg-slate-900 text-yellow-400 font-bold px-3 rounded-lg shadow-sm" title="Add New Vendor">+</button></div></div></div><div><label class="font-bold block">Pick Up Address</label><input id="cPickupFrom" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="grid grid-cols-2 gap-3"><div><label class="font-bold block">Customer Name</label><input id="cCustomerName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="cCustomerPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div></div><div><label class="font-bold block">Delivery Address</label><input id="cDeliveryAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div>
   
   <div class="grid grid-cols-2 gap-3">
     <div><label class="font-bold block text-emerald-800">Product Amt (Customer Pays)</label><input id="cProductAmt" type="number" step="0.01" required value="0" class="w-full border rounded-lg px-3 py-2 bg-emerald-50" oninput="checkDeficit()" /></div>
     <div><label class="font-bold block">Delivery Fee</label><input id="cDeliveryFee" type="number" step="0.01" required value="20" class="w-full border rounded-lg px-3 py-2 bg-gray-50" oninput="checkDeficit()" /></div>
   </div>
   <div class="grid grid-cols-2 gap-3">
-    <div><label class="font-bold block text-blue-900">Fee Type</label><select id="cFeeType" class="w-full border rounded-lg px-3 py-2 bg-blue-50 font-bold text-blue-900" onchange="checkDeficit()"><option value="COD">COD (Cut from Vendor Net)</option><option value="CAD">CAD (Added to Invoice Later)</option><option value="COC">COC (Paid upfront at Pickup)</option></select></div>
+    <div><label class="font-bold block text-blue-900">Fee Type</label><select id="cFeeType" class="w-full border rounded-lg px-3 py-2 bg-blue-50 font-bold text-blue-900" onchange="checkDeficit()"><option value="COD">COD</option><option value="CAD">CAD</option><option value="COC">COC</option></select></div>
     <div id="agentSelectContainer"><label class="font-bold block">Assign Delivery To</label><select id="cAgentSelect" class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div>
   </div>
   <div class="grid grid-cols-2 gap-3 mt-3 border-t pt-3">
@@ -409,7 +410,7 @@
     <div id="deficitReceivedContainer" class="hidden"><label class="font-bold block text-red-800">Deficit Recv from Vendor?</label><select id="cDeficitReceived" class="w-full border rounded-lg px-3 py-2 bg-red-50 font-bold text-red-900"><option value="NO">No, Pending</option><option value="YES">Yes, Received</option></select></div>
   </div>
 
-  <div class="flex justify-end gap-2 pt-4 border-t mt-2 shrink-0"><button type="button" onclick="closeModal('consignmentModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Save</button></div></form></div></div>
+  <div class="flex justify-end gap-2 pt-4 border-t mt-2 shrink-0"><button type="button" onclick="closeModal('consignmentModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold text-slate-900">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Save</button></div></form></div></div>
   <div id="actionModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 flex flex-col text-xs"><div class="flex justify-between items-center border-b pb-3 shrink-0"><h3 id="actionModalTitle" class="font-bold text-base text-slate-900">Action</h3><button onclick="closeModal('actionModal')" class="text-gray-400 text-lg font-bold">✕</button></div><div id="actionModalBody" class="space-y-3"></div></div></div>
   <div id="inspectModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-3"><div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-3 flex flex-col text-xs"><div class="flex justify-between items-center border-b pb-2.5 shrink-0"><h3 id="inspectTitle" class="font-bold text-base text-slate-900">Details</h3><button onclick="closeModal('inspectModal')" class="text-gray-500 font-bold w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">✕</button></div><div id="inspectContent" class="space-y-3"></div><div class="pt-2 border-t flex justify-end"><button onclick="closeModal('inspectModal')" class="bg-slate-900 text-yellow-400 font-bold px-4 py-1.5 rounded-lg">Close</button></div></div></div>
   
@@ -425,15 +426,15 @@
         <div><label class="font-bold block">Phone</label><input id="vPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div>
         <div><label class="font-bold block">Address</label><input id="vAddress" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div>
         <div class="flex justify-end gap-2 pt-3 border-t">
-          <button type="button" onclick="closeModal('vendorModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold">Cancel</button>
+          <button type="button" onclick="closeModal('vendorModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold text-slate-900">Cancel</button>
           <button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Save</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div id="agentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Add Agent</h3><button onclick="closeModal('agentModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveAgent(event)" class="space-y-3"><div><label class="font-bold block">Name</label><input id="aName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Username</label><input id="aUser" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="aPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Password</label><input id="aPass" type="password" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('agentModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Create</button></div></form></div></div>
-  <div id="vendorPaymentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Ledger Entry</h3><button onclick="closeModal('vendorPaymentModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveVendorLedgerEntry(event)" class="space-y-3"><div><label class="font-bold block">Vendor</label><select id="vpVendorSelect" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div><div><label class="font-bold block">Type</label><select id="vpType" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"><option value="PAID">Paid To</option><option value="RECEIVED">Received From</option></select></div><div><label class="font-bold block">Amount</label><input id="vpAmount" type="number" step="0.01" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Date</label><input id="vpDate" type="date" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Ref</label><input id="vpNotes" type="text" class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('vendorPaymentModal')" class="px-4 py-2 rounded-lg bg-gray-200">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Record</button></div></form></div></div>
+  <div id="agentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Add Agent</h3><button onclick="closeModal('agentModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveAgent(event)" class="space-y-3"><div><label class="font-bold block">Name</label><input id="aName" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Username</label><input id="aUser" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Phone</label><input id="aPhone" type="text" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Password</label><input id="aPass" type="password" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('agentModal')" class="px-4 py-2 rounded-lg bg-gray-200 text-slate-900 font-bold">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Create</button></div></form></div></div>
+  <div id="vendorPaymentModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"><div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs"><div class="flex justify-between items-center border-b pb-3"><h3 class="font-bold text-base text-slate-900">Ledger Entry</h3><button onclick="closeModal('vendorPaymentModal')" class="text-gray-400 font-bold">✕</button></div><form onsubmit="saveVendorLedgerEntry(event)" class="space-y-3"><div><label class="font-bold block">Vendor</label><select id="vpVendorSelect" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"></select></div><div><label class="font-bold block">Type</label><select id="vpType" required class="w-full border rounded-lg px-3 py-2 bg-gray-50"><option value="PAID">Paid To</option><option value="RECEIVED">Received From</option></select></div><div><label class="font-bold block">Amount</label><input id="vpAmount" type="number" step="0.01" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Date</label><input id="vpDate" type="date" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div><label class="font-bold block">Ref</label><input id="vpNotes" type="text" class="w-full border rounded-lg px-3 py-2 bg-gray-50" /></div><div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeModal('vendorPaymentModal')" class="px-4 py-2 rounded-lg bg-gray-200 text-slate-900 font-bold">Cancel</button><button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold">Record</button></div></form></div></div>
 
   <!-- VENDOR SETTLEMENT OTP MODAL -->
   <div id="vendorSettlementOtpModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4">
@@ -456,10 +457,25 @@
           <input id="vsoAmount" type="number" step="0.01" required class="w-full border rounded-lg px-3 py-2 bg-gray-50" />
         </div>
         <div class="flex justify-end gap-2 pt-3 border-t">
-          <button type="button" onclick="closeModal('vendorSettlementOtpModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold">Cancel</button>
+          <button type="button" onclick="closeModal('vendorSettlementOtpModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold text-slate-900">Cancel</button>
           <button type="submit" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold flex gap-1 items-center transition">Send WhatsApp</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- CONFIRM DEFICIT RECEIPT MODAL -->
+  <div id="deficitModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-base text-slate-900">Confirm Deficit Receipt</h3>
+        <button onclick="closeModal('deficitModal')" class="text-gray-400 font-bold text-lg">✕</button>
+      </div>
+      <div id="deficitModalContent" class="space-y-2 text-sm text-gray-700"></div>
+      <div class="flex justify-end gap-2 pt-3 border-t">
+        <button type="button" onclick="closeModal('deficitModal')" class="px-4 py-2 rounded-lg bg-gray-200 font-bold text-slate-900">Cancel</button>
+        <button id="deficitConfirmBtn" type="button" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-bold shadow">Confirm Receipt</button>
+      </div>
     </div>
   </div>
 
@@ -986,14 +1002,28 @@
       }
     }
 
-    async function markDeficitReceived(cid) {
-      if(!confirm('Confirm that the deficit amount (Delivery Fee > Product Amt) has been physically received from the vendor?')) return;
+    function markDeficitReceived(cid) {
       const c = db.consignments.find(x => x.id === cid);
-      if(c) {
+      if(!c) return;
+      const v = getVendorByCode(c.vendorCode);
+      const amt = c.deliveryCharge - c.productAmount;
+      
+      document.getElementById('deficitModalContent').innerHTML = `
+        <p><b>Consignment ID:</b> ${c.id}</p>
+        <p><b>Vendor:</b> ${v ? v.name : c.vendorCode}</p>
+        <p><b>Pickup Person:</b> ${getAgentName(c.pickedUpBy)}</p>
+        <p><b>Amount Pending:</b> <span class="text-red-600 font-bold">${formatAmt(amt)} AED</span></p>
+        <p class="mt-3 text-xs text-gray-500">Confirm that this amount has been physically received from the vendor.</p>
+      `;
+      
+      document.getElementById('deficitConfirmBtn').onclick = async function() {
         c.deficitReceivedDate = new Date().toISOString();
         await saveDB();
+        closeModal('deficitModal');
         refreshAllViews();
-      }
+      };
+      
+      document.getElementById('deficitModal').classList.remove('hidden');
     }
 
     async function adminConfirmPendingCoc(cid) {
@@ -1096,6 +1126,7 @@
             <p><b>Cust Pay:</b> <span class="text-emerald-700 font-bold">${formatAmt(c.productAmount)}</span></p>
             <p><b>Fee Type:</b> ${c.feeType}</p>
             <p><b>Picked Up By:</b> ${getAgentName(c.pickedUpBy)}</p>
+            <p><b>Delivery Agent:</b> ${getAgentName(c.assignedTo)}</p>
             ${c.cocPendingAmount > 0 ? `<p class="text-red-600 font-bold border border-red-200 bg-red-50 p-1 rounded inline-block mt-1">COC Pending: ${formatAmt(c.cocPendingAmount)} (${c.cocStatus})</p>` : ''}
           </div>
           <div id="qrCodeCanvas" class="flex justify-center items-center p-2 rounded bg-white border shrink-0 min-w-[90px]"></div>
@@ -1162,25 +1193,30 @@
     function printAdminCocReport() {
       const aid = document.getElementById('adminCocReportSelect').value;
       const ag = aid === 'ALL' ? null : db.users.find(u=>u.id===aid);
-      const ls = db.consignments.filter(c => c.feeType === 'COC' && c.cocPendingAmount > 0 && (aid === 'ALL' || c.pickedUpBy === aid));
+      
+      const ls = db.consignments.filter(c => {
+        const isDeficit = c.productAmount < c.deliveryCharge && (c.feeType === 'COC' || c.feeType === 'CAD');
+        return isDeficit && !c.deficitReceivedDate && c.pickedUpBy && (aid === 'ALL' || c.pickedUpBy === aid);
+      });
       
       let tot = 0;
       const tbody = ls.map(c => {
-        tot += c.cocPendingAmount;
+        const deficitAmt = c.deliveryCharge - c.productAmount;
+        tot += deficitAmt;
         const v = getVendorByCode(c.vendorCode);
         const a = db.users.find(u=>u.id===c.pickedUpBy);
         return `<tr>
           <td class="p-2 font-bold">${c.id}</td>
           <td class="p-2">${v ? v.name : c.vendorCode}</td>
           <td class="p-2">${a ? a.name : c.pickedUpBy}</td>
-          <td class="p-2">${c.cocStatus === 'COLLECTED' ? 'Agent Holds Cash' : 'Pending Vendor'}</td>
-          <td class="p-2 text-right font-black text-red-700">${formatAmt(c.cocPendingAmount)}</td>
+          <td class="p-2">Pending Vendor</td>
+          <td class="p-2 text-right font-black text-red-700">${formatAmt(deficitAmt)}</td>
         </tr>`;
       }).join('');
 
       document.getElementById('printableAdminAgentReport').innerHTML = `
         <div class="flex justify-between border-b border-gray-200 pb-4">
-          <div><h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-gray-500">Pending COC Tracking Report</p></div>
+          <div><h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-gray-500">Pending Deficit Tracking Report</p></div>
           <div class="text-right"><p class="text-sm font-bold text-slate-900">${ag ? ag.name : 'ALL AGENTS'}</p><p class="text-xs text-gray-600 font-semibold">${new Date().toISOString().split('T')[0]}</p></div>
         </div>
         <div class="grid grid-cols-2 gap-3 my-4">
