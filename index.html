@@ -39,19 +39,20 @@
     /* Dark Mode Theme */
     body.dark-mode { background-color: #0b0f19 !important; color: #f1f5f9 !important; }
     body.dark-mode .glass-card, body.dark-mode .bg-white { background-color: #131b2e !important; border-color: #1e293b !important; }
-    body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100, body.dark-mode .bg-slate-100 { background-color: #0d1424 !important; border-color: #1e293b !important; }
-    body.dark-mode .bg-gray-200, body.dark-mode .bg-gray-300 { background-color: #1e293b !important; color: #f8fafc !important; border-color: #334155 !important; }
+    body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100, body.dark-mode .bg-slate-100, body.dark-mode .bg-slate-50 { background-color: #0d1424 !important; border-color: #1e293b !important; }
+    body.dark-mode .bg-gray-200, body.dark-mode .bg-gray-300, body.dark-mode .bg-slate-200 { background-color: #1e293b !important; color: #f8fafc !important; border-color: #475569 !important; }
     body.dark-mode .text-slate-900, body.dark-mode .text-slate-800, body.dark-mode .text-gray-800, body.dark-mode .text-gray-700 { color: #f8fafc !important; }
-    body.dark-mode .text-gray-600, body.dark-mode .text-gray-500 { color: #94a3b8 !important; }
-    body.dark-mode .border-gray-200, body.dark-mode .border-gray-300, body.dark-mode .border-gray-100, body.dark-mode .border-b, body.dark-mode .border-t { border-color: #1e293b !important; }
+    body.dark-mode .text-gray-600, body.dark-mode .text-gray-500, body.dark-mode .text-slate-500 { color: #94a3b8 !important; }
+    body.dark-mode .border-gray-200, body.dark-mode .border-gray-300, body.dark-mode .border-gray-100, body.dark-mode .border-b, body.dark-mode .border-t, body.dark-mode .border-slate-200 { border-color: #1e293b !important; }
     body.dark-mode input, body.dark-mode select { background-color: #0b0f19 !important; color: #f8fafc !important; border-color: #334155 !important; }
     body.dark-mode input::placeholder { color: #475569 !important; }
+    body.dark-mode .shadow-sm, body.dark-mode .shadow-md, body.dark-mode .shadow-xl { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important; }
     body.dark-mode .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.1) !important; border-color: rgba(16, 185, 129, 0.25) !important; }
-    body.dark-mode .bg-yellow-50 { background-color: rgba(245, 158, 11, 0.1) !important; border-color: rgba(245, 158, 11, 0.25) !important; }
-    body.dark-mode .bg-red-50 { background-color: rgba(239, 68, 68, 0.1) !important; border-color: rgba(239, 68, 68, 0.25) !important; }
+    body.dark-mode .bg-yellow-50, body.dark-mode .bg-amber-50 { background-color: rgba(245, 158, 11, 0.1) !important; border-color: rgba(245, 158, 11, 0.25) !important; }
+    body.dark-mode .bg-red-50, body.dark-mode .bg-rose-50 { background-color: rgba(239, 68, 68, 0.1) !important; border-color: rgba(239, 68, 68, 0.25) !important; }
     body.dark-mode .bg-blue-50 { background-color: rgba(59, 130, 246, 0.1) !important; border-color: rgba(59, 130, 246, 0.25) !important; }
     body.dark-mode th { border-bottom-color: #1e293b !important; background-color: #0d1424 !important; color: #cbd5e1 !important; }
-    body.dark-mode .divide-gray-200 > :not([hidden]) ~ :not([hidden]) { border-color: #1e293b !important; }
+    body.dark-mode .divide-gray-200 > :not([hidden]) ~ :not([hidden]), body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #1e293b !important; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen antialiased selection:bg-amber-500 selection:text-slate-900">
@@ -69,7 +70,7 @@
         </div>
       </div>
       <div class="flex items-center gap-2.5">
-        <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-red-500 transition-all shadow-sm ring-2 ring-slate-800" title="Offline"></span>
+        <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-rose-500 transition-all shadow-sm ring-2 ring-slate-800" title="Offline"></span>
         <button id="installPwaBtn" class="hidden gold-gradient text-slate-950 text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm">Install</button>
         <button id="darkModeBtn" onclick="toggleDarkMode()" class="hidden bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-1.5 rounded-lg border border-slate-800 transition" title="Toggle Display Theme">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
@@ -82,7 +83,7 @@
   <main class="max-w-7xl mx-auto p-3 sm:p-5">
 
     <!-- ================= MODULE: AUTHENTICATION ================= -->
-    <section id="authView" class="max-w-md mx-auto mt-14 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/80 p-7">
+    <section id="authView" class="max-w-md mx-auto mt-14 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/80 p-7">
       <div class="text-center mb-6">
         <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl gold-gradient text-slate-950 font-black text-xl mb-3 shadow-md">NW</div>
         <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Enterprise Sign In</h2>
@@ -131,7 +132,7 @@
       <div id="panel-consignments" class="space-y-4">
         <div class="glass-card p-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-            <select id="filterStatus" onchange="renderConsignments()" class="text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50 font-medium focus:ring-1 focus:ring-amber-500">
+            <select id="filterStatus" onchange="renderConsignments()" class="text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50 font-medium focus:ring-1 focus:ring-amber-500 outline-none">
               <option value="ALL">All Statuses</option>
               <option value="PENDING_ALL">Pending (Undelivered)</option>
               <option value="Created">Created (Unassigned)</option>
@@ -141,8 +142,8 @@
               <option value="Delivered">Delivered</option>
               <option value="Returned">Returned</option>
             </select>
-            <div id="adminAgentSlicerWrap" class="hidden"><select id="filterAgentSlicer" onchange="renderConsignments()" class="text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50 font-medium"><option value="ALL">All Personnel</option></select></div>
-            <input id="filterSearchText" oninput="renderConsignments()" type="text" placeholder="Filter Consignments..." class="flex-1 sm:w-48 text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50" />
+            <div id="adminAgentSlicerWrap" class="hidden"><select id="filterAgentSlicer" onchange="renderConsignments()" class="text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50 font-medium outline-none"><option value="ALL">All Personnel</option></select></div>
+            <input id="filterSearchText" oninput="renderConsignments()" type="text" placeholder="Filter Consignments..." class="flex-1 sm:w-48 text-xs border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
           </div>
           
           <div class="flex flex-wrap gap-2 w-full lg:w-auto shrink-0">
@@ -155,9 +156,9 @@
 
         <div class="admin-only glass-card p-3 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-2 items-center">
            <span class="font-bold text-[10px] text-slate-500 uppercase tracking-wider">Bulk Assign:</span>
-           <input id="bulkIds" type="text" placeholder="e.g. 10045, 10046" class="flex-1 min-w-[150px] border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs bg-slate-50">
-           <select id="bulkAgent" class="border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs bg-slate-50"></select>
-           <button onclick="bulkAssign()" class="bg-slate-900 text-amber-400 font-bold px-3.5 py-1.5 rounded-xl text-xs shadow-sm">Assign</button>
+           <input id="bulkIds" type="text" placeholder="e.g. 10045, 10046" class="flex-1 min-w-[150px] border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs bg-slate-50 outline-none focus:border-amber-500">
+           <select id="bulkAgent" class="border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs bg-slate-50 outline-none"></select>
+           <button onclick="bulkAssign()" class="bg-slate-900 text-amber-400 font-bold px-3.5 py-1.5 rounded-xl text-xs shadow-sm hover:bg-slate-800 transition">Assign</button>
         </div>
 
         <div id="consignmentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
@@ -192,14 +193,14 @@
         <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4 no-print">
           <div><h3 class="font-bold text-sm text-slate-900">Delivery Agent Daily Activity Statement</h3></div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Select Agent</label><select id="adminReportSelect" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"></select></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Date</label><input id="adminReportDate" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Status Scope</label><select id="adminReportStatus" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Select Agent</label><select id="adminReportSelect" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"></select></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Date</label><input id="adminReportDate" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none" /></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Status Scope</label><select id="adminReportStatus" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
           </div>
           <div class="flex flex-wrap gap-2 pt-1">
-            <button onclick="generateAdminAgentReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Generate View</button>
-            <button onclick="printAdminAgentReport()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Print Statement</button>
-            <button onclick="exportAgentDailyExcel('admin')" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Export .xlsx</button>
+            <button onclick="generateAdminAgentReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Generate View</button>
+            <button onclick="printAdminAgentReport()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Print Statement</button>
+            <button onclick="exportAgentDailyExcel('admin')" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Export .xlsx</button>
           </div>
         </div>
 
@@ -208,10 +209,10 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">Personnel Filter</label>
-              <select id="adminCocReportSelect" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"></select>
+              <select id="adminCocReportSelect" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"></select>
             </div>
             <div class="flex items-end">
-              <button onclick="printAdminCocReport()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Print PDF Summary</button>
+              <button onclick="printAdminCocReport()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Print PDF Summary</button>
             </div>
           </div>
         </div>
@@ -224,12 +225,12 @@
         <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4 no-print">
           <div><h3 class="font-bold text-sm text-slate-900">My Daily Finance Statement</h3></div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Date</label><input id="agentFinanceDate" type="date" onchange="generateAgentFinanceReport()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Filter</label><select id="agentFinanceStatus" onchange="generateAgentFinanceReport()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Date</label><input id="agentFinanceDate" type="date" onchange="generateAgentFinanceReport()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none" /></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Filter</label><select id="agentFinanceStatus" onchange="generateAgentFinanceReport()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
           </div>
           <div class="flex flex-wrap gap-2 pt-1">
-            <button onclick="printAgentFinanceReport()" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm">Print</button>
-            <button onclick="exportAgentDailyExcel('agent')" class="bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm">Export .xlsx</button>
+            <button onclick="printAgentFinanceReport()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Print</button>
+            <button onclick="exportAgentDailyExcel('agent')" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Export .xlsx</button>
             <button onclick="sendAgentReportWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Share WhatsApp</button>
           </div>
         </div>
@@ -249,8 +250,8 @@
       <!-- TAB 5: PRODUCT VENDORS (ADMIN) -->
       <div id="panel-vendors" class="hidden space-y-4">
         <div class="glass-card p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-3">
-          <div><input id="vendorCodeSearch" oninput="renderVendors()" type="text" placeholder="Search Vendor Code / Name..." class="text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 w-full sm:w-64" /></div>
-          <button onclick="openVendorModal()" class="bg-slate-900 text-amber-400 text-xs font-bold px-4 py-2 rounded-xl shadow-sm">+ Add Vendor</button>
+          <div><input id="vendorCodeSearch" oninput="renderVendors()" type="text" placeholder="Search Vendor Code / Name..." class="text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 w-full sm:w-64 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" /></div>
+          <button onclick="openVendorModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">+ Add Vendor</button>
         </div>
         <div class="glass-card rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
           <table class="w-full text-left text-xs">
@@ -265,20 +266,20 @@
         <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4 no-print">
           <h3 class="font-bold text-sm text-slate-900">Vendor Statement & Ledger</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Select Vendor</label><select id="invVendorSelect" onchange="generateInvoicePreview()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"></select></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Period Filter</label><select id="invFilterType" onchange="updateInvoiceFilterInputs()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"><option value="ALL">All Dates</option><option value="DATE">Specific Date</option><option value="MONTH">Specific Month</option><option value="YEAR">Specific Year</option><option value="RANGE">Date Range</option></select></div>
-            <div id="invSingleDateWrap" class="hidden"><label id="invSingleLabel" class="block text-xs font-semibold text-slate-500 mb-1">Select Date</label><input id="invSingleInput" onchange="generateInvoicePreview()" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-            <div id="invRangeStartWrap" class="hidden"><label class="block text-xs font-semibold text-slate-500 mb-1">Start Date</label><input id="invStartDate" onchange="generateInvoicePreview()" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-            <div id="invRangeEndWrap" class="hidden"><label class="block text-xs font-semibold text-slate-500 mb-1">End Date</label><input id="invEndDate" onchange="generateInvoicePreview()" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Select Vendor</label><select id="invVendorSelect" onchange="generateInvoicePreview()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"></select></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Period Filter</label><select id="invFilterType" onchange="updateInvoiceFilterInputs()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"><option value="ALL">All Dates</option><option value="DATE">Specific Date</option><option value="MONTH">Specific Month</option><option value="YEAR">Specific Year</option><option value="RANGE">Date Range</option></select></div>
+            <div id="invSingleDateWrap" class="hidden"><label id="invSingleLabel" class="block text-xs font-semibold text-slate-500 mb-1">Select Date</label><input id="invSingleInput" onchange="generateInvoicePreview()" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none" /></div>
+            <div id="invRangeStartWrap" class="hidden"><label class="block text-xs font-semibold text-slate-500 mb-1">Start Date</label><input id="invStartDate" onchange="generateInvoicePreview()" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none" /></div>
+            <div id="invRangeEndWrap" class="hidden"><label class="block text-xs font-semibold text-slate-500 mb-1">End Date</label><input id="invEndDate" onchange="generateInvoicePreview()" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none" /></div>
           </div>
-          <div class="flex flex-wrap gap-2 pt-2"><button onclick="printVendorInvoice()" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm">Print Statement</button><button onclick="exportInvoiceExcel()" class="bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm">Export .xlsx</button></div>
+          <div class="flex flex-wrap gap-2 pt-2"><button onclick="printVendorInvoice()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Print Statement</button><button onclick="exportInvoiceExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Export .xlsx</button></div>
         </div>
 
-        <div id="printableInvoice" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+        <div id="printableInvoice" class="glass-card p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
           <div class="flex flex-col sm:flex-row justify-between border-b border-slate-200 pb-4">
             <div>
               <h2 class="text-lg font-black text-slate-900">NEXT WAY DELIVERY SERVICES LLC</h2>
-              <p class="text-[10px] text-slate-400">Phone: +971 50 123 4567 | info@nextway.ae<br/>Industrial Area, Dubai, UAE</p>
+              <p class="text-[10px] text-slate-500 font-medium">Phone: +971 50 123 4567 | info@nextway.ae<br/>Industrial Area, Dubai, UAE</p>
             </div>
             <div class="text-left sm:text-right mt-3 sm:mt-0">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Merchant Statement</p>
@@ -294,7 +295,7 @@
           </div>
           <div class="md:col-span-3 space-y-4 overflow-x-auto">
             <table class="w-full text-left text-xs border-collapse">
-              <thead><tr class="bg-slate-100 text-slate-700 border-b border-slate-200"><th class="p-2.5">Date</th><th class="p-2.5">Consignment ID</th><th class="p-2.5">Customer</th><th class="p-2.5 text-right text-rose-700">Deduction / Deficit</th><th class="p-2.5 text-right">Product Total</th></tr></thead>
+              <thead><tr class="bg-slate-100 text-slate-700 border-b border-slate-200"><th class="p-2.5">Date</th><th class="p-2.5">Tracking ID</th><th class="p-2.5">Customer</th><th class="p-2.5 text-right text-rose-700">Deduction / Deficit</th><th class="p-2.5 text-right">Product Total</th></tr></thead>
               <tbody id="invTableBody" class="divide-y divide-slate-100"></tbody>
             </table>
             <div id="invSettledLedgerWrap" class="hidden pt-3 border-t border-slate-200"><p class="text-xs font-bold text-slate-800 mb-1.5">Direct Payouts Made to Vendor</p><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 text-slate-700 border-b border-slate-200"><th class="p-2">Date</th><th class="p-2">Type</th><th class="p-2">Reference</th><th class="p-2 text-right">Amount</th></tr></thead><tbody id="invSettledTableBody" class="divide-y divide-slate-100"></tbody></table></div>
@@ -313,7 +314,7 @@
             <div><h3 class="font-bold text-sm text-slate-900">Payment Transactions</h3></div>
             <div class="flex gap-2">
               <button onclick="openVendorSettlementOtpModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] sm:text-xs font-bold px-3 py-2 rounded-xl shadow-sm transition">Generate OTP</button>
-              <button onclick="openVendorPaymentModal()" class="bg-slate-900 text-amber-400 text-[10px] sm:text-xs font-bold px-3 py-2 rounded-xl shadow-sm transition">Record Payment</button>
+              <button onclick="openVendorPaymentModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-400 text-[10px] sm:text-xs font-bold px-3 py-2 rounded-xl shadow-sm transition">Record Payment</button>
             </div>
           </div>
           <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-slate-100 uppercase border-b border-slate-200"><th class="p-3">Date</th><th class="p-3">Vendor</th><th class="p-3">Type</th><th class="p-3">Amount</th><th class="p-3">Notes</th><th class="p-3">Action</th></thead><tbody id="vendorLedgerTableBody" class="divide-y divide-slate-100"></tbody></table></div>
@@ -333,14 +334,14 @@
           <div class="space-y-3 max-w-xl text-xs">
             <div>
               <label class="font-semibold text-slate-600 block mb-1">Current Password</label>
-              <input id="selfCurrentPassword" type="password" placeholder="••••••••" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" />
+              <input id="selfCurrentPassword" type="password" placeholder="••••••••" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
             </div>
             <div>
               <label class="font-semibold text-slate-600 block mb-1">New Password</label>
-              <input id="selfNewPassword" type="password" placeholder="Enter new password..." class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" />
+              <input id="selfNewPassword" type="password" placeholder="Enter new password..." class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
             </div>
             <div class="flex gap-2 pt-1">
-              <button type="button" onclick="changeOwnPassword()" class="px-4 py-2 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-sm transition">Update Credentials</button>
+              <button type="button" onclick="changeOwnPassword()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold shadow-sm transition">Update Credentials</button>
             </div>
           </div>
         </div>
@@ -354,15 +355,15 @@
             <p class="text-xs text-slate-400">Manage real-time WebSocket connection to Supabase storage backend.</p>
             <div>
               <label class="font-semibold text-slate-600 block mb-1">Supabase Endpoint URL</label>
-              <input id="adminSupabaseUrlInput" type="text" placeholder="https://xyz.supabase.co" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" />
+              <input id="adminSupabaseUrlInput" type="text" placeholder="https://xyz.supabase.co" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
             </div>
             <div>
               <label class="font-semibold text-slate-600 block mb-1">Supabase Public Anon Key</label>
-              <input id="adminSupabaseKeyInput" type="password" placeholder="eyJhbGciOi..." class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" />
+              <input id="adminSupabaseKeyInput" type="password" placeholder="eyJhbGciOi..." class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
             </div>
             <div class="flex gap-2 pt-1">
-              <button type="button" onclick="saveSupabaseConfigFromTab()" class="px-4 py-2 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-sm">Save & Connect</button>
-              <button type="button" onclick="clearSupabaseConfig()" class="px-3.5 py-2 rounded-xl bg-slate-200 text-slate-800 font-bold hover:bg-slate-300 transition">Disconnect</button>
+              <button type="button" onclick="saveSupabaseConfigFromTab()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold shadow-sm transition">Save & Connect</button>
+              <button type="button" onclick="clearSupabaseConfig()" class="px-4 py-2.5 rounded-xl bg-slate-200 text-slate-800 font-bold hover:bg-slate-300 transition">Disconnect</button>
             </div>
           </div>
         </div>
@@ -373,18 +374,18 @@
               <h3 class="font-bold text-sm text-slate-900">State Optimizer</h3>
               <p class="text-xs text-slate-400 mt-1">Archive delivered consignments older than 24 hours to streamline transmission.</p>
             </div>
-            <button onclick="archiveOldDeliveries()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl mt-2 transition">Purge Old Records</button>
+            <button onclick="archiveOldDeliveries()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl mt-2 transition shadow-sm">Purge Old Records</button>
           </div>
           <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between">
             <div>
               <h3 class="font-bold text-sm text-slate-900">JSON Data Backup</h3>
               <p class="text-xs text-slate-400 mt-1">Download entire application database state into an offline JSON snapshot.</p>
             </div>
-            <button onclick="downloadBackup()" class="bg-slate-900 text-amber-400 text-xs font-bold px-4 py-2.5 rounded-xl mt-2 transition">Download State File</button>
+            <button onclick="downloadBackup()" class="bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-bold px-4 py-2.5 rounded-xl mt-2 transition shadow-sm">Download State File</button>
           </div>
           <div class="md:col-span-2 glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3">
             <h3 class="font-bold text-sm text-slate-900">Restore Snapshot</h3>
-            <input id="restoreFileInput" type="file" accept=".json" onchange="restoreBackup(event)" class="block w-full text-xs bg-slate-50 border border-slate-200 p-2 rounded-xl" />
+            <input id="restoreFileInput" type="file" accept=".json" onchange="restoreBackup(event)" class="block w-full text-xs bg-slate-50 border border-slate-200 p-2 rounded-xl outline-none" />
           </div>
           
           <div class="md:col-span-2 glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3 flex flex-col justify-between">
@@ -392,12 +393,12 @@
               <h3 class="font-bold text-sm text-rose-600">Factory Purge</h3>
               <p class="text-xs text-slate-400 mt-1">Irrevocably erase all consignment entries and orders across the system.</p>
             </div>
-            <button onclick="clearAllConsignments()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl mt-2 transition w-full sm:w-auto self-start">Clear Entire Consignment Database</button>
+            <button onclick="clearAllConsignments()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl mt-2 transition shadow-sm w-full sm:w-auto self-start">Clear Entire Consignment Database</button>
           </div>
         </div>
         <div class="admin-only glass-card p-5 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center gap-3">
           <div><h3 class="font-bold text-sm text-slate-900">Personnel Roster</h3></div>
-          <button onclick="openAgentModal()" class="bg-slate-900 text-amber-400 text-xs font-bold px-4 py-2 rounded-xl shadow-sm">+ Add Agent</button>
+          <button onclick="openAgentModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">+ Add Agent</button>
         </div>
         <div class="admin-only glass-card rounded-2xl shadow-sm border border-slate-200 overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-slate-100 border-b border-slate-200"><th class="p-3.5">ID</th><th class="p-3.5">Full Name</th><th class="p-3.5">Username</th><th class="p-3.5">Account Status</th><th class="p-3.5">Actions</th></thead><tbody id="agentTableBody" class="divide-y divide-slate-100"></tbody></table></div>
       </div>
@@ -407,12 +408,12 @@
   <!-- BOTTOM NAVIGATION BAR -->
   <nav id="bottomNav" class="hidden fixed bottom-0 w-full bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 flex justify-around text-[10px] sm:text-xs text-slate-400 pb-safe z-50 shadow-2xl">
     <button onclick="switchTab('consignments')" id="tab-consignments" class="flex-1 py-3 flex flex-col items-center gap-1 tab-active transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Dispatch</button>
-    <button onclick="switchTab('confirmations')" id="tab-confirmations" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all relative"><span id="navConfirmBadge" class="absolute top-1 right-2 bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>Alerts</button>
+    <button onclick="switchTab('confirmations')" id="tab-confirmations" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all relative"><span id="navConfirmBadge" class="absolute top-1.5 right-1.5 bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>Alerts</button>
     <button onclick="switchTab('agent-reports')" id="tab-agent-reports" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Reports</button>
     <button onclick="switchTab('agent-finance')" id="tab-agent-finance" class="agent-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Finance</button>
-    <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>Vendors</button>
+    <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>Merchants</button>
     <button onclick="switchTab('invoices')" id="tab-invoices" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Ledger</button>
-    <button onclick="switchTab('system')" id="tab-system" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Settings</button>
+    <button onclick="switchTab('system')" id="tab-system" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>System</button>
   </nav>
 
   <!-- ================= MODALS ================= -->
@@ -420,127 +421,132 @@
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-auto max-h-[92vh] flex flex-col border border-slate-100">
       <div class="flex justify-between items-center border-b border-slate-200 pb-3 shrink-0">
         <h3 class="font-extrabold text-sm text-slate-900 uppercase tracking-wide">New Consignment Entry</h3>
-        <button onclick="closeModal('consignmentModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+        <button onclick="closeModal('consignmentModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg transition">✕</button>
       </div>
       <form onsubmit="saveNewConsignment(event)" class="space-y-3.5 text-xs overflow-y-auto pr-1 flex-1">
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="font-bold block text-slate-700 mb-1">ID</label><div class="flex gap-1.5"><input id="cIdInput" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-semibold" /><button type="button" onclick="generateRandomConsignmentId()" class="bg-slate-200 hover:bg-slate-300 px-3 rounded-xl font-bold text-slate-900 transition">Auto</button></div></div>
-          <div><label class="font-bold block text-slate-700 mb-1">Vendor</label><div class="flex gap-1.5"><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-medium"></select><button type="button" onclick="openVendorModal()" class="bg-slate-900 text-amber-400 font-bold px-3 rounded-xl shadow-sm hover:bg-slate-800 transition" title="Add Vendor">+</button></div></div>
+          <div><label class="font-bold block text-slate-700 mb-1">ID Tracking</label><div class="flex gap-1.5"><input id="cIdInput" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-semibold outline-none focus:border-amber-500" /><button type="button" onclick="generateRandomConsignmentId()" class="bg-slate-200 hover:bg-slate-300 px-3 rounded-xl font-bold text-slate-900 transition">Auto</button></div></div>
+          <div><label class="font-bold block text-slate-700 mb-1">Merchant</label><div class="flex gap-1.5"><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-medium outline-none focus:border-amber-500"></select><button type="button" onclick="openVendorModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold px-3.5 rounded-xl shadow-sm transition" title="Add Vendor">+</button></div></div>
         </div>
-        <div><label class="font-bold block text-slate-700 mb-1">Pickup Address</label><input id="cPickupFrom" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Pickup Location</label><input id="cPickupFrom" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="font-bold block text-slate-700 mb-1">Customer Name</label><input id="cCustomerName" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-          <div><label class="font-bold block text-slate-700 mb-1">Phone</label><input id="cCustomerPhone" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
+          <div><label class="font-bold block text-slate-700 mb-1">Client Name</label><input id="cCustomerName" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+          <div><label class="font-bold block text-slate-700 mb-1">Contact Phone</label><input id="cCustomerPhone" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
         </div>
-        <div><label class="font-bold block text-slate-700 mb-1">Delivery Address</label><input id="cDeliveryAddress" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Delivery Destination</label><input id="cDeliveryAddress" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
         
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="font-bold block text-emerald-800 mb-1">Product Amount</label><input id="cProductAmt" type="number" step="0.01" required value="0" class="w-full border border-emerald-200 rounded-xl px-3 py-2 bg-emerald-50/60 font-bold text-emerald-900" oninput="checkDeficit()" /></div>
-          <div><label class="font-bold block text-slate-700 mb-1">Delivery Fee</label><input id="cDeliveryFee" type="number" step="0.01" required value="20" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold" oninput="checkDeficit()" /></div>
+          <div><label class="font-bold block text-emerald-800 mb-1">Product Amount</label><input id="cProductAmt" type="number" step="0.01" required value="0" class="w-full border border-emerald-200 rounded-xl px-3 py-2 bg-emerald-50/60 font-bold text-emerald-900 outline-none focus:border-emerald-500 transition" oninput="checkDeficit()" /></div>
+          <div><label class="font-bold block text-slate-700 mb-1">Delivery Service</label><input id="cDeliveryFee" type="number" step="0.01" required value="20" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold outline-none focus:border-amber-500 transition" oninput="checkDeficit()" /></div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="font-bold block text-blue-900 mb-1">Fee Type</label><select id="cFeeType" class="w-full border border-blue-200 rounded-xl px-3 py-2 bg-blue-50/60 font-bold text-blue-900" onchange="checkDeficit()"><option value="COD">COD</option><option value="CAD">CAD</option><option value="COC">COC</option></select></div>
-          <div id="agentSelectContainer"><label class="font-bold block text-slate-700 mb-1">Assign Delivery</label><select id="cAgentSelect" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-medium"></select></div>
+          <div><label class="font-bold block text-blue-900 mb-1">Settlement Terms</label><select id="cFeeType" class="w-full border border-blue-200 rounded-xl px-3 py-2 bg-blue-50/60 font-bold text-blue-900 outline-none focus:border-blue-500 transition" onchange="checkDeficit()"><option value="COD">COD</option><option value="CAD">CAD</option><option value="COC">COC</option></select></div>
+          <div id="agentSelectContainer"><label class="font-bold block text-slate-700 mb-1">Assign Delivery</label><select id="cAgentSelect" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-medium outline-none focus:border-amber-500 transition"></select></div>
         </div>
         <div class="grid grid-cols-2 gap-3 mt-2 border-t border-slate-100 pt-3">
-          <div id="pickedUpByContainer"><label class="font-bold block text-slate-900 mb-1">Picked Up By</label><select id="cPickedUpBy" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold"></select></div>
-          <div id="deficitReceivedContainer" class="hidden"><label class="font-bold block text-rose-800 mb-1">Deficit Received?</label><select id="cDeficitReceived" class="w-full border border-rose-200 rounded-xl px-3 py-2 bg-rose-50 font-bold text-rose-900"><option value="NO">No, Pending</option><option value="YES">Yes, Received</option></select></div>
+          <div id="pickedUpByContainer"><label class="font-bold block text-slate-900 mb-1">Picked Up Origin</label><select id="cPickedUpBy" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold outline-none focus:border-amber-500 transition"></select></div>
+          <div id="deficitReceivedContainer" class="hidden"><label class="font-bold block text-rose-800 mb-1">Deficit Settlement</label><select id="cDeficitReceived" class="w-full border border-rose-200 rounded-xl px-3 py-2 bg-rose-50 font-bold text-rose-900 outline-none focus:border-rose-500 transition"><option value="NO">No, Pending Vendor</option><option value="YES">Yes, Paid Cash</option></select></div>
         </div>
 
         <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 mt-2 shrink-0">
-          <button type="button" onclick="closeModal('consignmentModal')" class="px-4 py-2 rounded-xl bg-slate-200 font-bold text-slate-800 hover:bg-slate-300 transition">Cancel</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-md hover:bg-slate-800 transition">Save Consignment</button>
+          <button type="button" onclick="closeModal('consignmentModal')" class="px-5 py-2.5 rounded-xl bg-slate-100 font-bold text-slate-700 hover:bg-slate-200 transition">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-md hover:bg-slate-800 transition">Confirm Entry</button>
         </div>
       </form>
     </div>
   </div>
 
   <div id="actionModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 flex flex-col text-xs border border-slate-100">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-3 shrink-0"><h3 id="actionModalTitle" class="font-bold text-sm text-slate-900">Action</h3><button onclick="closeModal('actionModal')" class="text-slate-400 text-lg font-bold">✕</button></div>
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 flex flex-col text-xs border border-slate-100">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3 shrink-0"><h3 id="actionModalTitle" class="font-extrabold tracking-wide text-sm text-slate-900">Action</h3><button onclick="closeModal('actionModal')" class="text-slate-400 hover:text-slate-600 text-lg font-bold transition">✕</button></div>
       <div id="actionModalBody" class="space-y-3"></div>
     </div>
   </div>
 
   <div id="inspectModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-3.5 flex flex-col text-xs border border-slate-100">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-2.5 shrink-0"><h3 id="inspectTitle" class="font-bold text-sm text-slate-900">Details</h3><button onclick="closeModal('inspectModal')" class="text-slate-500 font-bold w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center">✕</button></div>
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-3.5 flex flex-col text-xs border border-slate-100">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3 shrink-0"><h3 id="inspectTitle" class="font-extrabold tracking-wide text-sm text-slate-900">Details</h3><button onclick="closeModal('inspectModal')" class="text-slate-400 hover:bg-slate-100 hover:text-slate-700 font-bold w-8 h-8 rounded-full transition flex items-center justify-center text-lg">✕</button></div>
       <div id="inspectContent" class="space-y-3"></div>
-      <div class="pt-2 border-t border-slate-100 flex justify-end"><button onclick="closeModal('inspectModal')" class="bg-slate-900 text-amber-400 font-bold px-4 py-1.5 rounded-xl">Close</button></div>
+      <div class="pt-3 border-t border-slate-100 flex justify-end"><button onclick="closeModal('inspectModal')" class="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold px-5 py-2.5 rounded-xl shadow-sm transition">Close Window</button></div>
     </div>
   </div>
   
   <div id="vendorModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs border border-slate-100">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 text-xs border border-slate-100">
       <div class="flex justify-between items-center border-b border-slate-200 pb-3">
-        <h3 id="vendorModalTitle" class="font-bold text-sm text-slate-900">Add Merchant</h3>
-        <button onclick="closeModal('vendorModal')" class="text-slate-400 font-bold">✕</button>
+        <h3 id="vendorModalTitle" class="font-extrabold tracking-wide text-sm text-slate-900">Add Merchant</h3>
+        <button onclick="closeModal('vendorModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg transition">✕</button>
       </div>
       <form onsubmit="saveVendor(event)" class="space-y-3">
-        <div><label class="font-bold block text-slate-700 mb-1">Code</label><input id="vCode" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 uppercase font-bold" /></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Company Name</label><input id="vName" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Contact Phone</label><input id="vPhone" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Pickup Facility Address</label><input id="vAddress" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-          <button type="button" onclick="closeModal('vendorModal')" class="px-4 py-2 rounded-xl bg-slate-200 font-bold text-slate-800">Cancel</button>
-          <button type="submit" class="px-4 py-2 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-sm">Save</button>
+        <div><label class="font-bold block text-slate-700 mb-1">Client Code</label><input id="vCode" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 uppercase font-bold outline-none focus:border-amber-500 transition" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Company Name</label><input id="vName" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Primary Phone</label><input id="vPhone" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Facility Address</label><input id="vAddress" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeModal('vendorModal')" class="px-5 py-2.5 rounded-xl bg-slate-100 font-bold text-slate-700 hover:bg-slate-200 transition">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-md hover:bg-slate-800 transition">Save Merchant</button>
         </div>
       </form>
     </div>
   </div>
 
   <div id="agentModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs border border-slate-100">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-3"><h3 class="font-bold text-sm text-slate-900">Add Personnel</h3><button onclick="closeModal('agentModal')" class="text-slate-400 font-bold">✕</button></div>
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 text-xs border border-slate-100">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3"><h3 class="font-extrabold tracking-wide text-sm text-slate-900">Register Personnel</h3><button onclick="closeModal('agentModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg transition">✕</button></div>
       <form onsubmit="saveAgent(event)" class="space-y-3">
-        <div><label class="font-bold block text-slate-700 mb-1">Full Name</label><input id="aName" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Username</label><input id="aUser" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Phone</label><input id="aPhone" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Password</label><input id="aPass" type="password" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100"><button type="button" onclick="closeModal('agentModal')" class="px-4 py-2 rounded-xl bg-slate-200 text-slate-800 font-bold">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-slate-900 text-amber-400 font-bold">Register</button></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Full Legal Name</label><input id="aName" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Portal Username</label><input id="aUser" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Contact Phone</label><input id="aPhone" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Temporary Password</label><input id="aPass" type="password" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100"><button type="button" onclick="closeModal('agentModal')" class="px-5 py-2.5 rounded-xl bg-slate-100 font-bold text-slate-700 hover:bg-slate-200 transition">Cancel</button><button type="submit" class="px-6 py-2.5 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-md hover:bg-slate-800 transition">Register Entity</button></div>
       </form>
     </div>
   </div>
 
   <div id="vendorPaymentModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs border border-slate-100">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-3"><h3 class="font-bold text-sm text-slate-900">Record Settlement Ledger</h3><button onclick="closeModal('vendorPaymentModal')" class="text-slate-400 font-bold">✕</button></div>
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 text-xs border border-slate-100">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3"><h3 class="font-extrabold tracking-wide text-sm text-slate-900">Record Settlement Ledger</h3><button onclick="closeModal('vendorPaymentModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg transition">✕</button></div>
       <form onsubmit="saveVendorLedgerEntry(event)" class="space-y-3">
-        <div><label class="font-bold block text-slate-700 mb-1">Vendor</label><select id="vpVendorSelect" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"></select></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Entry Nature</label><select id="vpType" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"><option value="PAID">Paid To Merchant</option><option value="RECEIVED">Received From Merchant</option></select></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Amount (AED)</label><input id="vpAmount" type="number" step="0.01" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold" /></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Date</label><input id="vpDate" type="date" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Reference / Note</label><input id="vpNotes" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50" /></div>
-        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100"><button type="button" onclick="closeModal('vendorPaymentModal')" class="px-4 py-2 rounded-xl bg-slate-200 text-slate-800 font-bold">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-slate-900 text-amber-400 font-bold">Post Ledger</button></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Merchant</label><select id="vpVendorSelect" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition"></select></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Entry Nature</label><select id="vpType" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition"><option value="PAID">Paid To Merchant</option><option value="RECEIVED">Received From Merchant</option></select></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Transaction Value (AED)</label><input id="vpAmount" type="number" step="0.01" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 font-bold outline-none focus:border-amber-500 transition" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Execution Date</label><input id="vpDate" type="date" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Reference / Note</label><input id="vpNotes" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100"><button type="button" onclick="closeModal('vendorPaymentModal')" class="px-5 py-2.5 rounded-xl bg-slate-100 font-bold text-slate-700 hover:bg-slate-200 transition">Cancel</button><button type="submit" class="px-6 py-2.5 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-md hover:bg-slate-800 transition">Post Ledger</button></div>
       </form>
     </div>
   </div>
 
+  <!-- VENDOR SETTLEMENT OTP MODAL -->
   <div id="vendorSettlementOtpModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-xs border border-slate-100">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-3"><h3 class="font-bold text-sm text-slate-900">Send Settlement Handover OTP</h3><button onclick="closeModal('vendorSettlementOtpModal')" class="text-slate-400 font-bold text-lg">✕</button></div>
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 text-xs border border-slate-100">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+        <h3 class="font-extrabold tracking-wide text-sm text-slate-900">Send Settlement Handover OTP</h3>
+        <button onclick="closeModal('vendorSettlementOtpModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg transition">✕</button>
+      </div>
       <form onsubmit="sendSettlementOtp(event)" class="space-y-3">
-        <div><label class="font-bold block text-slate-700 mb-1">Vendor</label><select id="vsoVendorSelect" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"></select></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Delivery Agent Handing Over</label><select id="vsoAgentSelect" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50"></select></div>
-        <div><label class="font-bold block text-slate-700 mb-1">Settlement Amount (AED)</label><input id="vsoAmount" type="number" step="0.01" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold" /></div>
-        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-          <button type="button" onclick="closeModal('vendorSettlementOtpModal')" class="px-4 py-2 rounded-xl bg-slate-200 font-bold text-slate-800">Cancel</button>
-          <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex gap-1 items-center transition">Send WhatsApp</button>
+        <div><label class="font-bold block text-slate-700 mb-1">Target Merchant</label><select id="vsoVendorSelect" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition"></select></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Courier Handling Deposit</label><select id="vsoAgentSelect" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500 transition"></select></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Settlement Sum (AED)</label><input id="vsoAmount" type="number" step="0.01" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 font-bold outline-none focus:border-amber-500 transition" /></div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeModal('vendorSettlementOtpModal')" class="px-5 py-2.5 rounded-xl bg-slate-100 font-bold text-slate-700 hover:bg-slate-200 transition">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex gap-1 items-center shadow-md transition">Dispatch WhatsApp</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- CONFIRM DEFICIT RECEIPT MODAL -->
   <div id="deficitModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4 text-xs border border-slate-100">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-xs border border-slate-100">
       <div class="flex justify-between items-center border-b border-slate-200 pb-3">
-        <h3 class="font-bold text-sm text-slate-900">Confirm Deficit Settlement</h3>
-        <button onclick="closeModal('deficitModal')" class="text-slate-400 font-bold text-lg">✕</button>
+        <h3 class="font-extrabold tracking-wide text-sm text-slate-900">Confirm Deficit Settlement</h3>
+        <button onclick="closeModal('deficitModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg transition">✕</button>
       </div>
       <div id="deficitModalContent" class="space-y-2 text-xs text-slate-700"></div>
-      <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-        <button type="button" onclick="closeModal('deficitModal')" class="px-4 py-2 rounded-xl bg-slate-200 font-bold text-slate-800">Cancel</button>
-        <button id="deficitConfirmBtn" type="button" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-sm transition">Confirm Receipt</button>
+      <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+        <button type="button" onclick="closeModal('deficitModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 font-bold text-slate-700 hover:bg-slate-200 transition">Cancel</button>
+        <button id="deficitConfirmBtn" type="button" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md transition">Confirm Action</button>
       </div>
     </div>
   </div>
@@ -776,10 +782,10 @@
       errBox.classList.add('hidden');
       if (!db || !db.users) { db = await getDefaultSeedDB(); await saveDB(); }
       const user = db.users.find(u => u && u.username && u.username.toLowerCase() === uName.toLowerCase());
-      if (!user) { errBox.textContent = 'Invalid credentials.'; errBox.classList.remove('hidden'); return; }
+      if (!user) { errBox.textContent = 'Invalid credentials provided.'; errBox.classList.remove('hidden'); return; }
       if (user.status !== 'ACTIVE') { errBox.textContent = `Account Deactivated.`; errBox.classList.remove('hidden'); return; }
       const inputHash = await hashPassword(pass); 
-      if (inputHash !== user.passwordHash && pass !== user.passwordHash && pass !== user.password) { errBox.textContent = 'Invalid credentials.'; errBox.classList.remove('hidden'); return; }
+      if (inputHash !== user.passwordHash && pass !== user.passwordHash && pass !== user.password) { errBox.textContent = 'Invalid credentials provided.'; errBox.classList.remove('hidden'); return; }
       if (inputHash !== user.passwordHash) { user.passwordHash = inputHash; delete user.password; await saveDB(); }
       currentUser = user; 
       document.getElementById('loginPassword').value = ''; 
@@ -809,7 +815,7 @@
       const isA = currentUser.role === 'ADMIN'; 
       document.getElementById('roleBadge').innerHTML = isA 
         ? `<span class="text-amber-500 font-extrabold mr-1">ADMIN</span> <span>${currentUser.username}</span>` 
-        : `<span>${currentUser.name}</span> <span class="ml-2 px-1.5 py-0.5 bg-slate-200 text-slate-700 rounded text-[9px] font-black">${currentUser.id}</span>`;
+        : `<span>${currentUser.name}</span> <span class="ml-2 px-1.5 py-0.5 bg-slate-200 text-slate-700 rounded-lg text-[9px] font-black">${currentUser.id}</span>`;
       
       document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', !isA)); 
       document.querySelectorAll('.agent-only').forEach(el => el.classList.toggle('hidden', isA));
@@ -819,7 +825,7 @@
         document.getElementById('bulkAgent').innerHTML = `<option value="">Agent...</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
         document.getElementById('filterAgentSlicer').innerHTML = `<option value="ALL">All Agents</option><option value="UNASSIGNED">Unassigned</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
         
-        const agentOptions = `<option value="ALL">All Agents</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
+        const agentOptions = `<option value="ALL">All Personnel</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
         document.getElementById('adminReportSelect').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
         document.getElementById('adminCocReportSelect').innerHTML = agentOptions;
 
@@ -1109,12 +1115,12 @@
 
             <div>
               <div class="mt-3 p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-xl text-xs">
-                <div class="flex justify-between items-center"><p class="text-slate-400 font-medium">Customer Collect:</p><p class="font-black text-emerald-700 text-sm">${formatAmt(c.productAmount)} AED</p></div>
-                <div class="flex justify-between items-center mt-1 border-t border-slate-200/50 pt-1"><p class="text-slate-400 font-medium">Delivery Service (${c.feeType}):</p><p class="font-bold text-slate-700">${formatAmt(c.deliveryCharge)} AED</p></div>
+                <div class="flex justify-between items-center"><p class="text-slate-500 font-medium">Customer Collect:</p><p class="font-black text-emerald-700 text-sm">${formatAmt(c.productAmount)} AED</p></div>
+                <div class="flex justify-between items-center mt-1 border-t border-slate-200/50 pt-1"><p class="text-slate-500 font-medium">Delivery Service (${c.feeType}):</p><p class="font-bold text-slate-700">${formatAmt(c.deliveryCharge)} AED</p></div>
               </div>
               ${isA && c.pendingModification ? `<p class="mt-2 text-[10px] font-bold text-rose-600 text-center uppercase tracking-widest bg-rose-50 py-1 rounded-lg border border-rose-200">Confirmation Pending</p>` : ''}
               <div class="mt-3 space-y-2">
-                ${isA ? (isDel?`<div class="flex gap-2"><p class="flex-1 text-[10px] font-bold text-emerald-700 text-center uppercase py-1 border border-emerald-200 rounded-xl bg-emerald-50">Delivered</p><button onclick="openAmountEditModal('${c.id}')" class="bg-slate-900 text-amber-400 text-xs font-bold px-3 py-1 rounded-xl shadow-sm hover:bg-slate-800 transition">Edit</button></div>`:`<select onchange="adminAssignAgent('${c.id}',this.value)" class="w-full border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-bold bg-slate-50"><option value="">- Assign Pool -</option>${ags.map(a=>`<option value="${a.id}" ${c.assignedTo===a.id?'selected':''}>${a.name}</option>`).join('')}</select>`) : ''}
+                ${isA ? (isDel?`<div class="flex gap-2"><p class="flex-1 text-[10px] font-bold text-emerald-700 text-center uppercase py-1 border border-emerald-200 rounded-xl bg-emerald-50">Delivered</p><button onclick="openAmountEditModal('${c.id}')" class="bg-slate-900 text-amber-400 text-xs font-bold px-3 py-1 rounded-xl shadow-sm hover:bg-slate-800 transition">Edit</button></div>`:`<select onchange="adminAssignAgent('${c.id}',this.value)" class="w-full border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-bold bg-slate-50 outline-none focus:border-amber-500 transition"><option value="">- Assign Pool -</option>${ags.map(a=>`<option value="${a.id}" ${c.assignedTo===a.id?'selected':''}>${a.name}</option>`).join('')}</select>`) : ''}
                 <div class="flex gap-1.5 mt-1">
                   ${canDeliver ? `<button onclick="openDeliveryModal('${c.id}')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 rounded-xl text-xs shadow-sm transition">Deliver</button>` : ''}
                   ${canMarkDeficit ? `<button onclick="markDeficitReceived('${c.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 rounded-xl text-xs shadow-sm transition">Mark Amt Recv</button>` : ''}
@@ -1146,13 +1152,13 @@
       const amt = c.deliveryCharge - c.productAmount;
       
       document.getElementById('deficitModalContent').innerHTML = `
-        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
+        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
           <p><b>Tracking ID:</b> <span class="font-mono font-bold">${c.id}</span></p>
           <p><b>Merchant:</b> ${v ? v.name : c.vendorCode}</p>
           <p><b>Pickup Origin:</b> ${getAgentName(c.pickedUpBy)}</p>
           <p><b>Deficit Due:</b> <span class="text-rose-600 font-bold">${formatAmt(amt)} AED</span></p>
         </div>
-        <p class="mt-2 text-[11px] text-slate-400">Confirm cash has been received from the merchant for this balance deficit.</p>
+        <p class="mt-2 text-[11px] text-slate-500 font-medium">Confirm cash has been received from the merchant for this balance deficit.</p>
       `;
       
       document.getElementById('deficitConfirmBtn').onclick = async function() {
@@ -1196,7 +1202,7 @@
     
     function handleModalPhoto(e) { if(e.target.files[0]) compressImageFile(e.target.files[0], b64 => { tempPhotoData = b64; document.getElementById('modalPhotoPreview').src=b64; document.getElementById('modalPhotoPreview').classList.remove('hidden'); }); }
     
-    function openDeliveryModal(cid) { const c = db.consignments.find(x=>x.id===cid); document.getElementById('actionModalTitle').textContent = `Deliver: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<div class="mb-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center"><p class="text-xs font-bold text-emerald-800 uppercase">Collect from Customer</p><p class="text-2xl text-emerald-700 font-black">${formatAmt(c.productAmount)} AED</p></div><label class="font-bold block mb-1">Upload Photo Documentation</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-slate-50 p-2 rounded-xl border border-slate-200 text-xs" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded-xl border mx-auto" /><button id="btnConfirmAction" onclick="confirmDelivery('${c.id}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-md transition">Confirm Handover</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
+    function openDeliveryModal(cid) { const c = db.consignments.find(x=>x.id===cid); document.getElementById('actionModalTitle').textContent = `Deliver: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<div class="mb-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center"><p class="text-xs font-bold text-emerald-800 uppercase">Collect from Customer</p><p class="text-2xl text-emerald-700 font-black">${formatAmt(c.productAmount)} AED</p></div><label class="font-bold block mb-1">Upload Photo Documentation</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-2 bg-slate-50 p-2 rounded-xl border border-slate-200 text-xs outline-none focus:border-amber-500 transition" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-24 mb-2 object-cover rounded-xl border mx-auto" /><button id="btnConfirmAction" onclick="confirmDelivery('${c.id}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-md transition">Confirm Handover</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
     
     async function confirmDelivery(cid) { 
       const btn = document.getElementById('btnConfirmAction'); btn.textContent = 'Uploading Proof...'; btn.disabled = true;
@@ -1211,7 +1217,7 @@
       const p = db.consignments.filter(c=>c.pendingModification && (currentUser.role==='ADMIN' || c.assignedTo===currentUser.id));
       const badge = document.getElementById('navConfirmBadge');
       if (p.length > 0) { badge.textContent = p.length; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
-      document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c=>`<div class="p-3 border border-amber-200 rounded-xl bg-amber-50 mb-2 text-xs"><b>${c.id}</b>: Product ${c.productAmount} -> <b class="text-emerald-700">${c.pendingModification.newProductAmount}</b> | Service Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${c.pendingModification.newDeliveryCharge}</b> ${currentUser.role==='AGENT'&&c.assignedTo===currentUser.id?`<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-amber-400 font-bold px-3.5 py-1.5 rounded-xl shadow-sm">Confirm Edit</button>`:'<br/><span class="text-[10px] text-slate-400">Waiting for agent confirmation</span>'}</div>`).join('') : '<p class="text-xs text-slate-400">No pending balance modifications.</p>';
+      document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c=>`<div class="p-3.5 border border-amber-200 rounded-xl bg-amber-50 mb-2 text-xs"><b>${c.id}</b>: Product ${c.productAmount} -> <b class="text-emerald-700">${c.pendingModification.newProductAmount}</b> | Service Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${c.pendingModification.newDeliveryCharge}</b> ${currentUser.role==='AGENT'&&c.assignedTo===currentUser.id?`<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-amber-400 font-bold px-4 py-1.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Confirm Edit</button>`:'<br/><span class="text-[10px] text-slate-500 font-medium">Waiting for field agent confirmation</span>'}</div>`).join('') : '<p class="text-xs text-slate-500 font-medium">No pending balance modifications.</p>';
 
       if (currentUser.role === 'ADMIN') {
         const pendingOtps = db.vendorSettlementOtps.filter(o => o.status === 'PENDING');
@@ -1220,9 +1226,9 @@
           otpCard.classList.toggle('hidden', pendingOtps.length === 0);
           document.getElementById('adminSettlementOtpList').innerHTML = pendingOtps.map(o => {
             const v = getVendorByCode(o.vendorCode); const a = db.users.find(u => u.id === o.agentId); const agentName = a ? a.name : 'Unknown Agent';
-            return `<div class="p-3 border border-slate-200 rounded-xl bg-slate-50 mb-2 text-xs flex flex-col sm:flex-row justify-between sm:items-center gap-3">
-              <div><b>${v ? v.name : o.vendorCode}</b><br/><span class="text-slate-500">Amount: <b class="text-emerald-700">${formatAmt(o.amount)} AED</b></span><br/><span class="text-slate-500">Bearer: <b>${agentName}</b></span></div>
-              <div class="flex gap-1.5 shrink-0"><input id="verifyOtpInput_${o.id}" type="text" placeholder="OTP" class="w-16 border border-slate-200 rounded-xl px-2 py-1 text-xs text-center font-bold" /><button onclick="verifySettlementOtp('${o.id}')" class="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold px-3 py-1.5 rounded-xl shadow-sm transition">Verify</button><button onclick="cancelSettlementOtp('${o.id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-sm transition">Cancel</button></div>
+            return `<div class="p-3.5 border border-slate-200 rounded-xl bg-slate-50 mb-2 text-xs flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+              <div><b>${v ? v.name : o.vendorCode}</b><br/><span class="text-slate-600">Amount: <b class="text-emerald-700">${formatAmt(o.amount)} AED</b></span><br/><span class="text-slate-600">Bearer: <b>${agentName}</b></span></div>
+              <div class="flex gap-1.5 shrink-0"><input id="verifyOtpInput_${o.id}" type="text" placeholder="OTP" class="w-16 border border-slate-200 rounded-xl px-2 py-1 text-xs text-center font-bold outline-none focus:border-amber-500 transition" /><button onclick="verifySettlementOtp('${o.id}')" class="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold px-3 py-1.5 rounded-xl shadow-sm transition">Verify</button><button onclick="cancelSettlementOtp('${o.id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-sm transition">Cancel</button></div>
             </div>`;
           }).join('');
         }
@@ -1233,19 +1239,19 @@
           cocCard.classList.toggle('hidden', cocHandovers.length === 0);
           document.getElementById('adminCocHandoverList').innerHTML = cocHandovers.map(c => {
             const ag = db.users.find(u => u.id === c.pickedUpBy);
-            return `<div class="p-3 border border-blue-200 rounded-xl bg-blue-50 mb-2 text-xs flex justify-between items-center gap-3">
+            return `<div class="p-3.5 border border-blue-200 rounded-xl bg-blue-50 mb-2 text-xs flex justify-between items-center gap-3">
               <div>
                 <b>${c.id}</b> - Agent: <b>${ag ? ag.name : c.pickedUpBy}</b><br/>
                 Amount: <b class="text-blue-800">${formatAmt(c.cocPendingAmount)} AED</b>
               </div>
-              <button onclick="adminConfirmPendingCoc('${c.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-1.5 rounded-xl shadow-sm shrink-0">Confirm Physical Deposit</button>
+              <button onclick="adminConfirmPendingCoc('${c.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-1.5 rounded-xl shadow-sm shrink-0 transition">Confirm Physical Deposit</button>
             </div>`;
           }).join('');
         }
       }
     }
     
-    function openAmountEditModal(cid) { const c = db.consignments.find(x=>x.id===cid); if(currentUser.role==='AGENT' && c.status==='Delivered') return alert('Cannot edit after delivery.'); document.getElementById('actionModalTitle').textContent = `Modify Financials: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-slate-400 mb-2">Edits to completed orders require field agent confirmation.</p><label class="font-bold block mb-1">Product Amount</label><input id="editProdAmt" type="number" step="0.01" value="${c.productAmount}" class="w-full border border-slate-200 rounded-xl px-3 py-2 mb-2 bg-slate-50" /><label class="font-bold block mb-1">Delivery Charge</label><input id="editDelivFee" type="number" step="0.01" value="${c.deliveryCharge}" class="w-full border border-slate-200 rounded-xl px-3 py-2 mb-2 bg-slate-50" /><button onclick="saveAmountModification('${c.id}')" class="w-full bg-slate-900 text-amber-400 font-bold py-2.5 rounded-xl shadow-sm">Dispatch Modification</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
+    function openAmountEditModal(cid) { const c = db.consignments.find(x=>x.id===cid); if(currentUser.role==='AGENT' && c.status==='Delivered') return alert('Cannot edit after delivery.'); document.getElementById('actionModalTitle').textContent = `Modify Financials: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-slate-500 font-medium mb-2">Edits to completed orders require field agent confirmation.</p><label class="font-bold block mb-1">Product Amount</label><input id="editProdAmt" type="number" step="0.01" value="${c.productAmount}" class="w-full border border-slate-200 rounded-xl px-3 py-2 mb-2 bg-slate-50 outline-none focus:border-amber-500 transition" /><label class="font-bold block mb-1">Delivery Charge</label><input id="editDelivFee" type="number" step="0.01" value="${c.deliveryCharge}" class="w-full border border-slate-200 rounded-xl px-3 py-2 mb-2 bg-slate-50 outline-none focus:border-amber-500 transition" /><button onclick="saveAmountModification('${c.id}')" class="w-full bg-slate-900 text-amber-400 font-bold py-2.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Dispatch Modification</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
     async function saveAmountModification(cid) { const c=db.consignments.find(x=>x.id===cid), np=parseFloat(document.getElementById('editProdAmt').value)||0, nd=parseFloat(document.getElementById('editDelivFee').value)||0; if(currentUser.role==='ADMIN') { if(c.status==='Delivered' && c.assignedTo) { c.pendingModification={newProductAmount:np, newDeliveryCharge:nd, requestedBy:currentUser.username}; } else { c.productAmount=np; c.deliveryCharge=nd; } } else { c.productAmount=np; } await saveDB(); closeModal('actionModal'); refreshAllViews(); }
     async function agentConfirmModification(cid) { const c=db.consignments.find(x=>x.id===cid); if(!c||!c.pendingModification) return; c.productAmount=c.pendingModification.newProductAmount; c.deliveryCharge=c.pendingModification.newDeliveryCharge; c.pendingModification=null; await saveDB(); refreshAllViews(); }
 
@@ -1254,7 +1260,7 @@
       const c = db.consignments.find(x=>x.id===cid); if(!c) return; const v = getVendorByCode(c.vendorCode);
       document.getElementById('inspectTitle').textContent = `Consignment Record: ${c.id}`; 
       document.getElementById('inspectContent').innerHTML = `
-        <div class="flex flex-col sm:flex-row gap-3 text-xs mb-2 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+        <div class="flex flex-col sm:flex-row gap-3 text-xs mb-2 bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
           <div class="flex-1 space-y-1.5">
             <p><b>Status:</b> <span class="px-2 py-0.5 bg-slate-200 rounded-lg font-bold">${c.status}</span></p>
             <p><b>Merchant:</b> ${v?v.name:c.vendorCode}</p>
@@ -1270,8 +1276,8 @@
           <div id="qrCodeCanvas" class="flex justify-center items-center p-2 rounded-xl bg-white border border-slate-200 shrink-0 min-w-[90px]"></div>
         </div>
         <div class="grid grid-cols-2 gap-3 text-xs">
-          <div class="border border-slate-200 p-2.5 rounded-xl bg-slate-50 text-center flex flex-col justify-between"><b>Pickup Verification:</b>${c.pickupPhoto?`<img src="${c.pickupPhoto}" class="h-24 object-cover mt-2 mx-auto rounded-xl border" /><a href="${c.pickupPhoto}" download="${c.id}_pickup.jpg" class="mt-2 block w-full bg-slate-900 text-amber-400 font-bold py-1.5 rounded-xl shadow-sm" target="_blank">View</a>`:'<span class="text-slate-400 mt-2 block font-medium">None</span>'}</div>
-          <div class="border border-slate-200 p-2.5 rounded-xl bg-slate-50 text-center flex flex-col justify-between"><b>Delivery Verification:</b>${c.deliveryPhoto?`<img src="${c.deliveryPhoto}" class="h-24 object-cover mt-2 mx-auto rounded-xl border" /><a href="${c.deliveryPhoto}" download="${c.id}_delivery.jpg" class="mt-2 block w-full bg-slate-900 text-amber-400 font-bold py-1.5 rounded-xl shadow-sm" target="_blank">View</a>`:'<span class="text-slate-400 mt-2 block font-medium">None</span>'}</div>
+          <div class="border border-slate-200 p-3 rounded-2xl bg-slate-50 text-center flex flex-col justify-between"><b>Pickup Verification:</b>${c.pickupPhoto?`<img src="${c.pickupPhoto}" class="h-24 object-cover mt-2 mx-auto rounded-xl border" /><a href="${c.pickupPhoto}" download="${c.id}_pickup.jpg" class="mt-2 block w-full bg-slate-900 text-amber-400 font-bold py-1.5 rounded-xl shadow-sm transition hover:bg-slate-800">View</a>`:'<span class="text-slate-400 mt-2 block font-medium">None</span>'}</div>
+          <div class="border border-slate-200 p-3 rounded-2xl bg-slate-50 text-center flex flex-col justify-between"><b>Delivery Verification:</b>${c.deliveryPhoto?`<img src="${c.deliveryPhoto}" class="h-24 object-cover mt-2 mx-auto rounded-xl border" /><a href="${c.deliveryPhoto}" download="${c.id}_delivery.jpg" class="mt-2 block w-full bg-slate-900 text-amber-400 font-bold py-1.5 rounded-xl shadow-sm transition hover:bg-slate-800">View</a>`:'<span class="text-slate-400 mt-2 block font-medium">None</span>'}</div>
         </div>`; 
       document.getElementById('inspectModal').classList.remove('hidden'); 
       if(c.qrGenerated){ setTimeout(()=>{ document.getElementById('qrCodeCanvas').innerHTML=''; new QRCode(document.getElementById('qrCodeCanvas'),{text:JSON.stringify({id:c.id}),width:80,height:80}); }, 100); }
@@ -1315,7 +1321,7 @@
       const { rows, totalCollected } = getAgentFinanceRows(id, d, stat);
       const tbody = rows.map(r=>`<tr><td class="p-2.5 font-bold">${r.id}</td><td class="p-2.5">${r.customer}</td><td class="p-2.5">${r.type}</td><td class="p-2.5 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
       
-      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-slate-200 pb-4"><div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-400">Agent Field Accounting</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-slate-500 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-xs text-slate-400">Total Entries</p><p class="text-lg font-bold text-slate-900">${rows.length}</p></div><div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Received</p><p class="text-lg font-black text-emerald-900">${formatAmt(totalCollected)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-slate-100">${tbody}</tbody></table></div>`;
+      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-slate-200 pb-4"><div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-500">Agent Field Accounting</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-slate-500 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-xs text-slate-500">Total Entries</p><p class="text-lg font-bold text-slate-900">${rows.length}</p></div><div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Received</p><p class="text-lg font-black text-emerald-900">${formatAmt(totalCollected)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-slate-100">${tbody}</tbody></table></div>`;
       document.getElementById('printableAdminAgentReport').classList.remove('hidden');
     }
 
@@ -1344,18 +1350,18 @@
           <td class="p-2.5 font-bold">${c.id}</td>
           <td class="p-2.5">${v ? v.name : c.vendorCode}</td>
           <td class="p-2.5">${a ? a.name : c.pickedUpBy}</td>
-          <td class="p-2.5">Pending Merchant</td>
+          <td class="p-2.5 text-slate-500 font-medium">Pending Merchant</td>
           <td class="p-2.5 text-right font-black text-rose-700">${formatAmt(deficitAmt)}</td>
         </tr>`;
       }).join('');
 
       document.getElementById('printableAdminAgentReport').innerHTML = `
         <div class="flex justify-between border-b border-slate-200 pb-4">
-          <div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-400">Merchant Deficit Receivable Report</p></div>
+          <div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-500">Merchant Deficit Receivable Report</p></div>
           <div class="text-right"><p class="text-sm font-bold text-slate-900">${ag ? ag.name : 'ALL ROSTER'}</p><p class="text-xs text-slate-500 font-semibold">${new Date().toISOString().split('T')[0]}</p></div>
         </div>
         <div class="grid grid-cols-2 gap-3 my-4">
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-xs text-slate-400">Total Pending Shipments</p><p class="text-lg font-bold text-slate-900">${ls.length}</p></div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-xs text-slate-500">Total Pending Shipments</p><p class="text-lg font-bold text-slate-900">${ls.length}</p></div>
           <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200"><p class="text-xs font-bold text-rose-800">Total Uncollected Deficit</p><p class="text-lg font-black text-rose-900">${formatAmt(tot)} AED</p></div>
         </div>
         <div class="overflow-x-auto">
@@ -1415,7 +1421,7 @@
     function generateInvoicePreview() { 
       const vCode = document.getElementById('invVendorSelect').value; const type = document.getElementById('invFilterType').value; const sVal = document.getElementById('invSingleInput').value; const start = document.getElementById('invStartDate').value; const end = document.getElementById('invEndDate').value;
       
-      const v = getVendorByCode(vCode); document.getElementById('invVendorHeader').innerHTML = v ? `${v.name}<br/><span class="text-xs font-normal text-slate-400">${v.phone} <br/> ${v.address}</span>` : 'ALL REGISTERED VENDORS';
+      const v = getVendorByCode(vCode); document.getElementById('invVendorHeader').innerHTML = v ? `${v.name}<br/><span class="text-xs font-normal text-slate-500">${v.phone} <br/> ${v.address}</span>` : 'ALL REGISTERED VENDORS';
       let period = '';
       if(type === 'MONTH' && sVal) { const [y, m] = sVal.split('-'); period = `Billing Month : ${new Date(y, m-1).toLocaleString('default', {month:'long'})}, ${y}`; }
       else if(type === 'YEAR' && sVal) { period = `Year : ${sVal}`; }
@@ -1443,7 +1449,7 @@
         if(vCode!=='ALL'&&p.vendorCode!==vCode) return false;
         const pd = p.date; if(type==='DATE'&&sVal&&pd!==sVal) return false; if(type==='MONTH'&&sVal&&!pd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!pd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&pd<start) return false; if(end&&pd>end) return false; } return true;
       });
-      if(pL.length>0) { document.getElementById('invSettledLedgerWrap').classList.remove('hidden'); document.getElementById('invSettledTableBody').innerHTML = pL.map(p=>{ if(p.type==='PAID') lp+=p.amount; else lp-=p.amount; return `<tr><td class="p-2">${p.date}</td><td class="p-2 font-bold ${p.type==='PAID'?'text-emerald-700':'text-blue-700'}">${p.type}</td><td class="p-2">${p.notes}</td><td class="p-2 text-right font-bold">${formatAmt(p.amount)}</td></tr>`;}).join(''); } else { document.getElementById('invSettledLedgerWrap').classList.add('hidden'); }
+      if(pL.length>0) { document.getElementById('invSettledLedgerWrap').classList.remove('hidden'); document.getElementById('invSettledTableBody').innerHTML = pL.map(p=>{ if(p.type==='PAID') lp+=p.amount; else lp-=p.amount; return `<tr><td class="p-2.5">${p.date}</td><td class="p-2.5 font-bold ${p.type==='PAID'?'text-emerald-700':'text-blue-700'}">${p.type}</td><td class="p-2.5">${p.notes}</td><td class="p-2.5 text-right font-bold">${formatAmt(p.amount)}</td></tr>`;}).join(''); } else { document.getElementById('invSettledLedgerWrap').classList.add('hidden'); }
       
       document.getElementById('invTotalProduct').textContent=formatAmt(tp) + ' AED'; document.getElementById('invTotalDeductions').textContent=formatAmt(td) + ' AED'; document.getElementById('invSettledAmount').textContent=formatAmt(lp) + ' AED'; document.getElementById('invNetAmount').textContent=formatAmt(tp-td-lp) + ' AED'; 
       setTimeout(()=>{ document.getElementById('pdfQrCodeCanvas').innerHTML=''; new QRCode(document.getElementById('pdfQrCodeCanvas'), { text: JSON.stringify({ Vendor: vCode, NetPayable: formatAmt(tp-td-lp), Date: new Date().toISOString() }), width: 64, height: 64 }); }, 100);
@@ -1488,16 +1494,16 @@
       if (!document.getElementById('consignmentModal').classList.contains('hidden')) { const currentSelected = document.getElementById('cVendorSelect').value; document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join(''); document.getElementById('cVendorSelect').value = editingVendorCode ? currentSelected : document.getElementById('vCode').value.toUpperCase(); syncVendorPickupAddress(); }
     }
     
-    function renderVendors() { document.getElementById('vendorTableBody').innerHTML = (document.getElementById('vendorCodeSearch').value ? db.vendors.filter(v=>v.code.includes(document.getElementById('vendorCodeSearch').value.toUpperCase())) : db.vendors).map(v=>`<tr><td class="p-3.5 font-bold">${v.code}</td><td class="p-3.5">${v.name}</td><td class="p-3.5">${v.phone}</td><td class="p-3.5">${v.address}</td><td class="p-3.5 font-bold">${db.consignments.filter(c=>c.vendorCode===v.code).length}</td><td class="p-3.5 flex gap-1.5"><button onclick="openEditVendorModal('${v.code}')" class="text-slate-900 font-bold bg-slate-200 px-2.5 py-1 rounded-xl border border-slate-300 shadow-sm transition hover:bg-slate-300">Edit</button><button onclick="deleteVendor('${v.code}')" class="text-white font-bold bg-rose-600 px-2.5 py-1 rounded-xl shadow-sm transition hover:bg-rose-700">Del</button></td></tr>`).join(''); }
+    function renderVendors() { document.getElementById('vendorTableBody').innerHTML = (document.getElementById('vendorCodeSearch').value ? db.vendors.filter(v=>v.code.includes(document.getElementById('vendorCodeSearch').value.toUpperCase())) : db.vendors).map(v=>`<tr><td class="p-3.5 font-bold">${v.code}</td><td class="p-3.5">${v.name}</td><td class="p-3.5">${v.phone}</td><td class="p-3.5">${v.address}</td><td class="p-3.5 font-bold">${db.consignments.filter(c=>c.vendorCode===v.code).length}</td><td class="p-3.5 flex gap-1.5"><button onclick="openEditVendorModal('${v.code}')" class="text-slate-900 font-bold bg-slate-200 px-3 py-1.5 rounded-xl shadow-sm hover:bg-slate-300 transition">Edit</button><button onclick="deleteVendor('${v.code}')" class="text-white font-bold bg-rose-600 px-3 py-1.5 rounded-xl shadow-sm hover:bg-rose-700 transition">Del</button></td></tr>`).join(''); }
     
     function openVendorPaymentModal() { document.getElementById('vpVendorSelect').innerHTML=db.vendors.map(v=>`<option value="${v.code}">${v.name}</option>`).join(''); document.getElementById('vendorPaymentModal').classList.remove('hidden'); }
     async function saveVendorLedgerEntry(e) { e.preventDefault(); db.vendorPayments.unshift({id:'LED-'+Date.now(), vendorCode:document.getElementById('vpVendorSelect').value, type:document.getElementById('vpType').value, amount:parseFloat(document.getElementById('vpAmount').value), date:document.getElementById('vpDate').value, notes:document.getElementById('vpNotes').value}); await saveDB(); closeModal('vendorPaymentModal'); renderVendorLedger(); generateInvoicePreview(); }
-    function renderVendorLedger() { document.getElementById('vendorLedgerTableBody').innerHTML=(db.vendorPayments||[]).map(p=>`<tr><td class="p-3">${p.date}</td><td class="p-3 font-bold">${p.vendorCode}</td><td class="p-3 text-[10px] font-bold ${p.type==='PAID'?'text-emerald-700':'text-blue-700'}">${p.type}</td><td class="p-3 font-black">${formatAmt(p.amount)} AED</td><td class="p-3">${p.notes}</td><td class="p-3"><button onclick="deleteLedger('${p.id}')" class="text-rose-600 font-bold bg-rose-50 px-2.5 py-1 rounded-xl border border-rose-200">Remove</button></td></tr>`).join(''); }
+    function renderVendorLedger() { document.getElementById('vendorLedgerTableBody').innerHTML=(db.vendorPayments||[]).map(p=>`<tr><td class="p-3">${p.date}</td><td class="p-3 font-bold">${p.vendorCode}</td><td class="p-3 text-[10px] font-bold ${p.type==='PAID'?'text-emerald-700':'text-blue-700'}">${p.type}</td><td class="p-3 font-black">${formatAmt(p.amount)} AED</td><td class="p-3">${p.notes}</td><td class="p-3"><button onclick="deleteLedger('${p.id}')" class="text-rose-600 font-bold bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-200 hover:bg-rose-100 transition">Remove</button></td></tr>`).join(''); }
     async function deleteLedger(id) { if(confirm('Delete ledger entry?')){ db.vendorPayments = db.vendorPayments.filter(x=>x.id!==id); await saveDB(); renderVendorLedger(); generateInvoicePreview(); } }
     
     function openAgentModal() { document.getElementById('aName').value=''; document.getElementById('aUser').value=''; document.getElementById('aPhone').value=''; document.getElementById('aPass').value=''; document.getElementById('agentModal').classList.remove('hidden'); }
     async function saveAgent(e) { e.preventDefault(); db.users.push({id:'AG-'+Math.floor(100+Math.random()*900), username:document.getElementById('aUser').value, name:document.getElementById('aName').value, phone:document.getElementById('aPhone').value, role:'AGENT', passwordHash:await hashPassword(document.getElementById('aPass').value), status:'ACTIVE'}); await saveDB(); closeModal('agentModal'); renderAgents(); }
-    function renderAgents() { document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-3.5 font-bold">${a.id}</td><td class="p-3.5">${a.name}</td><td class="p-3.5">${a.username}</td><td class="p-3.5 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-rose-600'}">${a.status}</td><td class="p-3.5 flex gap-1.5"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminResetAgentPassword('${a.id}')" class="text-slate-900 font-bold bg-amber-400 px-2.5 py-1 rounded-xl border border-amber-300 shadow-sm">Reset</button><button onclick="adminDeleteAgent('${a.id}')" class="text-white font-bold bg-rose-600 px-2.5 py-1 rounded-xl shadow-sm">Del</button></td></tr>`).join(''); }
+    function renderAgents() { document.getElementById('agentTableBody').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<tr><td class="p-3.5 font-bold">${a.id}</td><td class="p-3.5">${a.name}</td><td class="p-3.5">${a.username}</td><td class="p-3.5 font-bold ${a.status==='ACTIVE'?'text-emerald-600':'text-rose-600'}">${a.status}</td><td class="p-3.5 flex gap-1.5"><button onclick="setAgentStatus('${a.id}','${a.status==='ACTIVE'?'DEACTIVATED':'ACTIVE'}')" class="text-blue-600 font-bold bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200 hover:bg-blue-100 transition">${a.status==='ACTIVE'?'Deactivate':'Activate'}</button><button onclick="adminResetAgentPassword('${a.id}')" class="text-slate-900 font-bold bg-amber-400 px-3 py-1.5 rounded-xl shadow-sm hover:bg-amber-500 transition">Reset</button><button onclick="adminDeleteAgent('${a.id}')" class="text-white font-bold bg-rose-600 px-3 py-1.5 rounded-xl shadow-sm hover:bg-rose-700 transition">Del</button></td></tr>`).join(''); }
     async function setAgentStatus(id, st) { const a=db.users.find(u=>u.id===id); if(a) a.status=st; await saveDB(); renderAgents(); }
     async function adminDeleteAgent(id) { if(!confirm('Permanently remove this agent account?')) return; db.users = db.users.filter(x => x.id !== id); await saveDB(); renderAgents(); }
     async function adminResetAgentPassword(id) { const newPass = prompt('Enter new password for this agent:'); if (!newPass) return; const a = db.users.find(u => u.id === id); if (a) { a.passwordHash = await hashPassword(newPass); await saveDB(); alert('Password updated successfully.'); } }
