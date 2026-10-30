@@ -856,7 +856,8 @@
       renderConsignments(); renderConfirmations();
       if(currentUser.role==='ADMIN'){ renderVendors(); renderAgents(); }
       else {
-        const ac = db.consignments.filter(c => c.assignedTo===currentUser.id || c.pickedUpBy===currentUser.id);
+        // Only count consignments where the current agent is the assigned delivery agent
+        const ac = db.consignments.filter(c => c.assignedTo === currentUser.id);
         document.getElementById('agentPendingCount').textContent = ac.filter(c => ['Assigned','Picked Up','Out for delivery'].includes(c.status)).length;
         document.getElementById('agentCompletedCount').textContent = ac.filter(c => c.status==='Delivered').length;
       }
@@ -1101,9 +1102,12 @@
       const ls = db.consignments.filter(c => {
         if (!isA) {
             const isAssigned = c.assignedTo === currentUser.id;
-            const isPicker = c.pickedUpBy === currentUser.id;
             const isPool = c.status === 'Created';
-            if (!isAssigned && !isPicker && !isPool) return false;
+            
+            // Explicitly hide from the pickup agent if they are NOT the assigned delivery agent.
+            // Also hide if it's not assigned to them and not in the generic 'Created' pool.
+            if (c.pickedUpBy === currentUser.id && !isAssigned) return false;
+            if (!isAssigned && !isPool) return false;
         }
         if (stat === 'PENDING_ALL') { if(c.status === 'Delivered' || c.status === 'Returned') return false; } else if (stat!=='ALL' && c.status!==stat) return false;
         if (isA && slc!=='ALL') { if(slc==='UNASSIGNED'&&c.assignedTo) return false; if(slc!=='UNASSIGNED'&&c.assignedTo!==slc) return false; }
