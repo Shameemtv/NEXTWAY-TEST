@@ -333,11 +333,14 @@
 
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3">
           <div class="flex items-center justify-between">
-            <h3 class="font-bold text-sm text-slate-900">Live Cloud Sync (Supabase Free Tier)</h3>
-            <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-bold border border-emerald-200">Free Tier</span>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-sm text-slate-900">Live Cloud Sync</h3>
+              <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-bold border border-emerald-200">Free Tier</span>
+            </div>
+            <button onclick="toggleCloudSyncVisibility()" class="admin-only text-[10px] font-bold bg-gray-200 text-slate-900 px-2 py-1 rounded shadow-sm hover:bg-gray-300 transition">Toggle View</button>
           </div>
-          <p class="text-xs text-gray-500">Provide your Supabase credentials to enable multi-device live replication.</p>
-          <div class="space-y-3 max-w-xl text-xs">
+          <div id="cloudSyncConfigBlock" class="space-y-3 max-w-xl text-xs transition-all">
+            <p class="text-xs text-gray-500">Provide your Supabase credentials to enable multi-device live replication.</p>
             <div>
               <label class="font-semibold text-gray-700 block mb-1">Supabase Project URL</label>
               <input id="adminSupabaseUrlInput" type="text" placeholder="https://your-project.supabase.co" class="w-full border rounded-lg px-3 py-2 bg-gray-50" />
@@ -348,10 +351,11 @@
             </div>
             <div class="flex gap-2 pt-1">
               <button type="button" onclick="saveSupabaseConfigFromTab()" class="px-4 py-2 rounded-lg bg-slate-900 text-yellow-400 font-bold shadow">Connect Supabase</button>
-              <button type="button" onclick="clearSupabaseConfig()" class="px-3 py-2 rounded-lg bg-gray-200 text-gray-700 font-bold hover:bg-gray-300">Disconnect</button>
+              <button type="button" onclick="clearSupabaseConfig()" class="px-3 py-2 rounded-lg bg-gray-200 text-slate-900 font-bold hover:bg-gray-300 transition">Disconnect</button>
             </div>
           </div>
         </div>
+
         <div class="admin-only grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3 flex flex-col justify-between">
             <div>
@@ -516,7 +520,7 @@
     async function getDefaultSeedDB() {
       const adminHash = await hashPassword('admin123'), agentHash = await hashPassword('agent123');
       return {
-        settings: { companyName: 'NEXT WAY DELIVERY', otpMandatory: true },
+        settings: { companyName: 'NEXT WAY DELIVERY', otpMandatory: true, showCloudSyncConfig: true },
         users: [ 
           { id: 'USR-ADMIN', username: 'NEXTWAY', name: 'System Administrator', role: 'ADMIN', phone: '+917012133095', passwordHash: adminHash, status: 'ACTIVE' }, 
           { id: 'AG-101', username: 'agent1', name: 'Ramesh Kumar', role: 'AGENT', phone: '+971501112233', passwordHash: agentHash, status: 'ACTIVE' } 
@@ -536,6 +540,7 @@
         db = remoteData; 
         db.vendorPayments = db.vendorPayments || []; 
         db.vendorSettlementOtps = db.vendorSettlementOtps || [];
+        if (!db.settings) db.settings = { showCloudSyncConfig: true };
         db.consignments.forEach(c => { 
           if(!c.feeType) c.feeType = 'COD'; 
           if(typeof c.cocPendingAmount === 'undefined') c.cocPendingAmount = 0;
@@ -586,6 +591,7 @@
       db = saved && saved.users && saved.users.length ? saved : seedDB;
       db.vendorPayments = db.vendorPayments || []; 
       db.vendorSettlementOtps = db.vendorSettlementOtps || []; 
+      if (!db.settings) db.settings = { showCloudSyncConfig: true };
       db.consignments.forEach(c => { 
         if(!c.feeType) c.feeType = 'COD';
         if(typeof c.cocPendingAmount === 'undefined') c.cocPendingAmount = 0;
@@ -639,6 +645,20 @@
       if (confirm('Disconnect from Supabase? The app will operate in local offline mode.')) {
         localStorage.setItem('NEXTWAY_SUPABASE_URL', 'OFFLINE'); localStorage.setItem('NEXTWAY_SUPABASE_KEY', 'OFFLINE'); location.reload();
       }
+    }
+
+    async function toggleCloudSyncVisibility() {
+      if (!db.settings) db.settings = {};
+      db.settings.showCloudSyncConfig = db.settings.showCloudSyncConfig === false ? true : false;
+      await saveDB();
+      refreshAllViews();
+    }
+
+    function applySettingsUi() {
+      if(!db.settings) db.settings = {};
+      const showSync = db.settings.showCloudSyncConfig !== false;
+      const block = document.getElementById('cloudSyncConfigBlock');
+      if (block) block.classList.toggle('hidden', !showSync);
     }
 
     async function saveDB() { 
@@ -724,6 +744,7 @@
     function filterByDashboard(type) { document.getElementById('filterStatus').value = type; renderConsignments(); document.getElementById('panel-consignments').scrollIntoView({behavior: 'smooth'}); }
 
     function refreshAllViews() {
+      applySettingsUi();
       renderConsignments(); renderConfirmations();
       if(currentUser.role==='ADMIN'){ renderVendors(); renderAgents(); }
       else {
