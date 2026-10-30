@@ -1012,9 +1012,9 @@
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const wb = XLSX.utils.book_new();
       const wsData = [
-        ["Consignment ID", "Vendor Code", "Customer Name", "Customer Phone", "Delivery Address", "Product Amount", "Delivery Fee", "Fee Type"],
-        ["10045", "VND-001", "John Doe", "+971501234567", "Dubai Marina", 150, 20, "COD"],
-        ["10046", "VND-001", "Jane Smith", "+971509876543", "Abu Dhabi", 0, 30, "COC"]
+        ["Consignment ID", "Vendor Code", "Customer Name", "Customer Phone", "Delivery Address", "Product Amount", "Delivery Fee", "Fee Type", "Picked Up Origin", "Deficit Settlement"],
+        ["10045", "VND-001", "John Doe", "+971501234567", "Dubai Marina", 150, 20, "COD", "agent1", ""],
+        ["10046", "VND-001", "Jane Smith", "+971509876543", "Abu Dhabi", 0, 30, "COC", "agent1", "Y"]
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       XLSX.utils.book_append_sheet(wb, ws, "Template"); XLSX.writeFile(wb, "Consignment_Import_Template.xlsx");
@@ -1033,6 +1033,23 @@
           
           let importedCount = 0; let errorCount = 0;
 
+          // PRE-VALIDATION PASS for Deficit Columns
+          for (let i = 0; i < rows.length; i++) {
+            const pAmt = parseFloat(rows[i]["Product Amount"]) || 0;
+            const dFee = parseFloat(rows[i]["Delivery Fee"]) || 0;
+            const fType = (rows[i]["Fee Type"] || "COD").toString().trim().toUpperCase();
+            const defVal = (rows[i]["Deficit Settlement"] || "").toString().trim().toUpperCase();
+            
+            if ((fType === 'COC' || fType === 'CAD') && pAmt < dFee) {
+              if (defVal !== 'Y' && defVal !== 'N') {
+                alert("COC or CAD not mentioned as Y/N");
+                e.target.value = "";
+                return;
+              }
+            }
+          }
+
+          // ACTUAL IMPORT PASS
           for (const row of rows) {
             let id = (row["Consignment ID"] || "").toString().trim();
             const vCode = (row["Vendor Code"] || "").toString().trim().toUpperCase();
@@ -1042,17 +1059,34 @@
             const pAmt = parseFloat(row["Product Amount"]) || 0;
             const dFee = parseFloat(row["Delivery Fee"]) || 0;
             const fType = (row["Fee Type"] || "COD").toString().trim().toUpperCase();
+            const rawPicker = (row["Picked Up Origin"] || "").toString().trim();
+            const defVal = (row["Deficit Settlement"] || "").toString().trim().toUpperCase();
 
             if(!vCode || !cName || !dAddress) { errorCount++; continue; }
             if (!id) { id = Math.floor(10000 + Math.random() * 90000).toString(); while(db.consignments.some(c => c.id === id)) { id = Math.floor(10000 + Math.random() * 90000).toString(); } } 
             else { if(db.consignments.some(c => c.id.toUpperCase() === id.toUpperCase())) { errorCount++; continue; } }
 
             const v = getVendorByCode(vCode);
+            
+            let pickedUpBy = null;
+            if (rawPicker) {
+                const pUser = db.users.find(u => u.role === 'AGENT' && (u.username.toLowerCase() === rawPicker.toLowerCase() || u.name.toLowerCase() === rawPicker.toLowerCase() || u.id.toUpperCase() === rawPicker.toUpperCase()));
+                if (pUser) pickedUpBy = pUser.id;
+            }
+            
+            let deficitReceivedDate = null;
+            if ((fType === 'COC' || fType === 'CAD') && pAmt < dFee) {
+                if (defVal === 'Y') deficitReceivedDate = new Date().toISOString();
+            }
+            
+            let initialStatus = 'Created';
+            if (pickedUpBy) initialStatus = 'Picked Up';
+
             db.consignments.unshift({ 
               id, vendorCode: vCode, pickupFrom: v ? v.address : "", customerName: cName, customerPhone: cPhone, deliveryAddress: dAddress, 
-              productAmount: pAmt, deliveryCharge: dFee, feeType: fType, pendingModification: null, assignedTo: null, pickedUpBy: null, deficitReceivedDate: null, cocPendingAmount: 0, cocStatus: null,
-              status: 'Created', qrGenerated: false, otpCode: String(Math.floor(1000 + Math.random() * 9000)), otpVerified: false, 
-              pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: null, deliveredAt: null 
+              productAmount: pAmt, deliveryCharge: dFee, feeType: fType, pendingModification: null, assignedTo: null, pickedUpBy: pickedUpBy, deficitReceivedDate: deficitReceivedDate, cocPendingAmount: 0, cocStatus: null,
+              status: initialStatus, qrGenerated: false, otpCode: String(Math.floor(1000 + Math.random() * 9000)), otpVerified: false, 
+              pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: pickedUpBy ? new Date().toISOString() : null, deliveredAt: null 
             });
             importedCount++;
           }
