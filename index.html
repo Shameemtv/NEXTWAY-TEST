@@ -128,6 +128,127 @@
         </div>
       </div>
 
+      <!-- TAB 0: AGENT DASHBOARD (AGENT ONLY) -->
+      <div id="panel-dashboard" class="hidden space-y-4">
+        
+        <!-- MAIN DASHBOARD VIEW -->
+        <div id="dashMainScreen" class="max-w-md mx-auto space-y-5 py-2">
+          <!-- Agent Name & Date (No Version Number) -->
+          <div class="text-center space-y-0.5">
+            <h2 id="dashAgentName" class="text-sm font-bold text-slate-400 uppercase tracking-wide"></h2>
+            <p id="dashCurrentDate" class="text-xs font-semibold text-slate-400"></p>
+          </div>
+
+          <!-- Top Donut Cards: Delivered & Pending -->
+          <div class="grid grid-cols-2 gap-3.5">
+            <!-- Delivered Card -->
+            <div onclick="openDashAnalysis('DELIVERED_ANALYSIS')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition">
+              <div class="flex justify-between items-center mb-3">
+                <span class="font-bold text-xs text-slate-900">Delivered</span>
+                <div class="w-8 h-8 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </div>
+              </div>
+              <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" stroke="#cbd5e1" stroke-width="10" fill="transparent" />
+                  <circle id="dashDeliveredCircle" cx="50" cy="50" r="40" stroke="#dc2626" stroke-width="10" stroke-linecap="round" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <span class="text-[10px] font-bold text-slate-800">Keep Going</span>
+                  <span id="dashDeliveredPct" class="text-lg font-extrabold text-slate-900">0%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Card -->
+            <div onclick="openDashAnalysis('PENDING_ANALYSIS')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition">
+              <div class="flex justify-between items-center mb-3">
+                <span class="font-bold text-xs text-slate-900">Pending</span>
+                <div class="w-8 h-8 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </div>
+              </div>
+              <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" stroke="#cbd5e1" stroke-width="10" fill="transparent" />
+                  <circle id="dashPendingCircle" cx="50" cy="50" r="40" stroke="#dc2626" stroke-width="10" stroke-linecap="round" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <span class="text-[10px] font-bold text-slate-800">Keep Going</span>
+                  <span id="dashPendingPct" class="text-lg font-extrabold text-slate-900">0%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Selector Pill: PICKUP, DELIVERY, COD (No SYNC) -->
+          <div class="bg-amber-100/90 rounded-full py-3 px-6 shadow-md border border-amber-200/80 flex justify-around items-center">
+            <button onclick="setDashMode('PICKUP')" class="flex flex-col items-center gap-1.5 focus:outline-none group">
+              <div class="w-14 h-14 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+              </div>
+              <span id="dashTabLabel-PICKUP" class="text-[11px] font-extrabold tracking-wider text-slate-900">PICKUP</span>
+            </button>
+
+            <button onclick="setDashMode('DELIVERY')" class="flex flex-col items-center gap-1.5 focus:outline-none group">
+              <div class="w-14 h-14 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              </div>
+              <span id="dashTabLabel-DELIVERY" class="text-[11px] font-extrabold tracking-wider text-red-600">DELIVERY</span>
+            </button>
+
+            <button onclick="setDashMode('COD')" class="flex flex-col items-center gap-1.5 focus:outline-none group">
+              <div class="w-14 h-14 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <span id="dashTabLabel-COD" class="text-[11px] font-extrabold tracking-wider text-slate-900">COD</span>
+            </button>
+          </div>
+
+          <!-- Bottom 2x2 Summary Cards Grid -->
+          <div id="dashCardsGrid" class="grid grid-cols-2 gap-3.5"></div>
+        </div>
+
+        <!-- SUB-SCREEN 1: TABLE ANALYSIS VIEW (Delivery Analysis / Pending Delivery Analysis / COD Analysis) -->
+        <div id="dashAnalysisScreen" class="hidden max-w-2xl mx-auto space-y-4">
+          <div class="flex items-center justify-between py-2">
+            <div class="flex items-center gap-3">
+              <button onclick="closeDashSubScreen()" class="p-1.5 rounded-xl hover:bg-slate-200 text-slate-900 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+              </button>
+              <h2 id="dashAnalysisHeading" class="text-lg font-extrabold text-slate-900">Delivery Analysis</h2>
+            </div>
+            <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto p-2">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead id="dashAnalysisThead" class="border-b border-slate-200 text-slate-900 font-extrabold"></thead>
+              <tbody id="dashAnalysisTbody" class="divide-y divide-slate-200 text-slate-700"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUB-SCREEN 2: CARD LIST VIEW (Delivered List / Total Delivery List / Pending List / Failed List) -->
+        <div id="dashListScreen" class="hidden max-w-lg mx-auto space-y-4">
+          <div class="flex items-center gap-3 py-2">
+            <button onclick="closeDashSubScreen()" class="p-1.5 rounded-xl hover:bg-slate-200 text-slate-900 transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            </button>
+            <h2 id="dashListHeading" class="text-lg font-extrabold text-slate-900">Delivered List</h2>
+          </div>
+
+          <div class="flex gap-2.5">
+            <input id="dashListSearchInput" oninput="renderDashListItems()" type="text" placeholder="Search By Reference No" class="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-medium shadow-sm focus:outline-none focus:border-red-600" />
+            <button onclick="renderDashListItems()" class="bg-red-700 hover:bg-red-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-sm transition">Scan</button>
+          </div>
+
+          <div id="dashListContainer" class="space-y-3"></div>
+        </div>
+
+      </div>
+
       <!-- TAB 1: CONSIGNMENTS & DISPATCH -->
       <div id="panel-consignments" class="space-y-4">
         <div class="glass-card p-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
@@ -407,6 +528,7 @@
 
   <!-- BOTTOM NAVIGATION BAR -->
   <nav id="bottomNav" class="hidden fixed bottom-0 w-full bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 flex justify-around text-[10px] sm:text-xs text-slate-400 pb-safe z-50 shadow-2xl">
+    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="agent-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Dashboard</button>
     <button onclick="switchTab('consignments')" id="tab-consignments" class="flex-1 py-3 flex flex-col items-center gap-1 tab-active transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Dispatch</button>
     <button onclick="switchTab('confirmations')" id="tab-confirmations" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all relative"><span id="navConfirmBadge" class="absolute top-1.5 right-1.5 bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>Alerts</button>
     <button onclick="switchTab('agent-reports')" id="tab-agent-reports" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Reports</button>
@@ -564,6 +686,9 @@
     let isApplyingRemoteUpdate = false;
     let isPushingToCloud = false;
     let pushSyncDebounceTimer = null;
+
+    let currentDashMode = 'DELIVERY';
+    let currentDashListFilter = 'ALL';
 
     if (localStorage.getItem('NEXTWAY_DARK_MODE') === 'enabled') {
       document.body.classList.add('dark-mode');
@@ -831,16 +956,17 @@
 
         document.getElementById('adminReportDate').value = new Date().toISOString().split('T')[0]; 
       } 
-      switchTab('consignments'); 
+      switchTab(isA ? 'consignments' : 'dashboard'); 
       refreshAllViews();
     }
 
     function switchTab(tName) {
-      ['consignments','confirmations','agent-reports','agent-finance','vendors','invoices','system'].forEach(t => {
+      ['dashboard','consignments','confirmations','agent-reports','agent-finance','vendors','invoices','system'].forEach(t => {
         const p = document.getElementById(`panel-${t}`), b = document.getElementById(`tab-${t}`);
         if(p) p.classList.toggle('hidden', t!==tName);
         if(b) { b.classList.toggle('tab-active', t===tName); b.classList.toggle('text-slate-400', t!==tName); }
       });
+      if(tName==='dashboard') { closeDashSubScreen(); renderAgentDashboard(); }
       if(tName==='agent-finance') generateAgentFinanceReport();
       if(tName==='invoices') { 
         document.getElementById('invVendorSelect').innerHTML = `<option value="ALL">All Vendors</option>`+db.vendors.map(v=>`<option value="${v.code}">${v.name}</option>`).join(''); 
@@ -848,19 +974,281 @@
         renderVendorLedger(); 
       }
     }
-    
-    function filterByDashboard(type) { document.getElementById('filterStatus').value = type; renderConsignments(); document.getElementById('panel-consignments').scrollIntoView({behavior: 'smooth'}); }
 
     function refreshAllViews() {
       applySettingsUi();
       renderConsignments(); renderConfirmations();
       if(currentUser.role==='ADMIN'){ renderVendors(); renderAgents(); }
       else {
-        // Only count consignments where the current agent is the assigned delivery agent
         const ac = db.consignments.filter(c => c.assignedTo === currentUser.id);
         document.getElementById('agentPendingCount').textContent = ac.filter(c => ['Assigned','Picked Up','Out for delivery'].includes(c.status)).length;
         document.getElementById('agentCompletedCount').textContent = ac.filter(c => c.status==='Delivered').length;
+        renderAgentDashboard();
       }
+    }
+
+    // ================= AGENT DASHBOARD FUNCTIONS =================
+    function setDashMode(mode) {
+      currentDashMode = mode;
+      ['PICKUP', 'DELIVERY', 'COD'].forEach(m => {
+        const lbl = document.getElementById(`dashTabLabel-${m}`);
+        if (lbl) {
+          lbl.classList.toggle('text-red-600', m === mode);
+          lbl.classList.toggle('text-slate-900', m !== mode);
+        }
+      });
+      renderAgentDashboard();
+    }
+
+    function renderAgentDashboard() {
+      if (!currentUser || currentUser.role !== 'AGENT') return;
+
+      document.getElementById('dashAgentName').textContent = currentUser.name.toUpperCase();
+      const now = new Date();
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      document.getElementById('dashCurrentDate').textContent = `Date : ${String(now.getDate()).padStart(2, '0')}-${months[now.getMonth()]}-${now.getFullYear()}`;
+
+      const assigned = db.consignments.filter(c => c.assignedTo === currentUser.id);
+      const totalDelivery = assigned.length;
+      const deliveredList = assigned.filter(c => c.status === 'Delivered');
+      const pendingList = assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
+      const failedList = assigned.filter(c => c.status === 'Returned');
+
+      const delPct = totalDelivery > 0 ? Math.round((deliveredList.length / totalDelivery) * 100) : 0;
+      const penPct = totalDelivery > 0 ? Math.round((pendingList.length / totalDelivery) * 100) : 0;
+      const circumference = 251.2;
+
+      document.getElementById('dashDeliveredPct').textContent = `${delPct}%`;
+      document.getElementById('dashDeliveredCircle').style.strokeDashoffset = circumference - (delPct / 100) * circumference;
+
+      document.getElementById('dashPendingPct').textContent = `${penPct}%`;
+      document.getElementById('dashPendingCircle').style.strokeDashoffset = circumference - (penPct / 100) * circumference;
+
+      const iconBagBlue = `<div class="w-11 h-11 rounded-full bg-blue-600 border-2 border-amber-400 flex items-center justify-center text-white shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>`;
+      const iconBagGreen = `<div class="w-11 h-11 rounded-full bg-green-600 border-2 border-amber-400 flex items-center justify-center text-white shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>`;
+      const iconClockYellow = `<div class="w-11 h-11 rounded-full bg-amber-400 flex items-center justify-center text-white shrink-0"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5"/></svg></div>`;
+      const iconCrossRed = `<div class="w-11 h-11 rounded-full bg-red-600 border-2 border-amber-400 flex items-center justify-center text-white shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></div>`;
+
+      const grid = document.getElementById('dashCardsGrid');
+
+      if (currentDashMode === 'DELIVERY') {
+        grid.innerHTML = `
+          <div onclick="openDashList('TOTAL_DELIVERY')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconBagBlue}<span class="font-bold text-xs text-slate-900">Total Delivery</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${totalDelivery}</p>
+          </div>
+          <div onclick="openDashList('DELIVERED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconBagGreen}<span class="font-bold text-xs text-slate-900">Delivered</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${deliveredList.length}</p>
+          </div>
+          <div onclick="openDashList('PENDING')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconClockYellow}<span class="font-bold text-xs text-slate-900">Pending</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pendingList.length}</p>
+          </div>
+          <div onclick="openDashList('FAILED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconCrossRed}<span class="font-bold text-xs text-slate-900">Failed</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${failedList.length}</p>
+          </div>
+        `;
+      } else if (currentDashMode === 'PICKUP') {
+        const pickups = db.consignments.filter(c => c.pickedUpBy === currentUser.id);
+        const pTotal = pickups.length;
+        const pCollected = pickups.filter(c => ['Picked Up', 'Out for delivery', 'Delivered'].includes(c.status)).length;
+        const pPending = pickups.filter(c => ['Created', 'Assigned'].includes(c.status)).length;
+        const pFailed = pickups.filter(c => c.status === 'Returned').length;
+
+        grid.innerHTML = `
+          <div onclick="openDashList('PICKUP_TOTAL')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconBagBlue}<span class="font-bold text-xs text-slate-900">Total Pickups</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pTotal}</p>
+          </div>
+          <div onclick="openDashList('PICKUP_COLLECTED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconBagGreen}<span class="font-bold text-xs text-slate-900">Collected</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pCollected}</p>
+          </div>
+          <div onclick="openDashList('PICKUP_PENDING')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconClockYellow}<span class="font-bold text-xs text-slate-900">Pending</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pPending}</p>
+          </div>
+          <div onclick="openDashList('PICKUP_FAILED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconCrossRed}<span class="font-bold text-xs text-slate-900">Failed</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pFailed}</p>
+          </div>
+        `;
+      } else if (currentDashMode === 'COD') {
+        const sumAmt = arr => arr.reduce((sum, c) => sum + (Number(c.productAmount) || 0), 0);
+        const totalCodAmt = sumAmt(assigned);
+        const collectedCodAmt = sumAmt(deliveredList);
+        const pendingCodAmt = sumAmt(pendingList);
+        const failedCodAmt = sumAmt(failedList);
+
+        grid.innerHTML = `
+          <div onclick="openDashAnalysis('COD_TOTAL')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconBagBlue}<span class="font-bold text-xs text-slate-900">Total COD</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${formatAmt(totalCodAmt)} د.إ</p>
+          </div>
+          <div onclick="openDashAnalysis('COD_COLLECTED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconBagGreen}<span class="font-bold text-xs text-slate-900">Collected</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${formatAmt(collectedCodAmt)} د.إ</p>
+          </div>
+          <div onclick="openDashAnalysis('COD_PENDING')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconClockYellow}<span class="font-bold text-xs text-slate-900">Pending</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${formatAmt(pendingCodAmt)} د.إ</p>
+          </div>
+          <div onclick="openDashAnalysis('COD_FAILED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
+            <div class="flex items-center gap-2.5">${iconCrossRed}<span class="font-bold text-xs text-slate-900">Failed</span></div>
+            <p class="text-center font-extrabold text-base text-red-700 mt-2">${formatAmt(failedCodAmt)} د.إ</p>
+          </div>
+        `;
+      }
+    }
+
+    function formatDashDateTime(isoStr) {
+      if (!isoStr) return '-';
+      if (isoStr.includes('T')) {
+        const [d, t] = isoStr.split('T');
+        return `${d}<br/>${t.split('.')[0]}`;
+      }
+      return isoStr;
+    }
+
+    function openDashAnalysis(type) {
+      document.getElementById('dashMainScreen').classList.add('hidden');
+      document.getElementById('dashListScreen').classList.add('hidden');
+      document.getElementById('dashAnalysisScreen').classList.remove('hidden');
+
+      const assigned = db.consignments.filter(c => c.assignedTo === currentUser.id);
+      const heading = document.getElementById('dashAnalysisHeading');
+      const thead = document.getElementById('dashAnalysisThead');
+      const tbody = document.getElementById('dashAnalysisTbody');
+
+      if (type === 'DELIVERED_ANALYSIS' || type === 'PENDING_ANALYSIS') {
+        const isDel = type === 'DELIVERED_ANALYSIS';
+        heading.textContent = isDel ? 'Delivery Analysis' : 'Pending Delivery Analysis';
+        const rows = isDel 
+          ? assigned.filter(c => c.status === 'Delivered')
+          : assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
+
+        thead.innerHTML = `<tr><th class="p-3">#</th><th class="p-3">AWB Number</th><th class="p-3">Company</th><th class="p-3">Status</th><th class="p-3">Date Time</th></tr>`;
+        tbody.innerHTML = rows.length ? rows.map((c, idx) => `
+          <tr>
+            <td class="p-3 font-medium">${idx + 1}</td>
+            <td class="p-3 font-medium">${c.id}</td>
+            <td class="p-3 uppercase">${c.customerName}</td>
+            <td class="p-3 lowercase">${c.status}</td>
+            <td class="p-3 leading-tight">${formatDashDateTime(c.deliveredAt || c.pickedUpAt || c.createdAt)}</td>
+          </tr>
+        `).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">No records found.</td></tr>`;
+      } else {
+        const titles = {
+          'COD_TOTAL': 'COD Analysis',
+          'COD_COLLECTED': 'Collected Analysis',
+          'COD_PENDING': 'Pending Analysis',
+          'COD_FAILED': 'Failed Analysis'
+        };
+        heading.textContent = titles[type] || 'COD Analysis';
+
+        let rows = assigned;
+        if (type === 'COD_COLLECTED') rows = assigned.filter(c => c.status === 'Delivered');
+        else if (type === 'COD_PENDING') rows = assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
+        else if (type === 'COD_FAILED') rows = assigned.filter(c => c.status === 'Returned');
+
+        thead.innerHTML = `<tr><th class="p-3">#</th><th class="p-3">AWB Number</th><th class="p-3">Company</th><th class="p-3">Collect</th><th class="p-3">Received</th></tr>`;
+        tbody.innerHTML = rows.length ? rows.map((c, idx) => {
+          const collectAmt = Number(c.productAmount) || 0;
+          const receivedAmt = c.status === 'Delivered' ? collectAmt : 0;
+          return `
+            <tr>
+              <td class="p-3 font-medium">${idx + 1}</td>
+              <td class="p-3 font-medium">${c.id}</td>
+              <td class="p-3 uppercase">${c.customerName}</td>
+              <td class="p-3">${collectAmt}</td>
+              <td class="p-3">${formatAmt(receivedAmt)}</td>
+            </tr>
+          `;
+        }).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">No records found.</td></tr>`;
+      }
+    }
+
+    function openDashList(filterType) {
+      currentDashListFilter = filterType;
+      document.getElementById('dashMainScreen').classList.add('hidden');
+      document.getElementById('dashAnalysisScreen').classList.add('hidden');
+      document.getElementById('dashListScreen').classList.remove('hidden');
+      document.getElementById('dashListSearchInput').value = '';
+
+      const headings = {
+        'TOTAL_DELIVERY': 'Total Delivery List',
+        'DELIVERED': 'Delivered List',
+        'PENDING': 'Pending List',
+        'FAILED': 'Failed List',
+        'PICKUP_TOTAL': 'Total Pickups List',
+        'PICKUP_COLLECTED': 'Collected List',
+        'PICKUP_PENDING': 'Pending Pickups List',
+        'PICKUP_FAILED': 'Failed Pickups List'
+      };
+      document.getElementById('dashListHeading').textContent = headings[filterType] || 'Delivery List';
+      renderDashListItems();
+    }
+
+    function renderDashListItems() {
+      const q = (document.getElementById('dashListSearchInput').value || '').trim().toLowerCase();
+      let list = [];
+
+      if (currentDashListFilter.startsWith('PICKUP_')) {
+        const pickups = db.consignments.filter(c => c.pickedUpBy === currentUser.id);
+        if (currentDashListFilter === 'PICKUP_TOTAL') list = pickups;
+        else if (currentDashListFilter === 'PICKUP_COLLECTED') list = pickups.filter(c => ['Picked Up', 'Out for delivery', 'Delivered'].includes(c.status));
+        else if (currentDashListFilter === 'PICKUP_PENDING') list = pickups.filter(c => ['Created', 'Assigned'].includes(c.status));
+        else if (currentDashListFilter === 'PICKUP_FAILED') list = pickups.filter(c => c.status === 'Returned');
+      } else {
+        const assigned = db.consignments.filter(c => c.assignedTo === currentUser.id);
+        if (currentDashListFilter === 'TOTAL_DELIVERY') list = assigned;
+        else if (currentDashListFilter === 'DELIVERED') list = assigned.filter(c => c.status === 'Delivered');
+        else if (currentDashListFilter === 'PENDING') list = assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
+        else if (currentDashListFilter === 'FAILED') list = assigned.filter(c => c.status === 'Returned');
+      }
+
+      if (q) {
+        list = list.filter(c => `${c.id} ${c.customerName} ${c.customerPhone}`.toLowerCase().includes(q));
+      }
+
+      const container = document.getElementById('dashListContainer');
+      if (list.length === 0) {
+        container.innerHTML = `<div class="bg-white rounded-2xl p-8 text-center text-slate-400 font-bold text-xs shadow-sm border border-slate-100">No consignments found.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((c, idx) => {
+        const v = getVendorByCode(c.vendorCode);
+        return `
+          <div onclick="showConsignmentDetails('${c.id}')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-sm border border-slate-100 hover:border-red-300 transition space-y-2.5 text-xs">
+            <div class="flex justify-end items-center gap-2">
+              <span class="font-extrabold text-sm text-red-700 tracking-wide">${c.id}</span>
+              <span class="w-7 h-7 rounded-full bg-red-700 text-white font-bold text-xs flex items-center justify-center shadow-sm">${idx + 1}</span>
+            </div>
+            <p class="text-slate-500 font-medium uppercase tracking-wide">${c.customerName}</p>
+            <div class="flex justify-between items-center pt-1 font-bold text-slate-900">
+              <span>Telephone :</span>
+              <span>Mob: ${c.customerPhone || ''}</span>
+            </div>
+            <div class="flex items-start gap-1.5">
+              <span class="font-bold text-red-700 shrink-0">Shipper :</span>
+              <span class="text-slate-600 font-medium">${v ? v.name : c.vendorCode}</span>
+            </div>
+            <div>
+              <span class="font-bold text-slate-900">Instructions : </span>
+              <span class="text-slate-600">${c.deliveryAddress || ''}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function closeDashSubScreen() {
+      document.getElementById('dashAnalysisScreen').classList.add('hidden');
+      document.getElementById('dashListScreen').classList.add('hidden');
+      document.getElementById('dashMainScreen').classList.remove('hidden');
     }
 
     function openVendorSettlementOtpModal() {
