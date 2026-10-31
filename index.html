@@ -105,17 +105,6 @@
 
     <!-- ================= MODULE: WORKSPACE ================= -->
     <section id="appView" class="hidden space-y-4">
-      
-      <div id="agentDashboardBanner" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 no-print">
-        <div onclick="filterByDashboard('PENDING_ALL')" class="cursor-pointer glass-card p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-amber-400/50 transition">
-          <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pending Deliveries</p><h3 id="agentPendingCount" class="text-2xl font-black text-amber-500 mt-0.5">0</h3></div>
-          <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl border border-amber-200/50"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
-        </div>
-        <div onclick="filterByDashboard('Delivered')" class="cursor-pointer glass-card p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-emerald-400/50 transition">
-          <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Completed Orders</p><h3 id="agentCompletedCount" class="text-2xl font-black text-emerald-600 mt-0.5">0</h3></div>
-          <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-200/50"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></div>
-        </div>
-      </div>
 
       <div class="glass-card rounded-2xl shadow-sm border border-slate-200 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print">
         <div class="flex flex-wrap items-center gap-2">
@@ -128,9 +117,15 @@
         </div>
       </div>
 
-      <!-- TAB 0: AGENT DASHBOARD (AGENT ONLY) -->
+      <!-- TAB 0: DASHBOARD (ADMIN & AGENT) -->
       <div id="panel-dashboard" class="hidden space-y-4">
         
+        <!-- Admin Dashboard Filter -->
+        <div id="adminDashFilterWrap" class="admin-only hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-3 mb-1">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Filter Dashboard by Personnel</label>
+          <select id="adminDashAgentFilter" onchange="closeDashSubScreen(); renderAgentDashboard()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-medium outline-none focus:border-amber-500 transition"></select>
+        </div>
+
         <!-- MAIN DASHBOARD VIEW -->
         <div id="dashMainScreen" class="max-w-md mx-auto space-y-5 py-2">
           <!-- Agent Name & Date (No Version Number) -->
@@ -528,7 +523,7 @@
 
   <!-- BOTTOM NAVIGATION BAR -->
   <nav id="bottomNav" class="hidden fixed bottom-0 w-full bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 flex justify-around text-[10px] sm:text-xs text-slate-400 pb-safe z-50 shadow-2xl">
-    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="agent-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Dashboard</button>
+    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Dashboard</button>
     <button onclick="switchTab('consignments')" id="tab-consignments" class="flex-1 py-3 flex flex-col items-center gap-1 tab-active transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Dispatch</button>
     <button onclick="switchTab('confirmations')" id="tab-confirmations" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all relative"><span id="navConfirmBadge" class="absolute top-1.5 right-1.5 bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>Alerts</button>
     <button onclick="switchTab('agent-reports')" id="tab-agent-reports" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Reports</button>
@@ -885,7 +880,7 @@
       db.consignments = []; await saveDB(); refreshAllViews(); alert('All consignments have been successfully cleared.');
     }
 
-    function getAgentName(id) { if (!id) return 'Unassigned'; const u = db.users.find(x => x.id === id); return u ? `${u.name} (${u.status})` : `Archived`; }
+    function getAgentName(id) { if (!id) return 'Unassigned'; const u = db.users.find(x => x.id === id); return u ? `${u.name} - ${u.id}` : `Archived`; }
     function getVendorByCode(code) { return db.vendors.find(v => v.code.toUpperCase() === (code || '').toUpperCase()); }
 
     function checkDeficit() {
@@ -940,19 +935,21 @@
       const isA = currentUser.role === 'ADMIN'; 
       document.getElementById('roleBadge').innerHTML = isA 
         ? `<span class="text-amber-500 font-extrabold mr-1">ADMIN</span> <span>${currentUser.username}</span>` 
-        : `<span>${currentUser.name}</span> <span class="ml-2 px-1.5 py-0.5 bg-slate-200 text-slate-700 rounded-lg text-[9px] font-black">${currentUser.id}</span>`;
+        : `<span>${currentUser.name} - ${currentUser.id}</span>`;
       
       document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', !isA)); 
       document.querySelectorAll('.agent-only').forEach(el => el.classList.toggle('hidden', isA));
-      document.getElementById('agentDashboardBanner').classList.toggle('hidden', isA);
       
       if (isA) { 
-        document.getElementById('bulkAgent').innerHTML = `<option value="">Agent...</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
-        document.getElementById('filterAgentSlicer').innerHTML = `<option value="ALL">All Agents</option><option value="UNASSIGNED">Unassigned</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
+        document.getElementById('bulkAgent').innerHTML = `<option value="">Agent...</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name} - ${a.id}</option>`).join(''); 
+        document.getElementById('filterAgentSlicer').innerHTML = `<option value="ALL">All Agents</option><option value="UNASSIGNED">Unassigned</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name} - ${a.id}</option>`).join(''); 
         
-        const agentOptions = `<option value="ALL">All Personnel</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
-        document.getElementById('adminReportSelect').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name}</option>`).join(''); 
+        const agentOptions = `<option value="ALL">All Personnel</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name} - ${a.id}</option>`).join('');
+        document.getElementById('adminReportSelect').innerHTML = db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name} - ${a.id}</option>`).join(''); 
         document.getElementById('adminCocReportSelect').innerHTML = agentOptions;
+        
+        document.getElementById('adminDashAgentFilter').innerHTML = `<option value="ALL">Overall (All Agents)</option>` + db.users.filter(u=>u.role==='AGENT').map(a=>`<option value="${a.id}">${a.name} - ${a.id}</option>`).join('');
+        document.getElementById('adminDashFilterWrap').classList.remove('hidden');
 
         document.getElementById('adminReportDate').value = new Date().toISOString().split('T')[0]; 
       } 
@@ -979,15 +976,21 @@
       applySettingsUi();
       renderConsignments(); renderConfirmations();
       if(currentUser.role==='ADMIN'){ renderVendors(); renderAgents(); }
-      else {
-        const ac = db.consignments.filter(c => c.assignedTo === currentUser.id);
-        document.getElementById('agentPendingCount').textContent = ac.filter(c => ['Assigned','Picked Up','Out for delivery'].includes(c.status)).length;
-        document.getElementById('agentCompletedCount').textContent = ac.filter(c => c.status==='Delivered').length;
-        renderAgentDashboard();
+      renderAgentDashboard();
+    }
+
+    // ================= DASHBOARD FUNCTIONS =================
+    function getDashboardConsignments(type = 'DELIVERY') {
+      if (currentUser.role === 'ADMIN') {
+        const filterId = document.getElementById('adminDashAgentFilter').value || 'ALL';
+        if (type === 'PICKUP') return filterId === 'ALL' ? db.consignments.filter(c => c.pickedUpBy) : db.consignments.filter(c => c.pickedUpBy === filterId);
+        return filterId === 'ALL' ? db.consignments.filter(c => c.assignedTo) : db.consignments.filter(c => c.assignedTo === filterId);
+      } else {
+        if (type === 'PICKUP') return db.consignments.filter(c => c.pickedUpBy === currentUser.id);
+        return db.consignments.filter(c => c.assignedTo === currentUser.id);
       }
     }
 
-    // ================= AGENT DASHBOARD FUNCTIONS =================
     function setDashMode(mode) {
       currentDashMode = mode;
       ['PICKUP', 'DELIVERY', 'COD'].forEach(m => {
@@ -1001,14 +1004,23 @@
     }
 
     function renderAgentDashboard() {
-      if (!currentUser || currentUser.role !== 'AGENT') return;
+      if (!currentUser) return;
 
-      document.getElementById('dashAgentName').textContent = currentUser.name.toUpperCase();
+      let headerText = '';
+      if (currentUser.role === 'ADMIN') {
+        const filterId = document.getElementById('adminDashAgentFilter').value || 'ALL';
+        if (filterId === 'ALL') headerText = 'OVERALL DASHBOARD';
+        else { const ag = db.users.find(u => u.id === filterId); headerText = ag ? `${ag.name.toUpperCase()} - ${ag.id}` : 'AGENT DASHBOARD'; }
+      } else {
+        headerText = `${currentUser.name.toUpperCase()} - ${currentUser.id}`;
+      }
+      document.getElementById('dashAgentName').textContent = headerText;
+      
       const now = new Date();
       const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       document.getElementById('dashCurrentDate').textContent = `Date : ${String(now.getDate()).padStart(2, '0')}-${months[now.getMonth()]}-${now.getFullYear()}`;
 
-      const assigned = db.consignments.filter(c => c.assignedTo === currentUser.id);
+      const assigned = getDashboardConsignments('DELIVERY');
       const totalDelivery = assigned.length;
       const deliveredList = assigned.filter(c => c.status === 'Delivered');
       const pendingList = assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
@@ -1051,7 +1063,7 @@
           </div>
         `;
       } else if (currentDashMode === 'PICKUP') {
-        const pickups = db.consignments.filter(c => c.pickedUpBy === currentUser.id);
+        const pickups = getDashboardConsignments('PICKUP');
         const pTotal = pickups.length;
         const pCollected = pickups.filter(c => ['Picked Up', 'Out for delivery', 'Delivered'].includes(c.status)).length;
         const pPending = pickups.filter(c => ['Created', 'Assigned'].includes(c.status)).length;
@@ -1117,7 +1129,7 @@
       document.getElementById('dashListScreen').classList.add('hidden');
       document.getElementById('dashAnalysisScreen').classList.remove('hidden');
 
-      const assigned = db.consignments.filter(c => c.assignedTo === currentUser.id);
+      const assigned = getDashboardConsignments('DELIVERY');
       const heading = document.getElementById('dashAnalysisHeading');
       const thead = document.getElementById('dashAnalysisThead');
       const tbody = document.getElementById('dashAnalysisTbody');
@@ -1129,16 +1141,18 @@
           ? assigned.filter(c => c.status === 'Delivered')
           : assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
 
-        thead.innerHTML = `<tr><th class="p-3">#</th><th class="p-3">AWB Number</th><th class="p-3">Company</th><th class="p-3">Status</th><th class="p-3">Date Time</th></tr>`;
-        tbody.innerHTML = rows.length ? rows.map((c, idx) => `
+        thead.innerHTML = `<tr><th class="p-3">#</th><th class="p-3">AWB Number</th><th class="p-3">Merchant</th><th class="p-3">Status</th><th class="p-3">Date Time</th></tr>`;
+        tbody.innerHTML = rows.length ? rows.map((c, idx) => {
+          const v = getVendorByCode(c.vendorCode);
+          return `
           <tr>
             <td class="p-3 font-medium">${idx + 1}</td>
             <td class="p-3 font-medium">${c.id}</td>
-            <td class="p-3 uppercase">${c.customerName}</td>
+            <td class="p-3 uppercase">${v ? v.name : c.vendorCode}</td>
             <td class="p-3 lowercase">${c.status}</td>
             <td class="p-3 leading-tight">${formatDashDateTime(c.deliveredAt || c.pickedUpAt || c.createdAt)}</td>
           </tr>
-        `).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">No records found.</td></tr>`;
+        `}).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">No records found.</td></tr>`;
       } else {
         const titles = {
           'COD_TOTAL': 'COD Analysis',
@@ -1153,15 +1167,16 @@
         else if (type === 'COD_PENDING') rows = assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
         else if (type === 'COD_FAILED') rows = assigned.filter(c => c.status === 'Returned');
 
-        thead.innerHTML = `<tr><th class="p-3">#</th><th class="p-3">AWB Number</th><th class="p-3">Company</th><th class="p-3">Collect</th><th class="p-3">Received</th></tr>`;
+        thead.innerHTML = `<tr><th class="p-3">#</th><th class="p-3">AWB Number</th><th class="p-3">Merchant</th><th class="p-3">Collect</th><th class="p-3">Received</th></tr>`;
         tbody.innerHTML = rows.length ? rows.map((c, idx) => {
+          const v = getVendorByCode(c.vendorCode);
           const collectAmt = Number(c.productAmount) || 0;
           const receivedAmt = c.status === 'Delivered' ? collectAmt : 0;
           return `
             <tr>
               <td class="p-3 font-medium">${idx + 1}</td>
               <td class="p-3 font-medium">${c.id}</td>
-              <td class="p-3 uppercase">${c.customerName}</td>
+              <td class="p-3 uppercase">${v ? v.name : c.vendorCode}</td>
               <td class="p-3">${collectAmt}</td>
               <td class="p-3">${formatAmt(receivedAmt)}</td>
             </tr>
@@ -1196,13 +1211,13 @@
       let list = [];
 
       if (currentDashListFilter.startsWith('PICKUP_')) {
-        const pickups = db.consignments.filter(c => c.pickedUpBy === currentUser.id);
+        const pickups = getDashboardConsignments('PICKUP');
         if (currentDashListFilter === 'PICKUP_TOTAL') list = pickups;
         else if (currentDashListFilter === 'PICKUP_COLLECTED') list = pickups.filter(c => ['Picked Up', 'Out for delivery', 'Delivered'].includes(c.status));
         else if (currentDashListFilter === 'PICKUP_PENDING') list = pickups.filter(c => ['Created', 'Assigned'].includes(c.status));
         else if (currentDashListFilter === 'PICKUP_FAILED') list = pickups.filter(c => c.status === 'Returned');
       } else {
-        const assigned = db.consignments.filter(c => c.assignedTo === currentUser.id);
+        const assigned = getDashboardConsignments('DELIVERY');
         if (currentDashListFilter === 'TOTAL_DELIVERY') list = assigned;
         else if (currentDashListFilter === 'DELIVERED') list = assigned.filter(c => c.status === 'Delivered');
         else if (currentDashListFilter === 'PENDING') list = assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
@@ -1253,7 +1268,7 @@
 
     function openVendorSettlementOtpModal() {
       document.getElementById('vsoVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join('');
-      document.getElementById('vsoAgentSelect').innerHTML = db.users.filter(u => u.role === 'AGENT' && u.status === 'ACTIVE').map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+      document.getElementById('vsoAgentSelect').innerHTML = db.users.filter(u => u.role === 'AGENT' && u.status === 'ACTIVE').map(a => `<option value="${a.id}">${a.name} - ${a.id}</option>`).join('');
       document.getElementById('vsoAmount').value = '';
       document.getElementById('vendorSettlementOtpModal').classList.remove('hidden');
     }
@@ -1298,7 +1313,7 @@
       
       const agSelect = document.getElementById('cAgentSelect');
       const puSelect = document.getElementById('cPickedUpBy');
-      const agentPoolOptions = db.users.filter(u=>u.role==='AGENT'&&u.status==='ACTIVE').map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
+      const agentPoolOptions = db.users.filter(u=>u.role==='AGENT'&&u.status==='ACTIVE').map(a=>`<option value="${a.id}">${a.name} - ${a.id}</option>`).join('');
 
       if (currentUser.role === 'ADMIN') {
         agSelect.innerHTML = `<option value="">-- Pool --</option>` + agentPoolOptions;
@@ -1311,7 +1326,7 @@
         agSelect.innerHTML = `<option value="">-- Unassigned Pool --</option>`;
         document.getElementById('agentSelectContainer').classList.add('hidden');
         
-        puSelect.innerHTML = `<option value="${currentUser.id}">${currentUser.name}</option>`;
+        puSelect.innerHTML = `<option value="${currentUser.id}">${currentUser.name} - ${currentUser.id}</option>`;
         puSelect.value = currentUser.id;
         puSelect.disabled = true;
         puSelect.classList.add('bg-slate-200');
@@ -1546,7 +1561,7 @@
               </div>
               ${isA && c.pendingModification ? `<p class="mt-2 text-[10px] font-bold text-rose-600 text-center uppercase tracking-widest bg-rose-50 py-1 rounded-lg border border-rose-200">Confirmation Pending</p>` : ''}
               <div class="mt-3 space-y-2">
-                ${isA ? (isDel?`<div class="flex gap-2"><p class="flex-1 text-[10px] font-bold text-emerald-700 text-center uppercase py-1 border border-emerald-200 rounded-xl bg-emerald-50">Delivered</p><button onclick="openAmountEditModal('${c.id}')" class="bg-slate-900 text-amber-400 text-xs font-bold px-3 py-1 rounded-xl shadow-sm hover:bg-slate-800 transition">Edit</button></div>`:`<select onchange="adminAssignAgent('${c.id}',this.value)" class="w-full border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-bold bg-slate-50 outline-none focus:border-amber-500 transition"><option value="">- Assign Pool -</option>${ags.map(a=>`<option value="${a.id}" ${c.assignedTo===a.id?'selected':''}>${a.name}</option>`).join('')}</select>`) : ''}
+                ${isA ? (isDel?`<div class="flex gap-2"><p class="flex-1 text-[10px] font-bold text-emerald-700 text-center uppercase py-1 border border-emerald-200 rounded-xl bg-emerald-50">Delivered</p><button onclick="openAmountEditModal('${c.id}')" class="bg-slate-900 text-amber-400 text-xs font-bold px-3 py-1 rounded-xl shadow-sm hover:bg-slate-800 transition">Edit</button></div>`:`<select onchange="adminAssignAgent('${c.id}',this.value)" class="w-full border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-bold bg-slate-50 outline-none focus:border-amber-500 transition"><option value="">- Assign Pool -</option>${ags.map(a=>`<option value="${a.id}" ${c.assignedTo===a.id?'selected':''}>${a.name} - ${a.id}</option>`).join('')}</select>`) : ''}
                 <div class="flex gap-1.5 mt-1">
                   ${canDeliver ? `<button onclick="openDeliveryModal('${c.id}')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 rounded-xl text-xs shadow-sm transition">Deliver</button>` : ''}
                   ${canMarkDeficit ? `<button onclick="markDeficitReceived('${c.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 rounded-xl text-xs shadow-sm transition">Mark Amt Recv</button>` : ''}
