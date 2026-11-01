@@ -38,21 +38,35 @@
 
     /* Dark Mode Theme */
     body.dark-mode { background-color: #0b0f19 !important; color: #f1f5f9 !important; }
-    body.dark-mode .glass-card, body.dark-mode .bg-white { background-color: #131b2e !important; border-color: #1e293b !important; }
-    body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100, body.dark-mode .bg-slate-100, body.dark-mode .bg-slate-50 { background-color: #0d1424 !important; border-color: #1e293b !important; }
+    body.dark-mode .glass-card, 
+    body.dark-mode .bg-white,
+    body.dark-mode .bg-white\/90 { background-color: #131b2e !important; border-color: #1e293b !important; color: #f1f5f9 !important; }
+    body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100, body.dark-mode .bg-slate-100, body.dark-mode .bg-slate-50, body.dark-mode .bg-slate-50\/80 { background-color: #0d1424 !important; border-color: #1e293b !important; }
     body.dark-mode .bg-gray-200, body.dark-mode .bg-gray-300, body.dark-mode .bg-slate-200 { background-color: #1e293b !important; color: #f8fafc !important; border-color: #475569 !important; }
-    body.dark-mode .text-slate-900, body.dark-mode .text-slate-800, body.dark-mode .text-gray-800, body.dark-mode .text-gray-700 { color: #f8fafc !important; }
-    body.dark-mode .text-gray-600, body.dark-mode .text-gray-500, body.dark-mode .text-slate-500 { color: #94a3b8 !important; }
-    body.dark-mode .border-gray-200, body.dark-mode .border-gray-300, body.dark-mode .border-gray-100, body.dark-mode .border-b, body.dark-mode .border-t, body.dark-mode .border-slate-200 { border-color: #1e293b !important; }
-    body.dark-mode input, body.dark-mode select { background-color: #0b0f19 !important; color: #f8fafc !important; border-color: #334155 !important; }
+    body.dark-mode .text-slate-900, body.dark-mode .text-slate-800, body.dark-mode .text-gray-900, body.dark-mode .text-gray-800, body.dark-mode .text-slate-700 { color: #f8fafc !important; }
+    body.dark-mode .text-gray-600, body.dark-mode .text-gray-500, body.dark-mode .text-slate-600, body.dark-mode .text-slate-500, body.dark-mode .text-slate-400 { color: #94a3b8 !important; }
+    body.dark-mode .border-gray-200, body.dark-mode .border-gray-300, body.dark-mode .border-gray-100, body.dark-mode .border-b, body.dark-mode .border-t, body.dark-mode .border-slate-200, body.dark-mode .border-slate-100, body.dark-mode .border-slate-200\/80 { border-color: #1e293b !important; }
+    body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color: #0b0f19 !important; color: #f8fafc !important; border-color: #334155 !important; }
     body.dark-mode input::placeholder { color: #475569 !important; }
     body.dark-mode .shadow-sm, body.dark-mode .shadow-md, body.dark-mode .shadow-xl { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important; }
-    body.dark-mode .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.1) !important; border-color: rgba(16, 185, 129, 0.25) !important; }
-    body.dark-mode .bg-yellow-50, body.dark-mode .bg-amber-50 { background-color: rgba(245, 158, 11, 0.1) !important; border-color: rgba(245, 158, 11, 0.25) !important; }
-    body.dark-mode .bg-red-50, body.dark-mode .bg-rose-50 { background-color: rgba(239, 68, 68, 0.1) !important; border-color: rgba(239, 68, 68, 0.25) !important; }
-    body.dark-mode .bg-blue-50 { background-color: rgba(59, 130, 246, 0.1) !important; border-color: rgba(59, 130, 246, 0.25) !important; }
+    
+    /* Dark Mode State Colors */
+    body.dark-mode .bg-emerald-50, body.dark-mode .bg-emerald-50\/60 { background-color: rgba(16, 185, 129, 0.12) !important; border-color: rgba(16, 185, 129, 0.25) !important; }
+    body.dark-mode .bg-yellow-50, body.dark-mode .bg-amber-50 { background-color: rgba(245, 158, 11, 0.12) !important; border-color: rgba(245, 158, 11, 0.25) !important; }
+    body.dark-mode .bg-red-50, body.dark-mode .bg-rose-50 { background-color: rgba(239, 68, 68, 0.12) !important; border-color: rgba(239, 68, 68, 0.25) !important; }
+    body.dark-mode .bg-blue-50, body.dark-mode .bg-blue-50\/60 { background-color: rgba(59, 130, 246, 0.12) !important; border-color: rgba(59, 130, 246, 0.25) !important; }
+    body.dark-mode .bg-amber-100\/90 { background-color: rgba(245, 158, 11, 0.15) !important; border-color: rgba(245, 158, 11, 0.3) !important; }
+
+    body.dark-mode .text-emerald-700, body.dark-mode .text-emerald-800, body.dark-mode .text-emerald-900 { color: #34d399 !important; }
+    body.dark-mode .text-rose-700, body.dark-mode .text-rose-600, body.dark-mode .text-rose-800, body.dark-mode .text-red-700, body.dark-mode .text-red-600 { color: #f87171 !important; }
+    body.dark-mode .text-blue-700, body.dark-mode .text-blue-800, body.dark-mode .text-blue-900 { color: #60a5fa !important; }
+    body.dark-mode .text-amber-700, body.dark-mode .text-amber-800 { color: #fbbf24 !important; }
+    
     body.dark-mode th { border-bottom-color: #1e293b !important; background-color: #0d1424 !important; color: #cbd5e1 !important; }
-    body.dark-mode .divide-gray-200 > :not([hidden]) ~ :not([hidden]), body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #1e293b !important; }
+    body.dark-mode .divide-gray-200 > :not([hidden]) ~ :not([hidden]), 
+    body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+    body.dark-mode .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: #1e293b !important; }
+    body.dark-mode .hover\:bg-slate-200:hover, body.dark-mode .hover\:bg-slate-300:hover { background-color: #1e293b !important; color: #fff !important; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen antialiased selection:bg-amber-500 selection:text-slate-900">
@@ -64,9 +78,9 @@
         <div class="gold-gradient text-slate-950 font-black px-2.5 py-1 rounded-lg text-xs tracking-wider shadow-sm flex items-center justify-center">NW</div>
         <div>
           <h1 class="font-bold text-sm tracking-tight leading-tight text-white flex items-center gap-1.5">
-            NEXT WAY <span class="text-[9px] uppercase tracking-widest text-amber-400 font-extrabold bg-amber-400/10 px-1.5 py-0.5 rounded border border-amber-400/20">Executive</span>
+            NEXT WAY
           </h1>
-          <p class="text-[10px] text-slate-400 font-medium">Logistics & Settlement Gateway</p>
+          <p class="text-[10px] text-slate-400 font-medium">Delivery Services LLC</p>
         </div>
       </div>
       <div class="flex items-center gap-2.5">
@@ -86,8 +100,8 @@
     <section id="authView" class="max-w-md mx-auto mt-14 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/80 p-7">
       <div class="text-center mb-6">
         <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl gold-gradient text-slate-950 font-black text-xl mb-3 shadow-md">NW</div>
-        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Enterprise Sign In</h2>
-        <p class="text-xs text-slate-500 mt-1 font-medium">Secure Delivery & Account Services</p>
+        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">NEXT WAY</h2>
+        <p class="text-xs text-slate-500 mt-1 font-medium">Delivery Services LLC</p>
       </div>
       <form onsubmit="handleLogin(event)" class="space-y-4">
         <div>
@@ -99,7 +113,7 @@
           <input id="loginPassword" type="password" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none transition" />
         </div>
         <div id="loginError" class="hidden text-xs text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200 font-medium"></div>
-        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-2.5 rounded-xl shadow-md transition uppercase text-xs tracking-wider">Access Portal</button>
+        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-2.5 rounded-xl shadow-md transition uppercase text-xs tracking-wider">LOG IN</button>
       </form>
     </section>
 
@@ -128,7 +142,7 @@
 
         <!-- MAIN DASHBOARD VIEW -->
         <div id="dashMainScreen" class="max-w-md mx-auto space-y-5 py-2">
-          <!-- Agent Name & Date (No Version Number) -->
+          <!-- Agent Name & Date -->
           <div class="text-center space-y-0.5">
             <h2 id="dashAgentName" class="text-sm font-bold text-slate-400 uppercase tracking-wide"></h2>
             <p id="dashCurrentDate" class="text-xs font-semibold text-slate-400"></p>
@@ -177,7 +191,7 @@
             </div>
           </div>
 
-          <!-- Middle Selector Pill: PICKUP, DELIVERY, COD (No SYNC) -->
+          <!-- Middle Selector Pill: PICKUP, DELIVERY, COD -->
           <div class="bg-amber-100/90 rounded-full py-3 px-6 shadow-md border border-amber-200/80 flex justify-around items-center">
             <button onclick="setDashMode('PICKUP')" class="flex flex-col items-center gap-1.5 focus:outline-none group">
               <div class="w-14 h-14 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition">
@@ -205,7 +219,7 @@
           <div id="dashCardsGrid" class="grid grid-cols-2 gap-3.5"></div>
         </div>
 
-        <!-- SUB-SCREEN 1: TABLE ANALYSIS VIEW (Delivery Analysis / Pending Delivery Analysis / COD Analysis) -->
+        <!-- SUB-SCREEN 1: TABLE ANALYSIS VIEW -->
         <div id="dashAnalysisScreen" class="hidden max-w-2xl mx-auto space-y-4">
           <div class="flex items-center justify-between py-2">
             <div class="flex items-center gap-3">
@@ -225,7 +239,7 @@
           </div>
         </div>
 
-        <!-- SUB-SCREEN 2: CARD LIST VIEW (Delivered List / Total Delivery List / Pending List / Failed List) -->
+        <!-- SUB-SCREEN 2: CARD LIST VIEW -->
         <div id="dashListScreen" class="hidden max-w-lg mx-auto space-y-4">
           <div class="flex items-center gap-3 py-2">
             <button onclick="closeDashSubScreen()" class="p-1.5 rounded-xl hover:bg-slate-200 text-slate-900 transition">
@@ -445,26 +459,17 @@
           <button onclick="logout()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold shadow-sm transition text-xs w-full sm:w-auto">Logout</button>
         </div>
 
-        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3">
-          <h3 class="font-bold text-sm text-slate-900">Security Credentials</h3>
-          <div class="space-y-3 max-w-xl text-xs">
-            <div>
-              <label class="font-semibold text-slate-600 block mb-1">Current Password</label>
-              <input id="selfCurrentPassword" type="password" placeholder="••••••••" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
-            </div>
-            <div>
-              <label class="font-semibold text-slate-600 block mb-1">New Password</label>
-              <input id="selfNewPassword" type="password" placeholder="Enter new password..." class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
-            </div>
-            <div class="flex gap-2 pt-1">
-              <button type="button" onclick="changeOwnPassword()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold shadow-sm transition">Update Credentials</button>
-            </div>
+        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center">
+          <div>
+            <h3 class="font-bold text-sm text-slate-900">Security Credentials</h3>
+            <p class="text-xs text-slate-400 mt-0.5">Manage and update your account login password.</p>
           </div>
+          <button onclick="openCredentialsModal()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold shadow-sm transition text-xs">Update Credentials</button>
         </div>
 
         <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3">
           <div class="flex items-center justify-between">
-            <h3 class="font-bold text-sm text-slate-900">Live Cloud Replication</h3>
+            <h3 class="font-bold text-sm text-slate-900">Live Cloud</h3>
             <button onclick="toggleCloudSyncVisibility()" class="admin-only text-[10px] font-bold bg-slate-200 text-slate-900 px-3 py-1.5 rounded-xl shadow-sm hover:bg-slate-300 transition">Toggle View</button>
           </div>
           <div id="cloudSyncConfigBlock" class="space-y-3 max-w-xl text-xs transition-all">
@@ -521,19 +526,44 @@
     </section>
   </main>
 
-  <!-- BOTTOM NAVIGATION BAR -->
-  <nav id="bottomNav" class="hidden fixed bottom-0 w-full bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 flex justify-around text-[10px] sm:text-xs text-slate-400 pb-safe z-50 shadow-2xl">
-    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Dashboard</button>
-    <button onclick="switchTab('consignments')" id="tab-consignments" class="flex-1 py-3 flex flex-col items-center gap-1 tab-active transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Dispatch</button>
-    <button onclick="switchTab('confirmations')" id="tab-confirmations" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all relative"><span id="navConfirmBadge" class="absolute top-1.5 right-1.5 bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>Alerts</button>
-    <button onclick="switchTab('agent-reports')" id="tab-agent-reports" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Reports</button>
-    <button onclick="switchTab('agent-finance')" id="tab-agent-finance" class="agent-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Finance</button>
-    <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>Merchants</button>
-    <button onclick="switchTab('invoices')" id="tab-invoices" class="admin-only flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Ledger</button>
-    <button onclick="switchTab('system')" id="tab-system" class="flex-1 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>System</button>
+  <!-- BOTTOM NAVIGATION BAR (SCROLLABLE & RESPONSIVE) -->
+  <nav id="bottomNav" class="hidden fixed bottom-0 w-full bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 flex overflow-x-auto hide-scrollbar justify-start sm:justify-around text-[10px] sm:text-xs text-slate-400 pb-safe z-50 shadow-2xl px-1">
+    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Dashboard</button>
+    <button onclick="switchTab('consignments')" id="tab-consignments" class="shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 tab-active transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Dispatch</button>
+    <button onclick="switchTab('confirmations')" id="tab-confirmations" class="shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all relative"><span id="navConfirmBadge" class="absolute top-1.5 right-1.5 bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>Alerts</button>
+    <button onclick="switchTab('agent-reports')" id="tab-agent-reports" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Reports</button>
+    <button onclick="switchTab('agent-finance')" id="tab-agent-finance" class="agent-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Finance</button>
+    <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>Merchants</button>
+    <button onclick="switchTab('invoices')" id="tab-invoices" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Ledger</button>
+    <button onclick="switchTab('system')" id="tab-system" class="shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>System</button>
   </nav>
 
   <!-- ================= MODALS ================= -->
+  
+  <!-- SECURITY CREDENTIALS UPDATE MODAL -->
+  <div id="credentialsModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-xs border border-slate-100">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+        <h3 class="font-extrabold tracking-wide text-sm text-slate-900">Update Credentials</h3>
+        <button onclick="closeModal('credentialsModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg transition">✕</button>
+      </div>
+      <form onsubmit="changeOwnPassword(event)" class="space-y-3">
+        <div>
+          <label class="font-semibold text-slate-600 block mb-1">Current Password</label>
+          <input id="selfCurrentPassword" type="password" placeholder="••••••••" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
+        </div>
+        <div>
+          <label class="font-semibold text-slate-600 block mb-1">New Password</label>
+          <input id="selfNewPassword" type="password" placeholder="Enter new password..." required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition" />
+        </div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeModal('credentialsModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 font-bold text-slate-700 hover:bg-slate-200 transition">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold shadow-sm transition">Save Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="consignmentModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-auto max-h-[92vh] flex flex-col border border-slate-100">
       <div class="flex justify-between items-center border-b border-slate-200 pb-3 shrink-0">
@@ -1550,8 +1580,6 @@
             const isAssigned = c.assignedTo === currentUser.id;
             const isPool = c.status === 'Created';
             
-            // Explicitly hide from the pickup agent if they are NOT the assigned delivery agent.
-            // Also hide if it's not assigned to them and not in the generic 'Created' pool.
             if (c.pickedUpBy === currentUser.id && !isAssigned) return false;
             if (!isAssigned && !isPool) return false;
         }
@@ -1805,7 +1833,7 @@
       const { rows, totalCollected } = getAgentFinanceRows(id, d, stat);
       const tbody = rows.map(r=>`<tr><td class="p-2.5 font-bold">${r.id}</td><td class="p-2.5">${r.customer}</td><td class="p-2.5">${r.type}</td><td class="p-2.5 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
       
-      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-slate-200 pb-4"><div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-500">Agent Field Accounting</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-slate-500 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-xs text-slate-500">Total Entries</p><p class="text-lg font-bold text-slate-900">${rows.length}</p></div><div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Received</p><p class="text-lg font-black text-emerald-900">${formatAmt(totalCollected)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-slate-100">${tbody}</tbody></table></div>`;
+      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-slate-200 pb-4"><div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-500">Agent Field Accounting</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-slate-500 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-xs text-slate-500">Total Entries</p><p class="text-lg font-bold text-slate-900">${rows.length}</p></div><div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Received</p><p class="text-lg font-black text-emerald-900">${formatAmt(totalCollected)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">${r.type||'Type'}</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-slate-100">${tbody}</tbody></table></div>`;
       document.getElementById('printableAdminAgentReport').classList.remove('hidden');
     }
 
@@ -1991,7 +2019,31 @@
     async function setAgentStatus(id, st) { const a=db.users.find(u=>u.id===id); if(a) a.status=st; await saveDB(); renderAgents(); }
     async function adminDeleteAgent(id) { if(!confirm('Permanently remove this agent account?')) return; db.users = db.users.filter(x => x.id !== id); await saveDB(); renderAgents(); }
     async function adminResetAgentPassword(id) { const newPass = prompt('Enter new password for this agent:'); if (!newPass) return; const a = db.users.find(u => u.id === id); if (a) { a.passwordHash = await hashPassword(newPass); await saveDB(); alert('Password updated successfully.'); } }
-    async function changeOwnPassword() { const current = document.getElementById('selfCurrentPassword').value; const pass = document.getElementById('selfNewPassword').value.trim(); if (!current || !pass) return alert('Enter both current and new passwords'); const currentHash = await hashPassword(current); if (currentHash !== currentUser.passwordHash && current !== currentUser.passwordHash && current !== currentUser.password) { return alert('Incorrect current password'); } currentUser.passwordHash = await hashPassword(pass); const userInDb = db.users.find(u => u.id === currentUser.id); if (userInDb) userInDb.passwordHash = currentUser.passwordHash; await saveDB(); document.getElementById('selfCurrentPassword').value = ''; document.getElementById('selfNewPassword').value = ''; alert('Password updated successfully'); }
+
+    function openCredentialsModal() {
+      document.getElementById('selfCurrentPassword').value = '';
+      document.getElementById('selfNewPassword').value = '';
+      document.getElementById('credentialsModal').classList.remove('hidden');
+    }
+
+    async function changeOwnPassword(e) { 
+      if (e) e.preventDefault();
+      const current = document.getElementById('selfCurrentPassword').value; 
+      const pass = document.getElementById('selfNewPassword').value.trim(); 
+      if (!current || !pass) return alert('Enter both current and new passwords'); 
+      const currentHash = await hashPassword(current); 
+      if (currentHash !== currentUser.passwordHash && current !== currentUser.passwordHash && current !== currentUser.password) { 
+        return alert('Incorrect current password'); 
+      } 
+      currentUser.passwordHash = await hashPassword(pass); 
+      const userInDb = db.users.find(u => u.id === currentUser.id); 
+      if (userInDb) userInDb.passwordHash = currentUser.passwordHash; 
+      await saveDB(); 
+      document.getElementById('selfCurrentPassword').value = ''; 
+      document.getElementById('selfNewPassword').value = ''; 
+      closeModal('credentialsModal');
+      alert('Password updated successfully'); 
+    }
 
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function downloadBackup() { const a=document.createElement('a'); a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(db)); a.download='Backup.json'; document.body.appendChild(a); a.click(); }
