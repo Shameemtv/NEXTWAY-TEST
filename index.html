@@ -120,7 +120,8 @@
     <!-- ================= MODULE: WORKSPACE ================= -->
     <section id="appView" class="hidden space-y-4">
 
-      <div class="glass-card rounded-2xl shadow-sm border border-slate-200 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print">
+      <!-- TOP WORKSPACE HEADER (HIDDEN IN DASHBOARD TAB) -->
+      <div id="globalWorkspaceHeader" class="glass-card rounded-2xl shadow-sm border border-slate-200 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print">
         <div class="flex flex-wrap items-center gap-2">
           <span id="roleBadge" class="flex items-center px-3 py-1.5 rounded-xl text-[10px] font-bold bg-slate-100 text-slate-800 border border-slate-200/80"></span>
           <div id="adminOtpControl" class="hidden flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200"><span class="text-[10px] font-semibold text-slate-600">Handover OTP:</span><button id="otpToggleBtn" onclick="toggleGlobalOtp()" class="px-2 py-0.5 rounded text-[10px] font-bold"></button></div>
@@ -564,6 +565,7 @@
     </div>
   </div>
 
+  <!-- CONSIGNMENT CREATION MODAL -->
   <div id="consignmentModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-auto max-h-[92vh] flex flex-col border border-slate-100">
       <div class="flex justify-between items-center border-b border-slate-200 pb-3 shrink-0">
@@ -582,6 +584,11 @@
         </div>
         <div><label class="font-bold block text-slate-700 mb-1">Delivery Destination</label><input id="cDeliveryAddress" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
         
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="font-bold block text-slate-700 mb-1">Weight (kg)</label><input id="cWeight" type="number" step="0.01" value="1" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+          <div><label class="font-bold block text-slate-700 mb-1">Pieces</label><input id="cPieces" type="number" value="1" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div><label class="font-bold block text-emerald-800 mb-1">Product Amount</label><input id="cProductAmt" type="number" step="0.01" required value="0" class="w-full border border-emerald-200 rounded-xl px-3 py-2 bg-emerald-50/60 font-bold text-emerald-900 outline-none focus:border-emerald-500 transition" oninput="checkDeficit()" /></div>
           <div><label class="font-bold block text-slate-700 mb-1">Delivery Service</label><input id="cDeliveryFee" type="number" step="0.01" required value="20" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold outline-none focus:border-amber-500 transition" oninput="checkDeficit()" /></div>
@@ -754,7 +761,7 @@
           { id: 'AG-101', username: 'agent1', name: 'Ramesh Kumar', role: 'AGENT', phone: '+971501112233', passwordHash: agentHash, status: 'ACTIVE' } 
         ],
         vendors: [{ code: 'VND-001', name: 'Gulf Horizon Trading LLC', phone: '+971500001111', address: 'Dubai' }],
-        consignments: [{ id: '10001', vendorCode: 'VND-001', pickupFrom: 'Dubai', customerName: 'Omar', customerPhone: '+971529876543', deliveryAddress: 'Villa 12', productAmount: 350, deliveryCharge: 25, feeType: 'COD', pendingModification: null, assignedTo: 'AG-101', pickedUpBy: 'AG-101', cocPendingAmount: 0, cocStatus: null, deficitReceivedDate: null, status: 'Delivered', qrGenerated: true, otpCode: '4829', otpVerified: true, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: new Date().toISOString(), deliveredAt: new Date().toISOString() }],
+        consignments: [{ id: '10001', vendorCode: 'VND-001', pickupFrom: 'Dubai', customerName: 'Omar', customerPhone: '+971529876543', deliveryAddress: 'Villa 12', productAmount: 350, deliveryCharge: 25, feeType: 'COD', weight: 1.5, pieces: 1, pendingModification: null, assignedTo: 'AG-101', pickedUpBy: 'AG-101', cocPendingAmount: 0, cocStatus: null, deficitReceivedDate: null, status: 'Delivered', qrGenerated: true, otpCode: '4829', otpVerified: true, pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: new Date().toISOString(), deliveredAt: new Date().toISOString() }],
         vendorPayments: [], vendorSettlementOtps: []
       };
     }
@@ -771,6 +778,8 @@
         if (!db.settings) db.settings = { showCloudSyncConfig: true };
         db.consignments.forEach(c => { 
           if(!c.feeType) c.feeType = 'COD'; 
+          if(typeof c.weight === 'undefined') c.weight = 1;
+          if(typeof c.pieces === 'undefined') c.pieces = 1;
           if(typeof c.cocPendingAmount === 'undefined') c.cocPendingAmount = 0;
           if(typeof c.cocStatus === 'undefined') c.cocStatus = null;
           if(typeof c.pickedUpBy === 'undefined') c.pickedUpBy = null;
@@ -822,6 +831,8 @@
       if (!db.settings) db.settings = { showCloudSyncConfig: true };
       db.consignments.forEach(c => { 
         if(!c.feeType) c.feeType = 'COD';
+        if(typeof c.weight === 'undefined') c.weight = 1;
+        if(typeof c.pieces === 'undefined') c.pieces = 1;
         if(typeof c.cocPendingAmount === 'undefined') c.cocPendingAmount = 0;
         if(typeof c.cocStatus === 'undefined') c.cocStatus = null;
         if(typeof c.pickedUpBy === 'undefined') c.pickedUpBy = null;
@@ -988,6 +999,11 @@
     }
 
     function switchTab(tName) {
+      const globalHeader = document.getElementById('globalWorkspaceHeader');
+      if (globalHeader) {
+        globalHeader.classList.toggle('hidden', tName === 'dashboard');
+      }
+
       ['dashboard','consignments','confirmations','agent-reports','agent-finance','vendors','invoices','system'].forEach(t => {
         const p = document.getElementById(`panel-${t}`), b = document.getElementById(`tab-${t}`);
         if(p) p.classList.toggle('hidden', t!==tName);
@@ -1292,7 +1308,7 @@
               <div class="pt-1 text-slate-900 font-bold space-y-1.5">
                   <div class="flex justify-between">
                       <span class="truncate pr-2">Location:<span class="font-medium text-slate-700 ml-1">${c.deliveryAddress || ''}</span></span>
-                      <span class="pr-12 shrink-0">Pcs: 1</span>
+                      <span class="pr-12 shrink-0">Pcs: ${c.pieces || 1}</span>
                   </div>
                   <div class="flex justify-between">
                       <span>Tel :</span>
@@ -1406,6 +1422,8 @@
       }
       
       document.getElementById('cDeficitReceived').value = "NO";
+      document.getElementById('cWeight').value = "1";
+      document.getElementById('cPieces').value = "1";
       document.getElementById('cCustomerName').value = ''; 
       document.getElementById('cCustomerPhone').value = '+971'; 
       document.getElementById('cDeliveryAddress').value = ''; 
@@ -1447,6 +1465,8 @@
       const pAmt = parseFloat(document.getElementById('cProductAmt').value)||0;
       const dFee = parseFloat(document.getElementById('cDeliveryFee').value)||0;
       const fType = document.getElementById('cFeeType').value;
+      const weightVal = parseFloat(document.getElementById('cWeight').value) || 1;
+      const piecesVal = parseInt(document.getElementById('cPieces').value, 10) || 1;
       const isDeficit = pAmt < dFee && (fType === 'COC' || fType === 'CAD');
       const deficitReceived = isDeficit && document.getElementById('cDeficitReceived').value === 'YES';
       
@@ -1463,6 +1483,8 @@
         productAmount: pAmt, 
         deliveryCharge: dFee, 
         feeType: fType, 
+        weight: weightVal,
+        pieces: piecesVal,
         pendingModification: null, 
         assignedTo: ag, 
         pickedUpBy: pickedUpBy,
@@ -1489,9 +1511,9 @@
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const wb = XLSX.utils.book_new();
       const wsData = [
-        ["Consignment ID", "Vendor Code", "Customer Name", "Customer Phone", "Delivery Address", "Product Amount", "Delivery Fee", "Fee Type", "Picked Up Origin", "Deficit Settlement"],
-        ["10045", "VND-001", "John Doe", "+971501234567", "Dubai Marina", 150, 20, "COD", "agent1", ""],
-        ["10046", "VND-001", "Jane Smith", "+971509876543", "Abu Dhabi", 0, 30, "COC", "agent1", "Y"]
+        ["Consignment ID", "Vendor Code", "Customer Name", "Customer Phone", "Delivery Address", "Product Amount", "Delivery Fee", "Fee Type", "Weight", "Pieces", "Picked Up Origin", "Deficit Settlement"],
+        ["10045", "VND-001", "John Doe", "+971501234567", "Dubai Marina", 150, 20, "COD", 1.5, 1, "agent1", ""],
+        ["10046", "VND-001", "Jane Smith", "+971509876543", "Abu Dhabi", 0, 30, "COC", 2.0, 2, "agent1", "Y"]
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       XLSX.utils.book_append_sheet(wb, ws, "Template"); XLSX.writeFile(wb, "Consignment_Import_Template.xlsx");
@@ -1536,6 +1558,8 @@
             const pAmt = parseFloat(row["Product Amount"]) || 0;
             const dFee = parseFloat(row["Delivery Fee"]) || 0;
             const fType = (row["Fee Type"] || "COD").toString().trim().toUpperCase();
+            const weightVal = parseFloat(row["Weight"]) || 1;
+            const piecesVal = parseInt(row["Pieces"], 10) || 1;
             const rawPicker = (row["Picked Up Origin"] || "").toString().trim();
             const defVal = (row["Deficit Settlement"] || "").toString().trim().toUpperCase();
 
@@ -1561,7 +1585,7 @@
 
             db.consignments.unshift({ 
               id, vendorCode: vCode, pickupFrom: v ? v.address : "", customerName: cName, customerPhone: cPhone, deliveryAddress: dAddress, 
-              productAmount: pAmt, deliveryCharge: dFee, feeType: fType, pendingModification: null, assignedTo: null, pickedUpBy: pickedUpBy, deficitReceivedDate: deficitReceivedDate, cocPendingAmount: 0, cocStatus: null,
+              productAmount: pAmt, deliveryCharge: dFee, feeType: fType, weight: weightVal, pieces: piecesVal, pendingModification: null, assignedTo: null, pickedUpBy: pickedUpBy, deficitReceivedDate: deficitReceivedDate, cocPendingAmount: 0, cocStatus: null,
               status: initialStatus, qrGenerated: false, otpCode: String(Math.floor(1000 + Math.random() * 9000)), otpVerified: false, 
               pickupPhoto: null, deliveryPhoto: null, returnReason: '', createdAt: new Date().toISOString().split('T')[0], pickedUpAt: pickedUpBy ? new Date().toISOString() : null, deliveredAt: null 
             });
@@ -1618,6 +1642,7 @@
                 <p><b>Merchant:</b> ${v?v.name:c.vendorCode}</p>
                 <p><b>Client:</b> ${c.customerName}</p>
                 <p><b>Address:</b> ${c.deliveryAddress}</p>
+                <p><b>Weight:</b> ${c.weight || 1} kg | <b>Pieces:</b> ${c.pieces || 1}</p>
                 <p><b>Delivery Personnel:</b> ${getAgentName(c.assignedTo)}</p>
                 ${c.pickedUpBy ? `<p><b>Pickup Origin:</b> ${getAgentName(c.pickedUpBy)}</p>` : ''}
                 ${c.cocPendingAmount > 0 ? `<p class="text-[10px] font-bold uppercase p-1 px-1.5 rounded-lg inline-block mt-1 border ${c.cocStatus === 'COLLECTED' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-rose-50 text-rose-600 border-rose-200'}">${c.cocStatus === 'COLLECTED' ? 'COC Held by Agent' : 'COC Pending Vendor'}: ${formatAmt(c.cocPendingAmount)}</p>` : ''}
@@ -1704,7 +1729,7 @@
       await saveDB(); renderConsignments(); 
     }
 
-    function compressImageFile(file, cb) { const r = new FileReader(); r.onload=e=>{ const img=new Image(); img.onload=()=>{ const cvs=document.createElement('canvas'); let w=img.width, h=img.height, m=480; if(w>h&&w>m){h*=m/w;w=m;}else if(h>m){w*=m/h;h=m;} cvs.width=w; cvs.height=h; cvs.getContext('2d').drawImage(img,0,0,w,h); cb(cvs.toDataURL('image/jpeg',0.55)); }; img.src=e.target.result; }; r.readAsDataURL(file); }
+    function compressImageFile(file, cb) { const r = new FileReader(); r.onload=e=>{ const img=new Image(); img.onload=()=>{ const cvs=document.createElement('canvas'); let w=img.width, h=img.height, m=480; if(w>h&&w>m){h*=m/w;w=m;}else if(h>m){h*=m/h;h=m;} cvs.width=w; cvs.height=h; cvs.getContext('2d').drawImage(img,0,0,w,h); cb(cvs.toDataURL('image/jpeg',0.55)); }; img.src=e.target.result; }; r.readAsDataURL(file); }
     let tempPhotoData = null;
 
     async function uploadImageToSupabase(base64Str, filename) {
@@ -1779,6 +1804,8 @@
             <p><b>Customer:</b> ${c.customerName}</p>
             <p><b>Phone:</b> ${c.customerPhone}</p>
             <p><b>Destination:</b> ${c.deliveryAddress}</p>
+            <p><b>Weight:</b> ${c.weight || 1} kg</p>
+            <p><b>Pieces:</b> ${c.pieces || 1}</p>
             <p><b>Collect Value:</b> <span class="text-emerald-700 font-bold">${formatAmt(c.productAmount)} AED</span></p>
             <p><b>Terms:</b> ${c.feeType}</p>
             <p><b>Pickup Origin:</b> ${getAgentName(c.pickedUpBy)}</p>
