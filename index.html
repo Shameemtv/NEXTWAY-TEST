@@ -2124,7 +2124,16 @@
       refreshAllViews();
     }
     
-    function sendWhatsAppStatus(cid) { const c=db.consignments.find(x=>x.id===cid); const collectAmt = c.feeType === 'COD' ? (parseFloat(c.productAmount) + parseFloat(c.deliveryCharge)) : parseFloat(c.productAmount); window.open(`https://wa.me/${c.customerPhone.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(`Order ${c.id} is ${c.status}. Total to pay: ${formatAmt(collectAmt)} AED`)}`,'_blank'); }
+    function sendWhatsAppStatus(cid) { 
+  const c = db.consignments.find(x => x.id === cid); 
+  const v = getVendorByCode(c.vendorCode);
+  const vendorName = v ? v.name : c.vendorCode;
+  const collectAmt = c.feeType === 'COD' ? (parseFloat(c.productAmount) + parseFloat(c.deliveryCharge)) : parseFloat(c.productAmount); 
+  
+  const message = `Dear Customer,\nYour Shipment RefNo: *${c.id}*\n(From : *${vendorName}*),is on the way for delivery.\nAmount: Aed *${formatAmt(collectAmt)}*`;
+  
+  window.open(`https://wa.me/${c.customerPhone.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(message)}`,'_blank'); 
+    }
     
     function renderConfirmations() {
       const p = db.consignments.filter(c=>c.pendingModification && (currentUser.role==='ADMIN' || c.assignedTo===currentUser.id));
