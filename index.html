@@ -739,9 +739,15 @@
                   </div>
               </div>
               
-              <div>
-                  <label class="font-bold text-slate-700 block mb-1">To</label>
-                  <textarea id="qt_to" rows="4" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 leading-relaxed" placeholder="Client Name&#10;Address Line 1&#10;Address Line 2&#10;TRN: XXXXXXXXX"></textarea>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                      <label class="font-bold text-slate-700 block mb-1">From</label>
+                      <textarea id="qt_from" rows="4" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 leading-relaxed" placeholder="Company Name&#10;Address Line 1&#10;Address Line 2&#10;TRN: XXXXXXXXX"></textarea>
+                  </div>
+                  <div>
+                      <label class="font-bold text-slate-700 block mb-1">To</label>
+                      <textarea id="qt_to" rows="4" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 leading-relaxed" placeholder="Client Name&#10;Address Line 1&#10;Address Line 2&#10;TRN: XXXXXXXXX"></textarea>
+                  </div>
               </div>
               
               <div class="border-t border-slate-100 pt-3">
@@ -767,8 +773,9 @@
                   </div>
               </div>
               
-              <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
-                  <button onclick="clearQuotationForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-6 py-2.5 rounded-xl shadow-sm transition">Clear Form</button>
+              <div class="pt-4 flex flex-wrap justify-end gap-3 border-t border-slate-100">
+                  <button onclick="clearQuotationForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-6 py-2.5 rounded-xl shadow-sm transition">Clear</button>
+                  <button onclick="printQuotation()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition">Print PDF</button>
                   <button onclick="generateAndSendQuotation()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition">Save & Send WhatsApp</button>
               </div>
           </div>
@@ -3722,6 +3729,7 @@
         if (!confirm("Are you sure you want to clear all Quotation fields?")) return;
         document.getElementById('qt_no').value = '';
         document.getElementById('qt_date').value = '';
+        document.getElementById('qt_from').value = '';
         document.getElementById('qt_to').value = '';
         
         const container = document.getElementById('qt_items_container');
@@ -3737,31 +3745,27 @@
         calcQtGrandTotal();
     }
 
-    function generateAndSendQuotation() {
-        const phone = prompt("Enter WhatsApp number to send this to (include country code, e.g., 971501234567):", "+971");
-        if (phone === null) return; 
-
+    // Shared Canvas Generator for Quotation
+    function generateQuotationCanvas(callback) {
         const bgImg = new Image();
-        bgImg.src = '1000521341.jpg'; // Target the quotation template image
+        bgImg.src = '1000521341.jpg'; 
         
         bgImg.onload = () => {
             const canvas = document.createElement('canvas');
             canvas.width = bgImg.width;
             canvas.height = bgImg.height;
             const ctx = canvas.getContext('2d');
-
             ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-            // Establish proportional mapping grid coordinates (1000 x 1414 coordinate system)
             const scaleX = canvas.width / 1000;
             const scaleY = canvas.height / 1414;
 
-            // 1. Draw Quotation No & Date (Top Right Corner)
+            // 1. Quotation No & Date
             const qtNo = document.getElementById('qt_no').value || '';
             if (qtNo) {
-                ctx.fillStyle = '#091442'; // Navy Blue as requested
-                ctx.font = `bold ${18 * scaleY}px Helvetica`; // Increased size & Bold
-                ctx.fillText(qtNo, 830 * scaleX, 158.36 * scaleY); // Moved right and downward
+                ctx.fillStyle = '#091442'; 
+                ctx.font = `bold ${18 * scaleY}px Helvetica`; 
+                ctx.fillText(qtNo, 830 * scaleX, 158.36 * scaleY); 
             }
             
             const dateVal = document.getElementById('qt_date').value;
@@ -3770,29 +3774,31 @@
                 const ds = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
                 ctx.fillStyle = '#404040'; 
                 ctx.font = `normal ${14 * scaleY}px Helvetica`;
-                ctx.fillText(ds, 830 * scaleX, 185 * scaleY); // Moved right and downward to align with Quotation No
+                ctx.fillText(ds, 830 * scaleX, 185 * scaleY); 
             }
 
-            // 2. Draw "To" Box
-            const toText = document.getElementById('qt_to').value || '';
-            const toLines = toText.split('\n');
-            toLines.forEach((line, i) => {
-                if (i === 0) {
-                    // First Line (Client Name): Bold, Increased Size, Dark Navy/Slate to match "From"
-                    ctx.font = `bold ${16 * scaleY}px Helvetica`; 
-                    ctx.fillStyle = '#091442'; 
-                } else {
-                    // Sub-details: Maintained formatting combination, Increased Size
-                    ctx.font = `normal ${14 * scaleY}px Helvetica`; 
-                    ctx.fillStyle = '#404040'; 
-                }
-                // Moved downward from 300 to 315 and adjusted line height spacing
-                ctx.fillText(line, 538 * scaleX, (315 + (i * 26)) * scaleY); 
-            });
+            // 2. Draw "From" and "To" Side-by-Side dynamically aligned 
+            const drawAddressBox = (id, startX) => {
+                const text = document.getElementById(id).value || '';
+                const lines = text.split('\n');
+                lines.forEach((line, i) => {
+                    if (i === 0) {
+                        ctx.font = `bold ${16 * scaleY}px Helvetica`; 
+                        ctx.fillStyle = '#091442'; 
+                    } else {
+                        ctx.font = `normal ${14 * scaleY}px Helvetica`; 
+                        ctx.fillStyle = '#404040'; 
+                    }
+                    ctx.fillText(line, startX * scaleX, (315 + (i * 26)) * scaleY); 
+                });
+            };
 
-            // 3. Draw Dynamic Items Table
+            drawAddressBox('qt_from', 120); // From block coordinates perfectly matching standard items margin
+            drawAddressBox('qt_to', 538);   // To block coordinates
+
+            // 3. Items Table
             const rows = document.querySelectorAll('.qt-item-row');
-            let startY = 618; // Moved downward from 600
+            let startY = 618; 
             ctx.fillStyle = '#0f172a';
             
             rows.forEach((row, i) => {
@@ -3801,28 +3807,35 @@
                 const price = row.querySelector('.qt-price').value;
                 const total = row.querySelector('.qt-total').value;
                 
-                // Increased font size from 14px to 16px
                 ctx.font = `bold ${17 * scaleY}px Helvetica Bold`; 
-                
-                // Increased row spacing margin from 45 to 50 for better breathing room
                 ctx.fillText(item, 120 * scaleX, (startY + (i * 50)) * scaleY);
                 ctx.fillText(qty, 530 * scaleX, (startY + (i * 50)) * scaleY);
-                
                 if (price) ctx.fillText(`${price}/Pc`, 675 * scaleX, (startY + (i * 50)) * scaleY);
                 ctx.fillText(total, 798 * scaleX, (startY + (i * 50)) * scaleY);
             });
 
-            // 4. Draw Grand Total Section
+            // 4. Grand Total
             const grandTotalY = startY + (rows.length * 50) + 50; 
-            ctx.font = `bold ${17 * scaleY}px Arial`; // Increased font size from 16px to 20px
+            ctx.font = `bold ${17 * scaleY}px Arial`; 
             ctx.fillText("GRAND TOTAL", 530 * scaleX, grandTotalY * scaleY);
             ctx.fillText(document.getElementById('qt_grand_total').textContent, 798 * scaleX, grandTotalY * scaleY);
 
-            // 5. Output and Trigger WhatsApp Download
+            callback(canvas);
+        };
+
+        bgImg.onerror = () => {
+            alert("Could not load 1000521341.jpg. Make sure the quotation template exists in the same folder.");
+        };
+    }
+
+    function generateAndSendQuotation() {
+        const phone = prompt("Enter WhatsApp number to send this to (include country code, e.g., 971501234567):", "+971");
+        if (phone === null) return; 
+
+        generateQuotationCanvas((canvas) => {
             canvas.toBlob((blob) => {
                 const cleanPhone = phone.replace(/[^0-9]/g, '');
                 const url = URL.createObjectURL(blob);
-                
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = `Quotation_${(document.getElementById('qt_no').value || 'New').replace(/\//g, '-')}.jpg`;
@@ -3840,11 +3853,39 @@
                     }, 300);
                 }
             }, 'image/jpeg', 0.95);
-        };
+        });
+    }
 
-        bgImg.onerror = () => {
-            alert("Could not load 1000521341.jpg. Make sure the quotation template exists in the same folder.");
-        };
+    function printQuotation() {
+        generateQuotationCanvas((canvas) => {
+            const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+            
+            // Generate a secure invisible print wrapper compatible with the app's existing @media print CSS
+            let printContainer = document.getElementById('printableQuotationArea');
+            if (!printContainer) {
+                printContainer = document.createElement('div');
+                printContainer.id = 'printableQuotationArea';
+                printContainer.className = 'hidden bg-white';
+                document.body.appendChild(printContainer);
+            }
+            
+            printContainer.innerHTML = `<img src="${dataUrl}" style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto;" />`;
+            
+            // Clean other print contexts briefly
+            document.querySelectorAll('.print-area').forEach(e => e.classList.remove('print-area'));
+            
+            printContainer.classList.remove('hidden');
+            printContainer.classList.add('print-area');
+            
+            const img = printContainer.querySelector('img');
+            const doPrint = () => {
+                window.print();
+                printContainer.classList.remove('print-area');
+                printContainer.classList.add('hidden');
+            };
+            // Make sure the image is decoded before opening the print dialog
+            if (img.complete) doPrint(); else img.onload = doPrint;
+        });
     }
 
     // Initialize Application Database Engine
