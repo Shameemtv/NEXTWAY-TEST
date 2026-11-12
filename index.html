@@ -3761,16 +3761,16 @@
             if (qtNo) {
                 ctx.fillStyle = '#091442'; // Navy Blue as requested
                 ctx.font = `bold ${18 * scaleY}px Arial`; // Increased size & Bold
-                ctx.fillText(qtNo, 835 * scaleX, 158 * scaleY); // Moved right and downward
+                ctx.fillText(qtNo, 830 * scaleX, 158.4 * scaleY); // Moved right and downward
             }
             
             const dateVal = document.getElementById('qt_date').value;
             if (dateVal) {
                 const d = new Date(dateVal);
                 const ds = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-                ctx.fillStyle = '#1e293b'; 
+                ctx.fillStyle = '#404040'; 
                 ctx.font = `normal ${14 * scaleY}px Arial`;
-                ctx.fillText(ds, 835 * scaleX, 186 * scaleY); // Moved right and downward to align with Quotation No
+                ctx.fillText(ds, 830 * scaleX, 185.4 * scaleY); // Moved right and downward to align with Quotation No
             }
 
             // 2. Draw "To" Box
@@ -3784,7 +3784,7 @@
                 } else {
                     // Sub-details: Maintained formatting combination, Increased Size
                     ctx.font = `normal ${14 * scaleY}px Arial`; 
-                    ctx.fillStyle = '#334155'; 
+                    ctx.fillStyle = '#3E3E3E'; 
                 }
                 // Moved downward from 300 to 315 and adjusted line height spacing
                 ctx.fillText(line, 538 * scaleX, (315 + (i * 26)) * scaleY); 
@@ -3802,7 +3802,7 @@
                 const total = row.querySelector('.qt-total').value;
                 
                 // Increased font size from 14px to 16px
-                ctx.font = `bold ${16 * scaleY}px Arial`; 
+                ctx.font = `bold ${16 * scaleY}px Helvetica`; 
                 
                 // Increased row spacing margin from 45 to 50 for better breathing room
                 ctx.fillText(item, 120 * scaleX, (startY + (i * 50)) * scaleY);
@@ -3814,7 +3814,7 @@
 
             // 4. Draw Grand Total Section
             const grandTotalY = startY + (rows.length * 50) + 50; 
-            ctx.font = `bold ${20 * scaleY}px Arial`; // Increased font size from 16px to 20px
+            ctx.font = `bold ${17 * scaleY}px Arial`; // Increased font size from 16px to 20px
             ctx.fillText("GRAND TOTAL", 530 * scaleX, grandTotalY * scaleY);
             ctx.fillText(document.getElementById('qt_grand_total').textContent, 798 * scaleX, grandTotalY * scaleY);
 
