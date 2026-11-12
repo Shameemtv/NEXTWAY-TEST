@@ -3376,6 +3376,7 @@
       else if(type === 'RANGE') { const fS = start?`${start.split('-')[1]}-${start.split('-')[2]}-${start.split('-')[0]}`:''; const fE = end?`${end.split('-')[1]}-${end.split('-')[2]}-${end.split('-')[0]}`:''; period = `Period : ${fS} to ${fE}`; }
       
       const ls=db.consignments.filter(c => {
+        if(c.status !== 'Delivered') return false;
         if(c.feeType === 'COC' && !(c.cocPendingAmount > 0)) return false; 
         if(vCode!=='ALL'&&c.vendorCode!==vCode) return false;
         if(c.productAmount === 0 && c.feeType === 'COD') return false; 
@@ -3480,6 +3481,7 @@
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const v = document.getElementById('invVendorSelect').value; const type = document.getElementById('invFilterType').value; const sVal = document.getElementById('invSingleInput').value; const start = document.getElementById('invStartDate').value; const end = document.getElementById('invEndDate').value;
       const ls = db.consignments.filter(c => {
+        if(c.status !== 'Delivered') return false;
         if(c.feeType === 'COC' && !(c.cocPendingAmount > 0)) return false; 
         if(v!=='ALL'&&c.vendorCode!==v) return false; if(c.productAmount === 0 && c.feeType === 'COD') return false; 
         const cd = c.createdAt; if(type==='DATE'&&sVal&&cd!==sVal) return false; if(type==='MONTH'&&sVal&&!cd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!cd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&cd<start) return false; if(end&&cd>end) return false; } return true;
