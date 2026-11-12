@@ -739,15 +739,9 @@
                   </div>
               </div>
               
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                      <label class="font-bold text-slate-700 block mb-1">From</label>
-                      <textarea id="qt_from" rows="4" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 leading-relaxed" placeholder="Company Name&#10;Address Line 1&#10;Address Line 2&#10;TRN: XXXXXXXXX"></textarea>
-                  </div>
-                  <div>
-                      <label class="font-bold text-slate-700 block mb-1">To</label>
-                      <textarea id="qt_to" rows="4" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 leading-relaxed" placeholder="Client Name&#10;Address Line 1&#10;Address Line 2&#10;TRN: XXXXXXXXX"></textarea>
-                  </div>
+              <div>
+                  <label class="font-bold text-slate-700 block mb-1">To</label>
+                  <textarea id="qt_to" rows="4" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 leading-relaxed" placeholder="Client Name&#10;Address Line 1&#10;Address Line 2&#10;TRN: XXXXXXXXX"></textarea>
               </div>
               
               <div class="border-t border-slate-100 pt-3">
@@ -3729,7 +3723,6 @@
         if (!confirm("Are you sure you want to clear all Quotation fields?")) return;
         document.getElementById('qt_no').value = '';
         document.getElementById('qt_date').value = '';
-        document.getElementById('qt_from').value = '';
         document.getElementById('qt_to').value = '';
         
         const container = document.getElementById('qt_items_container');
@@ -3777,24 +3770,21 @@
                 ctx.fillText(ds, 830 * scaleX, 185 * scaleY); 
             }
 
-            // 2. Draw "From" and "To" Side-by-Side dynamically aligned 
-            const drawAddressBox = (id, startX) => {
-                const text = document.getElementById(id).value || '';
-                const lines = text.split('\n');
-                lines.forEach((line, i) => {
-                    if (i === 0) {
-                        ctx.font = `bold ${16 * scaleY}px Helvetica`; 
-                        ctx.fillStyle = '#091442'; 
-                    } else {
-                        ctx.font = `normal ${14 * scaleY}px Helvetica`; 
-                        ctx.fillStyle = '#404040'; 
-                    }
-                    ctx.fillText(line, startX * scaleX, (315 + (i * 26)) * scaleY); 
-                });
-            };
-
-            drawAddressBox('qt_from', 120); // From block coordinates perfectly matching standard items margin
-            drawAddressBox('qt_to', 538);   // To block coordinates
+            // 2. Draw "To" Box
+            const toText = document.getElementById('qt_to').value || '';
+            const toLines = toText.split('\n');
+            toLines.forEach((line, i) => {
+                if (i === 0) {
+                    // First Line (Client Name): Bold, Increased Size, Dark Navy/Slate
+                    ctx.font = `bold ${16 * scaleY}px Helvetica`; 
+                    ctx.fillStyle = '#091442'; 
+                } else {
+                    // Sub-details: Maintained formatting combination, Increased Size
+                    ctx.font = `normal ${14 * scaleY}px Helvetica`; 
+                    ctx.fillStyle = '#404040'; 
+                }
+                ctx.fillText(line, 538 * scaleX, (315 + (i * 26)) * scaleY); 
+            });
 
             // 3. Items Table
             const rows = document.querySelectorAll('.qt-item-row');
