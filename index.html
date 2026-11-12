@@ -3769,8 +3769,8 @@
                 const d = new Date(dateVal);
                 const ds = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
                 ctx.fillStyle = '#404040'; 
-                ctx.font = `normal ${14 * scaleY}px Arial`;
-                ctx.fillText(ds, 830 * scaleX, 185.1 * scaleY); // Moved right and downward to align with Quotation No
+                ctx.font = `normal ${14 * scaleY}px Helvetica`;
+                ctx.fillText(ds, 830 * scaleX, 185 * scaleY); // Moved right and downward to align with Quotation No
             }
 
             // 2. Draw "To" Box
@@ -3779,7 +3779,7 @@
             toLines.forEach((line, i) => {
                 if (i === 0) {
                     // First Line (Client Name): Bold, Increased Size, Dark Navy/Slate to match "From"
-                    ctx.font = `bold ${16 * scaleY}px Calibri`; 
+                    ctx.font = `bold ${16 * scaleY}px Helvetica`; 
                     ctx.fillStyle = '#091442'; 
                 } else {
                     // Sub-details: Maintained formatting combination, Increased Size
