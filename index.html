@@ -3760,8 +3760,8 @@
             const qtNo = document.getElementById('qt_no').value || '';
             if (qtNo) {
                 ctx.fillStyle = '#091442'; // Navy Blue as requested
-                ctx.font = `bold ${18 * scaleY}px Arial`; // Increased size & Bold
-                ctx.fillText(qtNo, 830 * scaleX, 158.35 * scaleY); // Moved right and downward
+                ctx.font = `bold ${18 * scaleY}px Helvetica`; // Increased size & Bold
+                ctx.fillText(qtNo, 830 * scaleX, 158.36 * scaleY); // Moved right and downward
             }
             
             const dateVal = document.getElementById('qt_date').value;
@@ -3770,7 +3770,7 @@
                 const ds = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
                 ctx.fillStyle = '#404040'; 
                 ctx.font = `normal ${14 * scaleY}px Arial`;
-                ctx.fillText(ds, 830 * scaleX, 185.2 * scaleY); // Moved right and downward to align with Quotation No
+                ctx.fillText(ds, 830 * scaleX, 185.1 * scaleY); // Moved right and downward to align with Quotation No
             }
 
             // 2. Draw "To" Box
@@ -3779,7 +3779,7 @@
             toLines.forEach((line, i) => {
                 if (i === 0) {
                     // First Line (Client Name): Bold, Increased Size, Dark Navy/Slate to match "From"
-                    ctx.font = `bold ${16 * scaleY}px Helvetica Bold`; 
+                    ctx.font = `bold ${16 * scaleY}px Helvetica`; 
                     ctx.fillStyle = '#091442'; 
                 } else {
                     // Sub-details: Maintained formatting combination, Increased Size
@@ -3792,7 +3792,7 @@
 
             // 3. Draw Dynamic Items Table
             const rows = document.querySelectorAll('.qt-item-row');
-            let startY = 635; // Moved downward from 600
+            let startY = 618; // Moved downward from 600
             ctx.fillStyle = '#0f172a';
             
             rows.forEach((row, i) => {
@@ -3802,7 +3802,7 @@
                 const total = row.querySelector('.qt-total').value;
                 
                 // Increased font size from 14px to 16px
-                ctx.font = `bold ${18 * scaleY}px Helvetica Bold`; 
+                ctx.font = `bold ${17 * scaleY}px Helvetica Bold`; 
                 
                 // Increased row spacing margin from 45 to 50 for better breathing room
                 ctx.fillText(item, 120 * scaleX, (startY + (i * 50)) * scaleY);
