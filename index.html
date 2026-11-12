@@ -3304,8 +3304,22 @@
       const d = role==='admin' ? document.getElementById('adminReportDate').value : document.getElementById('agentFinanceDate').value;
       const stat = role==='admin' ? document.getElementById('adminReportStatus').value : document.getElementById('agentFinanceStatus').value;
       const { rows } = getAgentFinanceRows(id, d, stat);
-      const data = rows.map(r => ({ "ID": r.id, "Customer": r.customer, "Type": r.type, "Amount Collected": r.amount }));
-      const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "AgentReport"); XLSX.writeFile(wb, `AgentReport_${d}.xlsx`);
+      
+      // Build standard delivery rows
+      const data = rows.map(r => ({ "ID": r.id, "Category / Customer": r.customer, "Notes / Type": r.type, "Amount": r.amount, "Entry Type": "Collection" }));
+      
+      // Append Approved Expenses
+      const exps = (db.agentExpenses || []).filter(e => e.agentId === id && e.date === d && e.status === 'APPROVED');
+      if (exps.length > 0) {
+        data.push({ "ID": "", "Category / Customer": "", "Notes / Type": "", "Amount": "", "Entry Type": "" }); // Blank row for spacing
+        exps.forEach(e => {
+            data.push({ "ID": e.id, "Category / Customer": e.category, "Notes / Type": e.notes, "Amount": -Math.abs(e.amount), "Entry Type": "Approved Expense" });
+        });
+      }
+      
+      const wb = XLSX.utils.book_new(); 
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "AgentReport"); 
+      XLSX.writeFile(wb, `AgentReport_${d}.xlsx`);
     }
 
     function sendAgentReportWhatsApp() {
@@ -3314,9 +3328,26 @@
       const d = document.getElementById('agentFinanceDate').value, stat = document.getElementById('agentFinanceStatus').value;
       const { rows, totalCollected } = getAgentFinanceRows(currentUser.id, d, stat);
       
+      // Fetch Approved Expenses
+      const exps = (db.agentExpenses || []).filter(e => e.agentId === currentUser.id && e.date === d && e.status === 'APPROVED');
+      const totalExpenses = exps.reduce((sum, e) => sum + parseFloat(e.amount), 0);
+      const netHandover = totalCollected - totalExpenses;
+      
       let text = `*Daily Financial Balance*\n*Representative:* ${currentUser.name}\n*Personnel ID:* ${currentUser.id}\n*Date:* ${d}\n\n`;
-      if(rows.length === 0) { text += `No deliveries registered for this date.`; } 
-      else { rows.forEach(r => { text += `• ${r.id} - ${r.type} - ${formatAmt(r.amount)} AED\n`; }); text += `\n*Total Records:* ${rows.length}\n*Net Collected:* ${formatAmt(totalCollected)} AED`; }
+      
+      text += `*--- COLLECTIONS ---*\n`;
+      if(rows.length === 0) { text += `No deliveries registered for this date.\n`; } 
+      else { rows.forEach(r => { text += `• ${r.id} - ${r.type} - ${formatAmt(r.amount)} AED\n`; }); }
+      
+      if(exps.length > 0) {
+          text += `\n*--- APPROVED EXPENSES ---*\n`;
+          exps.forEach(e => { text += `• ${e.category} - ${e.notes} - ${formatAmt(e.amount)} AED\n`; });
+      }
+      
+      text += `\n*Gross Collected:* ${formatAmt(totalCollected)} AED`;
+      if (exps.length > 0) text += `\n*Total Expenses:* -${formatAmt(totalExpenses)} AED`;
+      text += `\n*Net Handover:* ${formatAmt(netHandover)} AED`;
+      
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
