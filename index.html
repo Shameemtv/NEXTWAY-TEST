@@ -3759,9 +3759,9 @@
             // 1. Draw Quotation No & Date (Top Right Corner)
             const qtNo = document.getElementById('qt_no').value || '';
             if (qtNo) {
-                ctx.fillStyle = '#000080'; // Navy Blue as requested
+                ctx.fillStyle = '#091442'; // Navy Blue as requested
                 ctx.font = `bold ${18 * scaleY}px Arial`; // Increased size & Bold
-                ctx.fillText(qtNo, 840 * scaleX, 155 * scaleY); // Moved right and downward
+                ctx.fillText(qtNo, 835 * scaleX, 158 * scaleY); // Moved right and downward
             }
             
             const dateVal = document.getElementById('qt_date').value;
@@ -3770,7 +3770,7 @@
                 const ds = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
                 ctx.fillStyle = '#1e293b'; 
                 ctx.font = `normal ${14 * scaleY}px Arial`;
-                ctx.fillText(ds, 840 * scaleX, 185 * scaleY); // Moved right and downward to align with Quotation No
+                ctx.fillText(ds, 835 * scaleX, 186 * scaleY); // Moved right and downward to align with Quotation No
             }
 
             // 2. Draw "To" Box
@@ -3779,8 +3779,8 @@
             toLines.forEach((line, i) => {
                 if (i === 0) {
                     // First Line (Client Name): Bold, Increased Size, Dark Navy/Slate to match "From"
-                    ctx.font = `bold ${15 * scaleY}px Arial`; 
-                    ctx.fillStyle = '#0f172a'; 
+                    ctx.font = `bold ${16 * scaleY}px Arial Bold`; 
+                    ctx.fillStyle = '#091442'; 
                 } else {
                     // Sub-details: Maintained formatting combination, Increased Size
                     ctx.font = `normal ${14 * scaleY}px Arial`; 
@@ -3808,15 +3808,15 @@
                 ctx.fillText(item, 120 * scaleX, (startY + (i * 50)) * scaleY);
                 ctx.fillText(qty, 530 * scaleX, (startY + (i * 50)) * scaleY);
                 
-                if (price) ctx.fillText(`${price}/Pc`, 670 * scaleX, (startY + (i * 50)) * scaleY);
-                ctx.fillText(total, 795 * scaleX, (startY + (i * 50)) * scaleY);
+                if (price) ctx.fillText(`${price}/Pc`, 675 * scaleX, (startY + (i * 50)) * scaleY);
+                ctx.fillText(total, 798 * scaleX, (startY + (i * 50)) * scaleY);
             });
 
             // 4. Draw Grand Total Section
             const grandTotalY = startY + (rows.length * 50) + 50; 
             ctx.font = `bold ${20 * scaleY}px Arial`; // Increased font size from 16px to 20px
             ctx.fillText("GRAND TOTAL", 530 * scaleX, grandTotalY * scaleY);
-            ctx.fillText(document.getElementById('qt_grand_total').textContent, 795 * scaleX, grandTotalY * scaleY);
+            ctx.fillText(document.getElementById('qt_grand_total').textContent, 798 * scaleX, grandTotalY * scaleY);
 
             // 5. Output and Trigger WhatsApp Download
             canvas.toBlob((blob) => {
