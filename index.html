@@ -3746,43 +3746,53 @@
         
         bgImg.onload = () => {
             const canvas = document.createElement('canvas');
-            // Assuming logical mapping size based on standard A4 vertical proportions
             canvas.width = bgImg.width;
             canvas.height = bgImg.height;
             const ctx = canvas.getContext('2d');
 
             ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-            // Establish proportional mapping grid coordinates (1000 x 1414 coordinate system mapping to actual image)
+            // Establish proportional mapping grid coordinates (1000 x 1414 coordinate system)
             const scaleX = canvas.width / 1000;
             const scaleY = canvas.height / 1414;
 
             // 1. Draw Quotation No & Date (Top Right Corner)
-            ctx.fillStyle = '#0f172a';
-            ctx.font = `bold ${14 * scaleY}px Arial`;
-            
             const qtNo = document.getElementById('qt_no').value || '';
-            if (qtNo) ctx.fillText(qtNo, 825 * scaleX, 151 * scaleY); // Offset dynamically against "NW/3921"
+            if (qtNo) {
+                ctx.fillStyle = '#000080'; // Navy Blue as requested
+                ctx.font = `bold ${18 * scaleY}px Arial`; // Increased size & Bold
+                ctx.fillText(qtNo, 840 * scaleX, 155 * scaleY); // Moved right and downward
+            }
             
             const dateVal = document.getElementById('qt_date').value;
-            if(dateVal) {
+            if (dateVal) {
                 const d = new Date(dateVal);
                 const ds = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-                ctx.fillText(ds, 825 * scaleX, 179 * scaleY);
+                ctx.fillStyle = '#1e293b'; 
+                ctx.font = `normal ${14 * scaleY}px Arial`;
+                ctx.fillText(ds, 840 * scaleX, 185 * scaleY); // Moved right and downward to align with Quotation No
             }
 
-            // 2. Draw "To" Box (Line 1 is Bold, Sub-lines are regular to match template)
+            // 2. Draw "To" Box
             const toText = document.getElementById('qt_to').value || '';
             const toLines = toText.split('\n');
             toLines.forEach((line, i) => {
-                ctx.font = i === 0 ? `bold ${13 * scaleY}px Arial` : `normal ${13 * scaleY}px Arial`;
-                ctx.fillStyle = '#1e293b'; 
-                ctx.fillText(line, 538 * scaleX, (300 + (i * 24)) * scaleY); 
+                if (i === 0) {
+                    // First Line (Client Name): Bold, Increased Size, Dark Navy/Slate to match "From"
+                    ctx.font = `bold ${15 * scaleY}px Arial`; 
+                    ctx.fillStyle = '#0f172a'; 
+                } else {
+                    // Sub-details: Maintained formatting combination, Increased Size
+                    ctx.font = `normal ${14 * scaleY}px Arial`; 
+                    ctx.fillStyle = '#334155'; 
+                }
+                // Moved downward from 300 to 315 and adjusted line height spacing
+                ctx.fillText(line, 538 * scaleX, (315 + (i * 26)) * scaleY); 
             });
 
             // 3. Draw Dynamic Items Table
             const rows = document.querySelectorAll('.qt-item-row');
-            let startY = 600; // Starting Y coordinate for the first row item
+            let startY = 635; // Moved downward from 600
             ctx.fillStyle = '#0f172a';
             
             rows.forEach((row, i) => {
@@ -3791,19 +3801,20 @@
                 const price = row.querySelector('.qt-price').value;
                 const total = row.querySelector('.qt-total').value;
                 
-                ctx.font = `bold ${14 * scaleY}px Arial`;
-                ctx.fillText(item, 120 * scaleX, (startY + (i * 45)) * scaleY);
-                ctx.fillText(qty, 530 * scaleX, (startY + (i * 45)) * scaleY);
+                // Increased font size from 14px to 16px
+                ctx.font = `bold ${16 * scaleY}px Arial`; 
                 
-                // Print price line 
-                if (price) ctx.fillText(`${price}/Pc`, 675 * scaleX, (startY + (i * 45)) * scaleY);
+                // Increased row spacing margin from 45 to 50 for better breathing room
+                ctx.fillText(item, 120 * scaleX, (startY + (i * 50)) * scaleY);
+                ctx.fillText(qty, 530 * scaleX, (startY + (i * 50)) * scaleY);
                 
-                ctx.fillText(total, 795 * scaleX, (startY + (i * 45)) * scaleY);
+                if (price) ctx.fillText(`${price}/Pc`, 670 * scaleX, (startY + (i * 50)) * scaleY);
+                ctx.fillText(total, 795 * scaleX, (startY + (i * 50)) * scaleY);
             });
 
             // 4. Draw Grand Total Section
-            const grandTotalY = startY + (rows.length * 45) + 40;
-            ctx.font = `bold ${16 * scaleY}px Arial`;
+            const grandTotalY = startY + (rows.length * 50) + 50; 
+            ctx.font = `bold ${20 * scaleY}px Arial`; // Increased font size from 16px to 20px
             ctx.fillText("GRAND TOTAL", 530 * scaleX, grandTotalY * scaleY);
             ctx.fillText(document.getElementById('qt_grand_total').textContent, 795 * scaleX, grandTotalY * scaleY);
 
