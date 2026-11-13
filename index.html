@@ -3570,7 +3570,7 @@
     function openVendorModal() { 
       editingVendorCode = null; document.getElementById('vendorModalTitle').textContent = 'Add Merchant'; document.getElementById('vCode').value = 'VND-00'+(db.vendors.length+1); 
       document.getElementById('vCode').readOnly = false; document.getElementById('vCode').classList.remove('bg-slate-200');
-      document.getElementById('vName').value=''; document.getElementById('vPhone').value=''; document.getElementById('vAddress').value=''; document.getElementById('vTRN').value=''; 
+      document.getElementById('vName').value=''; document.getElementById('vPhone').value='+971'; document.getElementById('vAddress').value=''; document.getElementById('vTRN').value=''; 
       
       const btn = document.getElementById('vAutoAdjustBtn'); const val = document.getElementById('vAutoAdjustVal');
       val.value = 'true'; btn.textContent = 'Enabled'; btn.className = 'w-full text-left border border-slate-200 rounded-xl px-3 py-2.5 bg-emerald-50 text-emerald-700 font-bold transition';
