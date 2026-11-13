@@ -1669,7 +1669,15 @@
       applySettingsUi();
       renderConsignments(); renderConfirmations();
       if(currentUser.role==='ADMIN'){ renderVendors(); renderAgents(); }
+      
       renderAgentDashboard();
+      
+      // NEW: Re-render the dashboard list immediately if it is currently open
+      const dashListScreen = document.getElementById('dashListScreen');
+      if (dashListScreen && !dashListScreen.classList.contains('hidden')) {
+          renderDashListItems();
+      }
+
       if(currentUser.role==='AGENT'){ renderAgentDeficit(); }
     }
 
