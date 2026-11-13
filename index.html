@@ -2431,6 +2431,21 @@
 
         const newData = window.tempEditData;
         
+        // NEW: If Delivered, send to Agent for confirmation instead of updating immediately
+        if (c.status === 'Delivered') {
+            c.pendingModification = {
+                type: 'FULL_EDIT',
+                requestedBy: currentUser.username,
+                ...newData
+            };
+            await saveDB();
+            closeModal('actionModal');
+            closeModal('editConsignmentModal');
+            refreshAllViews();
+            alert("Modifications to this Delivered consignment have been sent to the assigned Delivery Agent for confirmation.");
+            return;
+        }
+
         c.id = newData.id;
         c.vendorCode = newData.vendorCode;
         c.pickupFrom = newData.pickupFrom;
@@ -2971,7 +2986,19 @@
       const p = db.consignments.filter(c=>c.pendingModification && (currentUser.role==='ADMIN' || c.assignedTo===currentUser.id));
       const badge = document.getElementById('navConfirmBadge');
       if (p.length > 0) { badge.textContent = p.length; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
-      document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c=>`<div class="p-3.5 border border-amber-200 rounded-xl bg-amber-50 mb-2 text-xs"><b>${c.id}</b>: Product ${c.productAmount} -> <b class="text-emerald-700">${c.pendingModification.newProductAmount}</b> | Service Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${c.pendingModification.newDeliveryCharge}</b> ${currentUser.role==='AGENT'&&c.assignedTo===currentUser.id?`<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-amber-400 font-bold px-4 py-1.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Confirm Edit</button>`:'<br/><span class="text-[10px] text-slate-500 font-medium">Waiting for field agent confirmation</span>'}</div>`).join('') : '<p class="text-xs text-slate-500 font-medium">No pending balance modifications.</p>';
+      document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c => {
+        const pm = c.pendingModification;
+        let changesText = '';
+        if (pm.type === 'FULL_EDIT') {
+            changesText = `<b>${c.id}</b>: Full details modified by Admin. (Product: <b class="text-emerald-700">${pm.productAmount}</b>, Fee: <b class="text-emerald-700">${pm.deliveryCharge}</b>)`;
+        } else {
+            changesText = `<b>${c.id}</b>: Product ${c.productAmount} -> <b class="text-emerald-700">${pm.newProductAmount}</b> | Service Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${pm.newDeliveryCharge}</b>`;
+        }
+        const btnHtml = (currentUser.role === 'AGENT' && c.assignedTo === currentUser.id) 
+            ? `<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-amber-400 font-bold px-4 py-1.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Confirm Edit</button>` 
+            : `<br/><span class="text-[10px] text-slate-500 font-medium">Waiting for field agent confirmation</span>`;
+        return `<div class="p-3.5 border border-amber-200 rounded-xl bg-amber-50 mb-2 text-xs">${changesText} ${btnHtml}</div>`;
+      }).join('') : '<p class="text-xs text-slate-500 font-medium">No pending modifications.</p>';
 
       if (currentUser.role === 'ADMIN') {
         const pendingOtps = db.vendorSettlementOtps.filter(o => o.status === 'PENDING');
@@ -3007,7 +3034,35 @@
     
     function openAmountEditModal(cid) { const c = db.consignments.find(x=>x.id===cid); if(currentUser.role==='AGENT' && c.status==='Delivered') return alert('Cannot edit after delivery.'); document.getElementById('actionModalTitle').textContent = `Modify Financials: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-slate-500 font-medium mb-2">Edits to completed orders require field agent confirmation.</p><label class="font-bold block mb-1">Product Amount</label><input id="editProdAmt" type="number" step="0.01" value="${c.productAmount}" class="w-full border border-slate-200 rounded-xl px-3 py-2 mb-2 bg-slate-50 outline-none focus:border-amber-500 transition" /><label class="font-bold block mb-1">Delivery Charge</label><input id="editDelivFee" type="number" step="0.01" value="${c.deliveryCharge}" class="w-full border border-slate-200 rounded-xl px-3 py-2 mb-2 bg-slate-50 outline-none focus:border-amber-500 transition" /><button onclick="saveAmountModification('${c.id}')" class="w-full bg-slate-900 text-amber-400 font-bold py-2.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Dispatch Modification</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
     async function saveAmountModification(cid) { const c=db.consignments.find(x=>x.id===cid), np=parseFloat(document.getElementById('editProdAmt').value)||0, nd=parseFloat(document.getElementById('editDelivFee').value)||0; if(currentUser.role==='ADMIN') { if(c.status==='Delivered' && c.assignedTo) { c.pendingModification={newProductAmount:np, newDeliveryCharge:nd, requestedBy:currentUser.username}; } else { c.productAmount=np; c.deliveryCharge=nd; } } else { c.productAmount=np; } await saveDB(); closeModal('actionModal'); refreshAllViews(); }
-    async function agentConfirmModification(cid) { const c=db.consignments.find(x=>x.id===cid); if(!c||!c.pendingModification) return; c.productAmount=c.pendingModification.newProductAmount; c.deliveryCharge=c.pendingModification.newDeliveryCharge; c.pendingModification=null; await saveDB(); refreshAllViews(); }
+    async function agentConfirmModification(cid) { 
+        const c = db.consignments.find(x => x.id === cid); 
+        if(!c || !c.pendingModification) return; 
+        
+        const pm = c.pendingModification;
+        if (pm.type === 'FULL_EDIT') {
+            c.id = pm.id;
+            c.vendorCode = pm.vendorCode;
+            c.pickupFrom = pm.pickupFrom;
+            c.customerName = pm.customerName;
+            c.customerPhone = pm.customerPhone;
+            c.deliveryAddress = pm.deliveryAddress;
+            c.weight = pm.weight;
+            c.pieces = pm.pieces;
+            c.productAmount = pm.productAmount;
+            c.deliveryCharge = pm.deliveryCharge;
+            c.feeType = pm.feeType;
+            c.assignedTo = pm.assignedTo || null;
+            c.pickedUpBy = pm.pickedUpBy || null;
+        } else {
+            c.productAmount = pm.newProductAmount; 
+            c.deliveryCharge = pm.newDeliveryCharge; 
+        }
+        
+        c.pendingModification = null; 
+        await saveDB(); 
+        refreshAllViews(); 
+        if (currentUser.role === 'AGENT') alert('Modification Confirmed!');
+    }
 
     function inspectConsignmentById() { const id=document.getElementById('globalConsignmentSearch').value.trim().toUpperCase(), c=db.consignments.find(x=>x.id.toUpperCase()===id); if(c) showConsignmentDetails(c.id); else alert('Record not found.'); }
     function showConsignmentDetails(cid) { 
@@ -3061,11 +3116,8 @@
       
       // Restrict Edit, Deliver, and Return buttons to Admin only
       if (isA) {
-          if (c.status !== 'Delivered') {
-              actionButtons += `<button onclick="openEditConsignmentModal('${c.id}')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-sm transition">Edit</button>`;
-          } else {
-              actionButtons += `<button disabled class="bg-slate-300 text-slate-500 font-bold py-1.5 px-3 rounded-xl text-xs shadow-sm cursor-not-allowed">Edit</button>`;
-          }
+          // Allow Admin to edit even if Delivered
+          actionButtons += `<button onclick="openEditConsignmentModal('${c.id}')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-sm transition">Edit</button>`;
           
           if (canDeliver) {
               actionButtons += `<button onclick="closeModal('inspectModal'); openPodScreen('${c.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-sm transition">Deliver</button>`;
