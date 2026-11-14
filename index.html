@@ -1749,16 +1749,16 @@
         }
       });
 
-      // 2. Calculate Total Expenses (Exclude Rejected)
+      // 2. Calculate Total Expenses (ONLY Approved Expenses)
       if (db.agentExpenses) {
         db.agentExpenses.forEach(e => {
-          if (e.status !== 'REJECTED') {
+          if (e.status === 'APPROVED') {
             totalExpenses += (parseFloat(e.amount) || 0);
           }
         });
       }
 
-      // 3. Calculate Profit based strictly on collected amounts
+      // 3. Calculate Profit based strictly on collected amounts minus approved expenses
       const profit = collectedDeliveryCharges - totalExpenses;
 
       // 4. Update UI
