@@ -575,6 +575,42 @@
         </div>
       </div>
 
+      <!-- TAB: ADMIN FINANCE (ADMIN ONLY) -->
+      <div id="panel-admin-finance" class="hidden space-y-4 admin-only">
+        <div class="glass-card p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+          <div class="border-b border-slate-200 pb-4">
+            <h2 class="text-lg font-black text-slate-900">Admin Finance Overview</h2>
+            <p class="text-xs text-slate-500 font-medium">Aggregated from all Delivered consignments</p>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Delivery Charges -->
+            <div class="p-4 rounded-xl bg-blue-50 border border-blue-200">
+              <p class="text-[11px] font-bold text-blue-800 uppercase tracking-wider">Delivery Charges</p>
+              <p id="adminFinDeliveryCharges" class="text-xl font-black text-blue-900 mt-1">0.00 AED</p>
+            </div>
+            
+            <!-- Expenses -->
+            <div class="p-4 rounded-xl bg-rose-50 border border-rose-200">
+              <p class="text-[11px] font-bold text-rose-800 uppercase tracking-wider">Expenses</p>
+              <p id="adminFinExpenses" class="text-xl font-black text-rose-900 mt-1">0.00 AED</p>
+            </div>
+            
+            <!-- Profit -->
+            <div id="adminFinProfitCard" class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 transition-colors">
+              <p id="adminFinProfitLabel" class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">Profit</p>
+              <p id="adminFinProfit" class="text-xl font-black text-emerald-900 mt-1 transition-colors">0.00 AED</p>
+            </div>
+            
+            <!-- Total Pending Deficit -->
+            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200">
+              <p class="text-[11px] font-bold text-amber-800 uppercase tracking-wider">Total Pending Deficit</p>
+              <p id="adminFinDeficit" class="text-xl font-black text-amber-900 mt-1">0.00 AED</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- TAB 7: SYSTEM & SETTINGS -->
       <div id="panel-system" class="hidden space-y-4">
         
@@ -792,6 +828,10 @@
     </button>
     <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>Merchants</button>
     <button onclick="switchTab('invoices')" id="tab-invoices" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Ledger</button>
+    <button onclick="switchTab('admin-finance')" id="tab-admin-finance" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      Profit
+    </button>
     <button onclick="switchTab('waybill')" id="tab-waybill" class="shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
       Waybill
@@ -1650,13 +1690,14 @@
         globalHeader.classList.toggle('hidden', tName === 'dashboard');
       }
 
-      ['dashboard','consignments','confirmations','agent-reports','agent-finance','agent-deficit','vendors','invoices','system','waybill'].forEach(t => {
+      ['dashboard','consignments','confirmations','agent-reports','agent-finance','agent-deficit','vendors','invoices','admin-finance','system','waybill'].forEach(t => {
         const p = document.getElementById(`panel-${t}`), b = document.getElementById(`tab-${t}`);
         if(p) p.classList.toggle('hidden', t!==tName);
         if(b) { b.classList.toggle('tab-active', t===tName); b.classList.toggle('text-slate-400', t!==tName); }
       });
       if(tName==='dashboard') { closeDashSubScreen(); renderAgentDashboard(); }
       if(tName==='agent-finance') generateAgentFinanceReport();
+      if(tName==='admin-finance') generateAdminFinanceTab();
       if(tName==='agent-deficit') renderAgentDeficit();
       if(tName==='invoices') { 
         document.getElementById('invVendorSelect').innerHTML = `<option value="" selected disabled></option>`+db.vendors.map(v=>`<option value="${v.code}">${v.name}</option>`).join(''); 
@@ -1679,6 +1720,61 @@
       }
 
       if(currentUser.role==='AGENT'){ renderAgentDeficit(); }
+      if(currentUser.role==='ADMIN'){ generateAdminFinanceTab(); } // Add this line
+    }
+
+    function generateAdminFinanceTab() {
+      if (!currentUser || currentUser.role !== 'ADMIN') return;
+
+      let totalDeliveryCharges = 0;
+      let totalPendingDeficit = 0;
+      let totalExpenses = 0;
+
+      // 1. Calculate Delivery Charges & Deficit (Strictly from Delivered consignments)
+      db.consignments.forEach(c => {
+        if (c.status === 'Delivered') {
+          totalDeliveryCharges += (parseFloat(c.deliveryCharge) || 0);
+
+          const { isDeficit, deficitAmt } = getDeficitInfo(c);
+          if (isDeficit && !c.deficitReceivedDate) {
+            totalPendingDeficit += deficitAmt;
+          }
+        }
+      });
+
+      // 2. Calculate Total Expenses (Exclude Rejected)
+      if (db.agentExpenses) {
+        db.agentExpenses.forEach(e => {
+          if (e.status !== 'REJECTED') {
+            totalExpenses += (parseFloat(e.amount) || 0);
+          }
+        });
+      }
+
+      // 3. Calculate Profit
+      const profit = totalDeliveryCharges - totalExpenses;
+
+      // 4. Update UI
+      document.getElementById('adminFinDeliveryCharges').textContent = formatAmt(totalDeliveryCharges) + ' AED';
+      document.getElementById('adminFinExpenses').textContent = formatAmt(totalExpenses) + ' AED';
+      document.getElementById('adminFinDeficit').textContent = formatAmt(totalPendingDeficit) + ' AED';
+
+      // 5. Handle Profit/Loss Styling dynamically
+      const profitEl = document.getElementById('adminFinProfit');
+      const profitCard = document.getElementById('adminFinProfitCard');
+      const profitLabel = document.getElementById('adminFinProfitLabel');
+      
+      profitEl.textContent = formatAmt(profit) + ' AED';
+
+      if (profit < 0) {
+        profitCard.className = "p-4 rounded-xl bg-rose-50 border border-rose-200 transition-colors";
+        profitLabel.className = "text-[11px] font-bold text-rose-800 uppercase tracking-wider";
+        profitEl.className = "text-xl font-black text-rose-900 mt-1 transition-colors";
+      } else {
+        profitCard.className = "p-4 rounded-xl bg-emerald-50 border border-emerald-200 transition-colors";
+        profitLabel.className = "text-[11px] font-bold text-emerald-800 uppercase tracking-wider";
+        profitEl.className = "text-xl font-black text-emerald-900 mt-1 transition-colors";
+      }
     }
 
     function renderAgentDeficit() {
