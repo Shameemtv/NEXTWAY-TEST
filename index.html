@@ -1726,19 +1726,26 @@
     function generateAdminFinanceTab() {
       if (!currentUser || currentUser.role !== 'ADMIN') return;
 
-      let totalDeliveryCharges = 0;
+      let collectedDeliveryCharges = 0;
       let totalPendingDeficit = 0;
       let totalExpenses = 0;
 
-      // 1. Calculate Delivery Charges & Deficit (Strictly from Delivered consignments)
+      // 1. Calculate Collected Delivery Charges & Deficit (Strictly from Delivered consignments)
       db.consignments.forEach(c => {
         if (c.status === 'Delivered') {
-          totalDeliveryCharges += (parseFloat(c.deliveryCharge) || 0);
+          let expectedCharge = parseFloat(c.deliveryCharge) || 0;
+          let pendingDeficitForThis = 0;
 
           const { isDeficit, deficitAmt } = getDeficitInfo(c);
+          
+          // Check if there is an uncollected deficit on this consignment
           if (isDeficit && !c.deficitReceivedDate) {
+            pendingDeficitForThis = deficitAmt;
             totalPendingDeficit += deficitAmt;
           }
+
+          // Delivery charges total ONLY includes what was actually collected
+          collectedDeliveryCharges += (expectedCharge - pendingDeficitForThis);
         }
       });
 
@@ -1751,11 +1758,11 @@
         });
       }
 
-      // 3. Calculate Profit
-      const profit = totalDeliveryCharges - totalExpenses;
+      // 3. Calculate Profit based strictly on collected amounts
+      const profit = collectedDeliveryCharges - totalExpenses;
 
       // 4. Update UI
-      document.getElementById('adminFinDeliveryCharges').textContent = formatAmt(totalDeliveryCharges) + ' AED';
+      document.getElementById('adminFinDeliveryCharges').textContent = formatAmt(collectedDeliveryCharges) + ' AED';
       document.getElementById('adminFinExpenses').textContent = formatAmt(totalExpenses) + ' AED';
       document.getElementById('adminFinDeficit').textContent = formatAmt(totalPendingDeficit) + ' AED';
 
