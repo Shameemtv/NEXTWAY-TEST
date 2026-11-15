@@ -172,7 +172,7 @@
   <header class="glass-panel text-[var(--text-primary)] sticky top-0 z-40 no-print transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between">
       <div class="flex items-center space-x-3.5">
-        <div class="gold-gradient font-black px-2.5 py-1.5 rounded-lg text-xs tracking-wider shadow-sm flex items-center justify-center border border-[var(--accent-gold-light)]/30">NW</div>
+        <div class="gold-gradient font-black px-2.5 py-1.5 rounded-lg text-xs tracking-wider shadow-sm flex items-center justify-center border border-[#e5c77a]/30">NW</div>
         <div>
           <h1 class="font-extrabold text-sm tracking-tight leading-tight flex items-center gap-1.5 uppercase">
             Next Way
@@ -181,7 +181,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-[var(--status-rose)] transition-all shadow-sm ring-2 ring-[var(--status-rose-bg)]" title="Offline"></span>
+        <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-[var(--status-rose)] transition-all shadow-sm ring-2 ring-[#f43f5e]/20" title="Offline"></span>
         <button id="installPwaBtn" class="hidden gold-gradient text-[#0b0f19] text-[10px] font-extrabold px-3 py-1.5 rounded-lg shadow-sm uppercase tracking-wide">Install</button>
         <button id="darkModeBtn" onclick="toggleDarkMode()" class="hidden bg-[var(--bg-base)] hover:bg-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-2 rounded-xl border border-[var(--border-color)] transition-all" title="Toggle Display Theme">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
@@ -197,7 +197,7 @@
     <section id="authView" class="max-w-md mx-auto mt-16 sm:mt-24 ql-card p-8 sm:p-10 relative overflow-hidden">
       <div class="absolute top-0 left-0 w-full h-1 gold-gradient"></div>
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl gold-gradient text-xl mb-4 shadow-[var(--shadow-elevated)] border border-[var(--accent-gold-light)]/50">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl gold-gradient text-xl mb-4 shadow-[var(--shadow-elevated)] border border-[#e5c77a]/50">
           <span class="font-black tracking-tighter text-[#0b0f19]">NW</span>
         </div>
         <h2 class="text-2xl font-black text-[var(--text-primary)] tracking-tight uppercase">Next Way</h2>
@@ -206,13 +206,13 @@
       <form onsubmit="handleLogin(event)" class="space-y-5">
         <div>
           <label class="block text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-secondary)] mb-2">Username</label>
-          <input id="loginUsername" type="text" required class="w-full px-4 py-3 rounded-xl bg-[var(--bg-base)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] font-bold focus:ring-2 focus:ring-[var(--accent-gold)]/20 focus:border-[var(--accent-gold)] focus:outline-none transition-all placeholder-[var(--text-muted)]" placeholder="Enter your username" />
+          <input id="loginUsername" type="text" required class="w-full px-4 py-3 rounded-xl bg-[var(--bg-base)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] font-bold focus:ring-2 focus:ring-[#c9a24b]/20 focus:border-[var(--accent-gold)] focus:outline-none transition-all placeholder-[var(--text-muted)]" placeholder="Enter your username" />
         </div>
         <div>
           <label class="block text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-secondary)] mb-2">Password</label>
-          <input id="loginPassword" type="password" required class="w-full px-4 py-3 rounded-xl bg-[var(--bg-base)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] font-bold focus:ring-2 focus:ring-[var(--accent-gold)]/20 focus:border-[var(--accent-gold)] focus:outline-none transition-all placeholder-[var(--text-muted)]" placeholder="••••••••" />
+          <input id="loginPassword" type="password" required class="w-full px-4 py-3 rounded-xl bg-[var(--bg-base)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] font-bold focus:ring-2 focus:ring-[#c9a24b]/20 focus:border-[var(--accent-gold)] focus:outline-none transition-all placeholder-[var(--text-muted)]" placeholder="••••••••" />
         </div>
-        <div id="loginError" class="hidden text-xs text-[var(--status-rose)] bg-[var(--status-rose-bg)] p-3.5 rounded-xl border border-[var(--status-rose)]/20 font-bold text-center"></div>
+        <div id="loginError" class="hidden text-xs text-[var(--status-rose)] bg-[var(--status-rose-bg)] p-3.5 rounded-xl border border-[#f43f5e]/20 font-bold text-center"></div>
         <button type="submit" class="w-full bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] font-extrabold py-3.5 rounded-xl shadow-[var(--shadow-elevated)] transition-all uppercase text-xs tracking-widest border border-[#1e293b] mt-2">Secure Login</button>
       </form>
     </section>
@@ -232,137 +232,128 @@
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <div class="relative w-full sm:w-64">
             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input id="globalConsignmentSearch" type="text" placeholder="Lookup Tracking ID..." class="w-full pl-9 pr-3 py-2 text-xs font-bold bg-[var(--bg-base)] border border-[var(--border-color)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--accent-gold)]/20 focus:border-[var(--accent-gold)] transition-all text-[var(--text-primary)] placeholder-[var(--text-muted)] uppercase" />
+            <input id="globalConsignmentSearch" type="text" placeholder="Lookup Tracking ID..." class="w-full pl-9 pr-3 py-2 text-xs font-bold bg-[var(--bg-base)] border border-[var(--border-color)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#c9a24b]/20 focus:border-[var(--accent-gold)] transition-all text-[var(--text-primary)] placeholder-[var(--text-muted)] uppercase" />
           </div>
           <button onclick="inspectConsignmentById()" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] text-[11px] font-extrabold px-4 py-2.5 rounded-xl shrink-0 shadow-sm transition-all border border-[#1e293b] uppercase tracking-widest">Find</button>
         </div>
       </div>
 
       <!-- TAB 0: DASHBOARD (ADMIN & AGENT) -->
-      <div id="panel-dashboard" class="hidden space-y-4">
+      <div id="panel-dashboard" class="hidden space-y-5">
         
         <!-- Admin Dashboard Filter -->
-        <div id="adminDashFilterWrap" class="admin-only hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-3 mb-1">
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Filter Dashboard by Personnel</label>
-          <select id="adminDashAgentFilter" onchange="closeDashSubScreen(); renderAgentDashboard()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-medium outline-none focus:border-amber-500 transition"></select>
+        <div id="adminDashFilterWrap" class="admin-only hidden ql-card p-5 mb-2">
+          <label class="block text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-secondary)] mb-2">Filter Dashboard by Personnel</label>
+          <select id="adminDashAgentFilter" onchange="closeDashSubScreen(); renderAgentDashboard()" class="w-full text-sm font-bold border border-[var(--border-color)] rounded-xl px-4 py-3 bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-2 focus:ring-[#c9a24b]/20 transition-all cursor-pointer"></select>
         </div>
 
         <!-- MAIN DASHBOARD VIEW -->
-        <div id="dashMainScreen" class="max-w-md mx-auto space-y-5 py-2">
+        <div id="dashMainScreen" class="max-w-md mx-auto space-y-6 py-2">
           <!-- Agent Name & Date -->
-          <div class="text-center space-y-0.5">
-            <h2 id="dashAgentName" class="text-sm font-bold text-slate-400 uppercase tracking-wide"></h2>
-            <p id="dashCurrentDate" class="text-xs font-semibold text-slate-400"></p>
+          <div class="text-center space-y-1">
+            <h2 id="dashAgentName" class="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest"></h2>
+            <p id="dashCurrentDate" class="text-[10px] font-extrabold text-[var(--text-secondary)] tracking-widest uppercase"></p>
           </div>
 
           <!-- Top Donut Cards: Delivered & Pending -->
-          <div class="grid grid-cols-2 gap-3.5">
+          <div class="grid grid-cols-2 gap-4">
             <!-- Delivered Card -->
-            <div onclick="openDashAnalysis('DELIVERED_ANALYSIS')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition">
-              <div class="flex justify-between items-center mb-3">
-                <span class="font-bold text-xs text-slate-900">Delivered</span>
-                <div class="w-8 h-8 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <div onclick="openDashAnalysis('DELIVERED_ANALYSIS')" class="cursor-pointer ql-card p-5 hover:border-[var(--status-emerald)] transition-colors group">
+              <div class="flex justify-between items-center mb-4">
+                <span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Delivered</span>
+                <div class="w-8 h-8 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 flex items-center justify-center text-[var(--status-emerald)] shadow-sm group-hover:scale-105 transition-transform">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
               </div>
-              <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
+              <div class="relative w-28 h-28 mx-auto flex items-center justify-center">
                 <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="40" stroke="#cbd5e1" stroke-width="10" fill="transparent" />
-                  <circle id="dashDeliveredCircle" cx="50" cy="50" r="40" stroke="#dc2626" stroke-width="10" stroke-linecap="round" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500" />
+                  <circle cx="50" cy="50" r="42" stroke="currentColor" class="text-[var(--border-color-strong)]" stroke-width="8" fill="transparent" />
+                  <circle id="dashDeliveredCircle" cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="transparent" stroke-dasharray="264" stroke-dashoffset="264" class="text-[var(--status-emerald)] transition-all duration-700 ease-out" />
                 </svg>
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <span class="text-[10px] font-bold text-slate-800">Keep Going</span>
-                  <span id="dashDeliveredPct" class="text-lg font-extrabold text-slate-900">0%</span>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center mt-1">
+                  <span id="dashDeliveredPct" class="text-xl font-black text-[var(--text-primary)] tabular-nums">0%</span>
                 </div>
               </div>
             </div>
 
             <!-- Pending Card -->
-            <div onclick="openDashAnalysis('PENDING_ANALYSIS')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition">
-              <div class="flex justify-between items-center mb-3">
-                <span class="font-bold text-xs text-slate-900">Pending</span>
-                <div class="w-8 h-8 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <div onclick="openDashAnalysis('PENDING_ANALYSIS')" class="cursor-pointer ql-card p-5 hover:border-[var(--accent-gold)] transition-colors group">
+              <div class="flex justify-between items-center mb-4">
+                <span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Pending</span>
+                <div class="w-8 h-8 rounded-full bg-[#c9a24b]/10 border border-[#c9a24b]/30 flex items-center justify-center text-[var(--accent-gold)] shadow-sm group-hover:scale-105 transition-transform">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5"/></svg>
                 </div>
               </div>
-              <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
+              <div class="relative w-28 h-28 mx-auto flex items-center justify-center">
                 <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="40" stroke="#cbd5e1" stroke-width="10" fill="transparent" />
-                  <circle id="dashPendingCircle" cx="50" cy="50" r="40" stroke="#dc2626" stroke-width="10" stroke-linecap="round" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500" />
+                  <circle cx="50" cy="50" r="42" stroke="currentColor" class="text-[var(--border-color-strong)]" stroke-width="8" fill="transparent" />
+                  <circle id="dashPendingCircle" cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="transparent" stroke-dasharray="264" stroke-dashoffset="264" class="text-[var(--accent-gold)] transition-all duration-700 ease-out" />
                 </svg>
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <span class="text-[10px] font-bold text-slate-800">Keep Going</span>
-                  <span id="dashPendingPct" class="text-lg font-extrabold text-slate-900">0%</span>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center mt-1">
+                  <span id="dashPendingPct" class="text-xl font-black text-[var(--text-primary)] tabular-nums">0%</span>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Middle Selector Pill: PICKUP, DELIVERY, COD -->
-          <div class="bg-amber-100/90 rounded-full py-3 px-6 shadow-md border border-amber-200/80 flex justify-around items-center">
-            <button onclick="setDashMode('PICKUP')" class="flex flex-col items-center gap-1.5 focus:outline-none group">
-              <div class="w-14 h-14 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
-              </div>
-              <span id="dashTabLabel-PICKUP" class="text-[11px] font-extrabold tracking-wider text-slate-900">PICKUP</span>
+          <div class="bg-[var(--bg-base)] rounded-full p-2 shadow-sm border border-[var(--border-color)] flex justify-between items-center relative overflow-hidden">
+            <button onclick="setDashMode('PICKUP')" class="flex-1 flex flex-col items-center py-2 gap-1 focus:outline-none group z-10 relative">
+              <span id="dashTabLabel-PICKUP" class="text-[10px] font-extrabold tracking-widest transition-colors text-[var(--text-secondary)] uppercase">Pickup</span>
             </button>
-
-            <button onclick="setDashMode('DELIVERY')" class="flex flex-col items-center gap-1.5 focus:outline-none group">
-              <div class="w-14 h-14 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-              </div>
-              <span id="dashTabLabel-DELIVERY" class="text-[11px] font-extrabold tracking-wider text-red-600">DELIVERY</span>
+            <div class="w-px h-6 bg-[var(--border-color-strong)]"></div>
+            <button onclick="setDashMode('DELIVERY')" class="flex-1 flex flex-col items-center py-2 gap-1 focus:outline-none group z-10 relative">
+              <span id="dashTabLabel-DELIVERY" class="text-[10px] font-extrabold tracking-widest transition-colors text-[var(--text-primary)] uppercase">Delivery</span>
             </button>
-
-            <button onclick="setDashMode('COD')" class="flex flex-col items-center gap-1.5 focus:outline-none group">
-              <div class="w-14 h-14 rounded-full bg-blue-600 border-[3px] border-amber-400 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              </div>
-              <span id="dashTabLabel-COD" class="text-[11px] font-extrabold tracking-wider text-slate-900">COD</span>
+            <div class="w-px h-6 bg-[var(--border-color-strong)]"></div>
+            <button onclick="setDashMode('COD')" class="flex-1 flex flex-col items-center py-2 gap-1 focus:outline-none group z-10 relative">
+              <span id="dashTabLabel-COD" class="text-[10px] font-extrabold tracking-widest transition-colors text-[var(--text-secondary)] uppercase">COD</span>
             </button>
           </div>
 
           <!-- Bottom 2x2 Summary Cards Grid -->
-          <div id="dashCardsGrid" class="grid grid-cols-2 gap-3.5"></div>
+          <div id="dashCardsGrid" class="grid grid-cols-2 gap-4"></div>
         </div>
 
         <!-- SUB-SCREEN 1: TABLE ANALYSIS VIEW -->
         <div id="dashAnalysisScreen" class="hidden max-w-2xl mx-auto space-y-4">
           <div class="flex items-center justify-between py-2">
             <div class="flex items-center gap-3">
-              <button onclick="closeDashSubScreen()" class="p-1.5 rounded-xl hover:bg-slate-200 text-slate-900 transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+              <button onclick="closeDashSubScreen()" class="p-2 rounded-xl hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors border border-transparent hover:border-[var(--border-color-strong)]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
               </button>
-              <h2 id="dashAnalysisHeading" class="text-lg font-extrabold text-slate-900">Delivery Analysis</h2>
+              <h2 id="dashAnalysisHeading" class="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest">Delivery Analysis</h2>
             </div>
-            <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+            <svg class="w-5 h-5 text-[var(--text-muted)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
           </div>
 
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto p-2">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead id="dashAnalysisThead" class="border-b border-slate-200 text-slate-900 font-extrabold"></thead>
-              <tbody id="dashAnalysisTbody" class="divide-y divide-slate-200 text-slate-700"></tbody>
+          <div class="ql-card overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse tabular-nums">
+              <thead id="dashAnalysisThead" class="border-b border-[var(--border-color)] bg-[var(--bg-base)]"></thead>
+              <tbody id="dashAnalysisTbody" class="divide-y divide-[var(--border-color)]"></tbody>
             </table>
           </div>
         </div>
 
         <!-- SUB-SCREEN 2: CARD LIST VIEW -->
-        <div id="dashListScreen" class="hidden max-w-lg mx-auto space-y-4">
+        <div id="dashListScreen" class="hidden max-w-lg mx-auto space-y-5">
           <div class="flex items-center gap-3 py-2">
-            <button onclick="closeDashSubScreen()" class="p-1.5 rounded-xl hover:bg-slate-200 text-slate-900 transition">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            <button onclick="closeDashSubScreen()" class="p-2 rounded-xl hover:bg-[var(--border-color)] text-[var(--text-primary)] transition-colors border border-transparent hover:border-[var(--border-color-strong)]">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             </button>
-            <h2 id="dashListHeading" class="text-lg font-extrabold text-slate-900">Delivered List</h2>
+            <h2 id="dashListHeading" class="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest">Delivered List</h2>
           </div>
 
-          <div class="flex gap-2.5">
-            <input id="dashListSearchInput" oninput="renderDashListItems()" type="text" placeholder="Search By Reference No" class="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-medium shadow-sm focus:outline-none focus:border-red-600" />
-            <button onclick="renderDashListItems()" class="bg-red-700 hover:bg-red-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-sm transition">Scan</button>
+          <div class="flex gap-3">
+            <div class="relative flex-1">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <input id="dashListSearchInput" oninput="renderDashListItems()" type="text" placeholder="Search Reference No" class="w-full pl-9 pr-4 py-3 bg-[var(--bg-base)] border border-[var(--border-color)] rounded-xl text-xs font-bold shadow-sm focus:outline-none focus:border-[var(--accent-gold)] focus:ring-2 focus:ring-[#c9a24b]/20 transition-all text-[var(--text-primary)] placeholder-[var(--text-muted)] uppercase tracking-wide" />
+            </div>
+            <button onclick="renderDashListItems()" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] font-extrabold px-6 py-3 rounded-xl text-xs shadow-[var(--shadow-elevated)] transition-all border border-[#1e293b] uppercase tracking-widest">Scan</button>
           </div>
 
-          <div id="dashListContainer" class="space-y-3"></div>
+          <div id="dashListContainer" class="space-y-4"></div>
         </div>
-
       </div>
 
       <!-- TAB 1: CONSIGNMENTS & DISPATCH -->
@@ -1392,9 +1383,9 @@
       const dot = document.getElementById('syncDot');
       if (!dot) return; 
       dot.title = label;
-      if (state === 'LIVE') { dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shadow ring-2 ring-emerald-500/20 animate-pulse'; }
-      else if (state === 'SYNCING') { dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 shadow ring-2 ring-amber-400/20 animate-pulse'; }
-      else { dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500 shadow ring-2 ring-rose-500/20'; }
+      if (state === 'LIVE') { dot.className = 'w-2.5 h-2.5 rounded-full bg-[#10b981] shadow ring-2 ring-[#10b981]/20 animate-pulse'; }
+      else if (state === 'SYNCING') { dot.className = 'w-2.5 h-2.5 rounded-full bg-[#c9a24b] shadow ring-2 ring-[#c9a24b]/20 animate-pulse'; }
+      else { dot.className = 'w-2.5 h-2.5 rounded-full bg-[#f43f5e] shadow ring-2 ring-[#f43f5e]/20'; }
     }
 
     async function hashPassword(plain) {
@@ -2032,8 +2023,8 @@
       ['PICKUP', 'DELIVERY', 'COD'].forEach(m => {
         const lbl = document.getElementById(`dashTabLabel-${m}`);
         if (lbl) {
-          lbl.classList.toggle('text-red-600', m === mode);
-          lbl.classList.toggle('text-slate-900', m !== mode);
+          lbl.classList.toggle('text-[var(--text-primary)]', m === mode);
+          lbl.classList.toggle('text-[var(--text-secondary)]', m !== mode);
         }
       });
       renderAgentDashboard();
@@ -2046,9 +2037,9 @@
       if (currentUser.role === 'ADMIN') {
         const filterId = document.getElementById('adminDashAgentFilter').value || 'ALL';
         if (filterId === 'ALL') headerText = 'OVERALL DASHBOARD';
-        else { const ag = db.users.find(u => u.id === filterId); headerText = ag ? `${ag.name.toUpperCase()} - ${ag.id}` : 'AGENT DASHBOARD'; }
+        else { const ag = db.users.find(u => u.id === filterId); headerText = ag ? `${ag.name} - ${ag.id}` : 'AGENT DASHBOARD'; }
       } else {
-        headerText = `${currentUser.name.toUpperCase()} - ${currentUser.id}`;
+        headerText = `${currentUser.name} - ${currentUser.id}`;
       }
       document.getElementById('dashAgentName').textContent = headerText;
       
@@ -2064,7 +2055,7 @@
 
       const delPct = totalDelivery > 0 ? Math.round((deliveredList.length / totalDelivery) * 100) : 0;
       const penPct = totalDelivery > 0 ? Math.round((pendingList.length / totalDelivery) * 100) : 0;
-      const circumference = 251.2;
+      const circumference = 264; 
 
       document.getElementById('dashDeliveredPct').textContent = `${delPct}%`;
       document.getElementById('dashDeliveredCircle').style.strokeDashoffset = circumference - (delPct / 100) * circumference;
@@ -2072,30 +2063,30 @@
       document.getElementById('dashPendingPct').textContent = `${penPct}%`;
       document.getElementById('dashPendingCircle').style.strokeDashoffset = circumference - (penPct / 100) * circumference;
 
-      const iconBagBlue = `<div class="w-11 h-11 rounded-full bg-blue-600 border-2 border-amber-400 flex items-center justify-center text-white shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>`;
-      const iconBagGreen = `<div class="w-11 h-11 rounded-full bg-green-600 border-2 border-amber-400 flex items-center justify-center text-white shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>`;
-      const iconClockYellow = `<div class="w-11 h-11 rounded-full bg-amber-400 flex items-center justify-center text-white shrink-0"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5"/></svg></div>`;
-      const iconCrossRed = `<div class="w-11 h-11 rounded-full bg-red-600 border-2 border-amber-400 flex items-center justify-center text-white shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></div>`;
+      const iconBagBlue = `<div class="w-10 h-10 rounded-full bg-[#3b82f6]/10 border border-[#3b82f6]/30 flex items-center justify-center text-[var(--status-blue)] shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>`;
+      const iconBagGreen = `<div class="w-10 h-10 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 flex items-center justify-center text-[var(--status-emerald)] shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>`;
+      const iconClockYellow = `<div class="w-10 h-10 rounded-full bg-[#c9a24b]/10 border border-[#c9a24b]/30 flex items-center justify-center text-[var(--accent-gold)] shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5"/></svg></div>`;
+      const iconCrossRed = `<div class="w-10 h-10 rounded-full bg-[#f43f5e]/10 border border-[#f43f5e]/30 flex items-center justify-center text-[var(--status-rose)] shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></div>`;
 
       const grid = document.getElementById('dashCardsGrid');
 
       if (currentDashMode === 'DELIVERY') {
         grid.innerHTML = `
-          <div onclick="openDashList('TOTAL_DELIVERY')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconBagBlue}<span class="font-bold text-xs text-slate-900">Total Delivery</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${totalDelivery}</p>
+          <div onclick="openDashList('TOTAL_DELIVERY')" class="cursor-pointer ql-card p-5 hover:border-[var(--accent-gold)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconBagBlue}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Total Delivery</span></div>
+            <p class="text-right font-black text-2xl text-[var(--text-primary)] mt-3 tabular-nums">${totalDelivery}</p>
           </div>
-          <div onclick="openDashList('DELIVERED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconBagGreen}<span class="font-bold text-xs text-slate-900">Delivered</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${deliveredList.length}</p>
+          <div onclick="openDashList('DELIVERED')" class="cursor-pointer ql-card p-5 hover:border-[var(--status-emerald)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconBagGreen}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Delivered</span></div>
+            <p class="text-right font-black text-2xl text-[var(--text-primary)] mt-3 tabular-nums">${deliveredList.length}</p>
           </div>
-          <div onclick="openDashList('PENDING')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconClockYellow}<span class="font-bold text-xs text-slate-900">Pending</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pendingList.length}</p>
+          <div onclick="openDashList('PENDING')" class="cursor-pointer ql-card p-5 hover:border-[var(--accent-gold)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconClockYellow}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Pending</span></div>
+            <p class="text-right font-black text-2xl text-[var(--text-primary)] mt-3 tabular-nums">${pendingList.length}</p>
           </div>
-          <div onclick="openDashList('FAILED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconCrossRed}<span class="font-bold text-xs text-slate-900">Failed</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${failedList.length}</p>
+          <div onclick="openDashList('FAILED')" class="cursor-pointer ql-card p-5 hover:border-[var(--status-rose)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconCrossRed}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Failed</span></div>
+            <p class="text-right font-black text-2xl text-[var(--text-primary)] mt-3 tabular-nums">${failedList.length}</p>
           </div>
         `;
       } else if (currentDashMode === 'PICKUP') {
@@ -2106,21 +2097,21 @@
         const pFailed = pickups.filter(c => c.status === 'Returned').length;
 
         grid.innerHTML = `
-          <div onclick="openDashList('PICKUP_TOTAL')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconBagBlue}<span class="font-bold text-xs text-slate-900">Total Pickups</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pTotal}</p>
+          <div onclick="openDashList('PICKUP_TOTAL')" class="cursor-pointer ql-card p-5 hover:border-[var(--accent-gold)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconBagBlue}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Total Pickups</span></div>
+            <p class="text-right font-black text-2xl text-[var(--text-primary)] mt-3 tabular-nums">${pTotal}</p>
           </div>
-          <div onclick="openDashList('PICKUP_COLLECTED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconBagGreen}<span class="font-bold text-xs text-slate-900">Collected</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pCollected}</p>
+          <div onclick="openDashList('PICKUP_COLLECTED')" class="cursor-pointer ql-card p-5 hover:border-[var(--status-emerald)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconBagGreen}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Collected</span></div>
+            <p class="text-right font-black text-2xl text-[var(--text-primary)] mt-3 tabular-nums">${pCollected}</p>
           </div>
-          <div onclick="openDashList('PICKUP_PENDING')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconClockYellow}<span class="font-bold text-xs text-slate-900">Pending</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pPending}</p>
+          <div onclick="openDashList('PICKUP_PENDING')" class="cursor-pointer ql-card p-5 hover:border-[var(--accent-gold)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconClockYellow}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Pending</span></div>
+            <p class="text-right font-black text-2xl text-[var(--text-primary)] mt-3 tabular-nums">${pPending}</p>
           </div>
-          <div onclick="openDashList('PICKUP_FAILED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconCrossRed}<span class="font-bold text-xs text-slate-900">Failed</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${pFailed}</p>
+          <div onclick="openDashList('PICKUP_FAILED')" class="cursor-pointer ql-card p-5 hover:border-[var(--status-rose)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconCrossRed}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Failed</span></div>
+            <p class="text-right font-black text-2xl text-[var(--text-primary)] mt-3 tabular-nums">${pFailed}</p>
           </div>
         `;
       } else if (currentDashMode === 'COD') {
@@ -2135,21 +2126,21 @@
         const failedCodAmt = sumAmt(failedList);
 
         grid.innerHTML = `
-          <div onclick="openDashAnalysis('COD_TOTAL')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconBagBlue}<span class="font-bold text-xs text-slate-900">Total COD</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${formatAmt(totalCodAmt)} د.إ</p>
+          <div onclick="openDashAnalysis('COD_TOTAL')" class="cursor-pointer ql-card p-5 hover:border-[var(--accent-gold)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconBagBlue}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Total COD</span></div>
+            <p class="text-right font-black text-[18px] text-[var(--text-primary)] mt-3 tabular-nums">${formatAmt(totalCodAmt)} <span class="text-xs">د.إ</span></p>
           </div>
-          <div onclick="openDashAnalysis('COD_COLLECTED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconBagGreen}<span class="font-bold text-xs text-slate-900">Collected</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${formatAmt(collectedCodAmt)} د.إ</p>
+          <div onclick="openDashAnalysis('COD_COLLECTED')" class="cursor-pointer ql-card p-5 hover:border-[var(--status-emerald)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconBagGreen}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Collected</span></div>
+            <p class="text-right font-black text-[18px] text-[var(--text-primary)] mt-3 tabular-nums">${formatAmt(collectedCodAmt)} <span class="text-xs">د.إ</span></p>
           </div>
-          <div onclick="openDashAnalysis('COD_PENDING')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconClockYellow}<span class="font-bold text-xs text-slate-900">Pending</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${formatAmt(pendingCodAmt)} د.إ</p>
+          <div onclick="openDashAnalysis('COD_PENDING')" class="cursor-pointer ql-card p-5 hover:border-[var(--accent-gold)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconClockYellow}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Pending</span></div>
+            <p class="text-right font-black text-[18px] text-[var(--text-primary)] mt-3 tabular-nums">${formatAmt(pendingCodAmt)} <span class="text-xs">د.إ</span></p>
           </div>
-          <div onclick="openDashAnalysis('COD_FAILED')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-md border border-slate-100 hover:border-red-300 transition flex flex-col justify-between min-h-[110px]">
-            <div class="flex items-center gap-2.5">${iconCrossRed}<span class="font-bold text-xs text-slate-900">Failed</span></div>
-            <p class="text-center font-extrabold text-base text-red-700 mt-2">${formatAmt(failedCodAmt)} د.إ</p>
+          <div onclick="openDashAnalysis('COD_FAILED')" class="cursor-pointer ql-card p-5 hover:border-[var(--status-rose)] transition-colors flex flex-col justify-between min-h-[120px]">
+            <div class="flex items-center gap-3">${iconCrossRed}<span class="font-extrabold text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Failed</span></div>
+            <p class="text-right font-black text-[18px] text-[var(--text-primary)] mt-3 tabular-nums">${formatAmt(failedCodAmt)} <span class="text-xs">د.إ</span></p>
           </div>
         `;
       }
@@ -2159,7 +2150,7 @@
       if (!isoStr) return '-';
       if (isoStr.includes('T')) {
         const [d, t] = isoStr.split('T');
-        return `${d}<br/>${t.split('.')[0]}`;
+        return `${d}<br/><span class="text-[10px]">${t.split('.')[0]}</span>`;
       }
       return isoStr;
     }
@@ -2181,18 +2172,18 @@
           ? assigned.filter(c => c.status === 'Delivered')
           : assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
 
-        thead.innerHTML = `<tr><th class="p-3">#</th><th class="p-3">AWB Number</th><th class="p-3">Merchant</th><th class="p-3">Status</th><th class="p-3">Date Time</th></tr>`;
+        thead.innerHTML = `<tr><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">#</th><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">AWB Number</th><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Merchant</th><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Status</th><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Date Time</th></tr>`;
         tbody.innerHTML = rows.length ? rows.map((c, idx) => {
           const v = getVendorByCode(c.vendorCode);
           return `
-          <tr>
-            <td class="p-3 font-medium">${idx + 1}</td>
-            <td class="p-3 font-medium">${c.id}</td>
-            <td class="p-3 uppercase">${v ? v.name : c.vendorCode}</td>
-            <td class="p-3 lowercase">${c.status}</td>
-            <td class="p-3 leading-tight">${formatDashDateTime(c.deliveredAt || c.pickedUpAt || c.createdAt)}</td>
+          <tr class="hover:bg-[var(--bg-base)] transition-colors">
+            <td class="p-4 font-bold text-[var(--text-primary)]">${idx + 1}</td>
+            <td class="p-4 font-black text-[var(--text-primary)]">${c.id}</td>
+            <td class="p-4 font-bold uppercase text-[var(--text-secondary)]">${v ? v.name : c.vendorCode}</td>
+            <td class="p-4 lowercase font-bold text-[var(--text-muted)]">${c.status}</td>
+            <td class="p-4 leading-tight font-bold text-[var(--text-secondary)] whitespace-nowrap">${formatDashDateTime(c.deliveredAt || c.pickedUpAt || c.createdAt)}</td>
           </tr>
-        `}).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">No records found.</td></tr>`;
+        `}).join('') : `<tr><td colspan="5" class="p-8 text-center text-[var(--text-muted)] font-bold uppercase tracking-widest text-[10px]">No records found.</td></tr>`;
       } else {
         const titles = {
           'COD_TOTAL': 'COD Analysis',
@@ -2207,7 +2198,7 @@
         else if (type === 'COD_PENDING') rows = assigned.filter(c => ['Assigned', 'Picked Up', 'Out for delivery'].includes(c.status));
         else if (type === 'COD_FAILED') rows = assigned.filter(c => c.status === 'Returned');
 
-        thead.innerHTML = `<tr><th class="p-3">#</th><th class="p-3">AWB Number</th><th class="p-3">Merchant</th><th class="p-3">Collect</th><th class="p-3">Received</th></tr>`;
+        thead.innerHTML = `<tr><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">#</th><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">AWB Number</th><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Merchant</th><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold text-right">Collect</th><th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold text-right">Received</th></tr>`;
         tbody.innerHTML = rows.length ? rows.map((c, idx) => {
           const v = getVendorByCode(c.vendorCode);
           const baseAmt = Number(c.productAmount) || 0;
@@ -2215,15 +2206,15 @@
           const collectAmt = c.feeType === 'COD' ? (baseAmt + delCharge) : baseAmt;
           const receivedAmt = c.status === 'Delivered' ? collectAmt : 0;
           return `
-            <tr>
-              <td class="p-3 font-medium">${idx + 1}</td>
-              <td class="p-3 font-medium">${c.id}</td>
-              <td class="p-3 uppercase">${v ? v.name : c.vendorCode}</td>
-              <td class="p-3">${collectAmt}</td>
-              <td class="p-3">${formatAmt(receivedAmt)}</td>
+            <tr class="hover:bg-[var(--bg-base)] transition-colors">
+              <td class="p-4 font-bold text-[var(--text-primary)]">${idx + 1}</td>
+              <td class="p-4 font-black text-[var(--text-primary)]">${c.id}</td>
+              <td class="p-4 font-bold uppercase text-[var(--text-secondary)]">${v ? v.name : c.vendorCode}</td>
+              <td class="p-4 font-black text-[var(--text-primary)] text-right">${collectAmt}</td>
+              <td class="p-4 font-black text-[var(--text-primary)] text-right">${formatAmt(receivedAmt)}</td>
             </tr>
           `;
-        }).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">No records found.</td></tr>`;
+        }).join('') : `<tr><td colspan="5" class="p-8 text-center text-[var(--text-muted)] font-bold uppercase tracking-widest text-[10px]">No records found.</td></tr>`;
       }
     }
 
@@ -2272,7 +2263,7 @@
 
       const container = document.getElementById('dashListContainer');
       if (list.length === 0) {
-        container.innerHTML = `<div class="bg-white rounded-2xl p-8 text-center text-slate-400 font-bold text-xs shadow-sm border border-slate-100">No consignments found.</div>`;
+        container.innerHTML = `<div class="ql-card p-10 text-center text-[var(--text-muted)] font-bold text-xs uppercase tracking-widest">No consignments found.</div>`;
         return;
       }
 
@@ -2281,43 +2272,43 @@
 
         if (currentDashListFilter === 'PENDING') {
           return `
-            <div onclick="showConsignmentDetails('${c.id}')" class="cursor-pointer relative bg-white rounded-2xl p-4 shadow-sm border border-slate-100 hover:border-red-300 transition space-y-2 text-xs">
+            <div onclick="showConsignmentDetails('${c.id}')" class="cursor-pointer relative ql-card p-5 hover:border-[var(--accent-gold)] transition-colors space-y-3 text-xs">
               <div class="flex justify-between items-start">
                   ${currentUser.role === 'ADMIN' ? 
-                    `<button disabled onclick="event.stopPropagation()" class="bg-slate-300 text-slate-500 font-bold px-4 py-1.5 rounded-xl shadow-sm tracking-wide text-xs cursor-not-allowed">Start</button>` : 
-                    `<button onclick="event.stopPropagation(); openPodScreen('${c.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-1.5 rounded-xl shadow-sm transition tracking-wide text-xs">Start</button>`
+                    `<button disabled onclick="event.stopPropagation()" class="bg-[var(--bg-base)] text-[var(--text-muted)] border border-[var(--border-color)] font-extrabold px-4 py-2 rounded-xl shadow-sm tracking-widest text-[10px] uppercase cursor-not-allowed">Start</button>` : 
+                    `<button onclick="event.stopPropagation(); openPodScreen('${c.id}')" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] font-extrabold px-5 py-2.5 rounded-xl shadow-md transition-all tracking-widest text-[10px] uppercase border border-[#1e293b]">Start</button>`
                   }
-                  <div class="flex items-center gap-2">
-                      <span class="font-extrabold text-red-700 text-sm tracking-wide">${c.id}</span>
-                      <span class="w-6 h-6 rounded-full bg-red-700 text-white font-bold text-xs flex items-center justify-center shadow-sm">${idx + 1}</span>
+                  <div class="flex items-center gap-3">
+                      <span class="font-black text-[var(--text-primary)] text-sm tracking-widest uppercase">${c.id}</span>
+                      <span class="w-6 h-6 rounded-full bg-[var(--bg-base)] border border-[var(--border-color-strong)] text-[var(--text-primary)] font-black text-[10px] flex items-center justify-center shadow-sm tabular-nums">${idx + 1}</span>
                   </div>
               </div>
 
-              <p class="text-slate-500 font-medium uppercase tracking-wide pr-12">${c.customerName}</p>
+              <p class="text-[var(--text-secondary)] font-bold uppercase tracking-widest pr-12 text-[11px]">${c.customerName}</p>
 
-              <div class="absolute right-4 top-14 flex flex-col gap-2 z-10">
-                   <a href="https://wa.me/${(c.customerPhone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Order ${c.id} is pending.`)}" target="_blank" onclick="event.stopPropagation()" class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-md hover:bg-blue-600 transition">
+              <div class="absolute right-5 top-16 flex flex-col gap-3 z-10">
+                   <a href="https://wa.me/${(c.customerPhone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Order ${c.id} is pending.`)}" target="_blank" onclick="event.stopPropagation()" class="w-8 h-8 rounded-full bg-[#0b0f19] border border-[#1e293b] text-[var(--accent-gold)] flex items-center justify-center shadow-[var(--shadow-elevated)] hover:scale-110 transition-transform">
                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.128.552 4.195 1.6 6.02L.015 24l6.104-1.592c1.748.956 3.715 1.464 5.912 1.464 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm0 21.874c-1.802 0-3.565-.483-5.111-1.398l-.366-.217-3.8.992.992-3.801-.238-.378c-.997-1.583-1.523-3.411-1.523-5.253 0-5.467 4.45-9.917 9.916-9.917 5.467 0 9.917 4.45 9.917 9.917s-4.45 9.917-9.917 9.917zm5.442-7.44c-.298-.15-1.765-.871-2.037-.971-.272-.1-.472-.15-.671.15-.199.3-.77 1.018-.944 1.218-.174.2-.348.25-.646.1-1.258-.636-2.316-1.29-3.238-2.613-.238-.344.238-.328.665-1.182.1-.2.05-.375-.025-.525-.075-.15-.671-1.618-.921-2.218-.242-.582-.487-.503-.671-.513-.174-.01-.374-.01-.573-.01-.199 0-.522.075-.796.375-.273.3-1.044 1.022-1.044 2.493s1.07 2.892 1.219 3.092c.15.2 2.11 3.22 5.11 4.515.714.308 1.27.492 1.706.63.717.228 1.368.196 1.884.119.58-.087 1.765-.722 2.014-1.422.249-.7.249-1.3.174-1.422-.075-.122-.274-.197-.573-.347z"/></svg>
                    </a>
-                   <a href="tel:${c.customerPhone}" onclick="event.stopPropagation()" class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-md hover:bg-blue-600 transition">
+                   <a href="tel:${c.customerPhone}" onclick="event.stopPropagation()" class="w-8 h-8 rounded-full bg-[var(--bg-base)] border border-[var(--border-color-strong)] text-[var(--text-primary)] flex items-center justify-center shadow-sm hover:scale-110 transition-transform">
                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                    </a>
               </div>
 
-              <div class="pt-1 text-slate-900 font-bold space-y-1.5">
+              <div class="pt-2 text-[var(--text-primary)] font-bold space-y-2">
                   <div class="flex justify-between">
-                      <span class="truncate pr-2">Location:<span class="font-medium text-slate-700 ml-1">${c.deliveryAddress || ''}</span></span>
-                      <span class="pr-12 shrink-0">Pcs: ${c.pieces || 1}</span>
+                      <span class="truncate pr-2 uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Location <span class="font-bold text-[var(--text-primary)] ml-1">${c.deliveryAddress || ''}</span></span>
+                      <span class="pr-12 shrink-0 uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Pcs <span class="font-bold text-[var(--text-primary)] ml-1">${c.pieces || 1}</span></span>
                   </div>
                   <div class="flex justify-between">
-                      <span>Tel :</span>
-                      <span class="pr-12 shrink-0">Mob :<span class="font-medium text-slate-700 ml-1">${c.customerPhone || ''}</span></span>
+                      <span class="uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Tel</span>
+                      <span class="pr-12 shrink-0 uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Mob <span class="font-bold text-[var(--text-primary)] ml-1 tabular-nums">${c.customerPhone || ''}</span></span>
                   </div>
                   <div>
-                      <span class="text-red-700">Shipper:</span><span class="uppercase font-medium text-slate-700 ml-1">${v ? v.name : c.vendorCode}</span>
+                      <span class="uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Shipper </span><span class="uppercase font-bold text-[var(--text-primary)] ml-1">${v ? v.name : c.vendorCode}</span>
                   </div>
                   <div>
-                      <span>Instructions:</span>
+                      <span class="uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Instructions </span>
                   </div>
               </div>
             </div>
@@ -2325,23 +2316,23 @@
         }
 
         return `
-          <div onclick="showConsignmentDetails('${c.id}')" class="cursor-pointer bg-white rounded-2xl p-4 shadow-sm border border-slate-100 hover:border-red-300 transition space-y-2.5 text-xs">
-            <div class="flex justify-end items-center gap-2">
-              <span class="font-extrabold text-sm text-red-700 tracking-wide">${c.id}</span>
-              <span class="w-7 h-7 rounded-full bg-red-700 text-white font-bold text-xs flex items-center justify-center shadow-sm">${idx + 1}</span>
+          <div onclick="showConsignmentDetails('${c.id}')" class="cursor-pointer ql-card p-5 hover:border-[var(--accent-gold)] transition-colors space-y-3 text-xs">
+            <div class="flex justify-end items-center gap-3">
+              <span class="font-black text-sm text-[var(--text-primary)] tracking-widest uppercase">${c.id}</span>
+              <span class="w-7 h-7 rounded-full bg-[var(--bg-base)] border border-[var(--border-color-strong)] text-[var(--text-primary)] font-black text-[10px] flex items-center justify-center shadow-sm tabular-nums">${idx + 1}</span>
             </div>
-            <p class="text-slate-500 font-medium uppercase tracking-wide">${c.customerName}</p>
-            <div class="flex justify-between items-center pt-1 font-bold text-slate-900">
-              <span>Telephone :</span>
-              <span>Mob: ${c.customerPhone || ''}</span>
+            <p class="text-[var(--text-secondary)] font-bold uppercase tracking-widest text-[11px]">${c.customerName}</p>
+            <div class="flex justify-between items-center pt-2 font-bold text-[var(--text-primary)]">
+              <span class="uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Telephone</span>
+              <span class="uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Mob <span class="text-[var(--text-primary)] font-bold ml-1 tabular-nums">${c.customerPhone || ''}</span></span>
             </div>
-            <div class="flex items-start gap-1.5">
-              <span class="font-bold text-red-700 shrink-0">Shipper :</span>
-              <span class="text-slate-600 font-medium">${v ? v.name : c.vendorCode}</span>
+            <div class="flex items-start gap-2">
+              <span class="uppercase text-[10px] tracking-wider text-[var(--text-muted)] shrink-0">Shipper </span>
+              <span class="text-[var(--text-primary)] font-bold uppercase">${v ? v.name : c.vendorCode}</span>
             </div>
             <div>
-              <span class="font-bold text-slate-900">Instructions : </span>
-              <span class="text-slate-600">${c.deliveryAddress || ''}</span>
+              <span class="uppercase text-[10px] tracking-wider text-[var(--text-muted)]">Instructions </span>
+              <span class="text-[var(--text-secondary)] font-bold ml-1">${c.deliveryAddress || ''}</span>
             </div>
           </div>
         `;
