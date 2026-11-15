@@ -3146,7 +3146,11 @@
     }
 
     async function submitPodDelivered(e) {
+        async function submitPodDelivered(e) {
+        if (e) e.preventDefault();
         const cid = window.currentPodCid;
+        if (!cid) return alert('Error: Consignment ID missing.');
+        
         const c = db.consignments.find(x => x.id === cid);
         if (!c) return;
         
@@ -3158,10 +3162,13 @@
             return alert('Validation Failed: Please enter NCND Remarks because NCND Collected is less than NCND Amount.');
         }
         
-        const selectedPayMethod = document.querySelector('input[name="podPayMethod"]:checked').value;
+        // Failsafe: If nothing is checked, default to COD to prevent crashes
+        const selectedPayRadio = document.querySelector('input[name="podPayMethod"]:checked');
+        const selectedPayMethod = selectedPayRadio ? selectedPayRadio.value : 'COD';
+        
         const payModeRemarks = document.getElementById('podPayModeRemarks').value.trim();
         
-        if (selectedPayMethod !== currentPodDefaultMethod && !payModeRemarks) {
+        if (selectedPayMethod !== (currentPodDefaultMethod || 'COD') && !payModeRemarks) {
             return alert('Validation Failed: Please enter Payment Mode Remarks since the default Payment Method was changed.');
         }
         
@@ -3181,6 +3188,50 @@
           <button onclick="executePodDelivered('${c.id}')" class="w-full bg-[var(--status-emerald)] hover:bg-[#059669] text-white font-extrabold py-3.5 rounded-xl shadow-[var(--shadow-elevated)] transition-colors uppercase tracking-widest text-[11px]">Confirm Delivery</button>
         `;
         document.getElementById('actionModal').classList.remove('hidden');
+    }
+
+    function submitPodReturn() {
+        const cid = window.currentPodCid;
+        if (!cid) return alert("Error: Consignment ID not found.");
+        
+        closeModal('podModal');
+        openReturnModal(cid); 
+    }
+
+    function openReturnModal(cid) {
+      const c = db.consignments.find(x => x.id === cid);
+      if (!c) return;
+      
+      document.getElementById('actionModalTitle').textContent = `Return Consignment: ${c.id}`;
+      document.getElementById('actionModalBody').innerHTML = `
+        <div class="mb-4 p-4 bg-[var(--status-rose-bg)] border border-[#f43f5e]/20 rounded-xl">
+          <p class="text-[10px] font-extrabold text-[var(--status-rose)] uppercase tracking-widest mb-2">Reason for Return</p>
+          <textarea id="returnRemark" rows="3" class="w-full border border-[var(--border-color)] rounded-xl px-4 py-3 text-xs font-bold bg-[var(--bg-surface)] text-[var(--text-primary)] outline-none focus:ring-1 focus:ring-[var(--status-rose)] focus:border-[var(--status-rose)] transition-all placeholder-[var(--text-muted)] resize-none" placeholder="e.g., Customer not available..."></textarea>
+        </div>
+        <button onclick="confirmReturn('${c.id}')" class="w-full bg-[var(--status-rose)] hover:bg-[#e11d48] text-white font-extrabold py-3.5 rounded-xl shadow-[var(--shadow-elevated)] transition-colors uppercase tracking-widest text-[11px]">Confirm Return</button>
+      `;
+      document.getElementById('actionModal').classList.remove('hidden');
+    }
+
+    function viewDeliveryPhoto(cid) {
+      const c = db.consignments.find(x => x.id === cid);
+      if (!c) return;
+      
+      document.getElementById('actionModalTitle').textContent = `Delivery Photo: ${c.id}`;
+      
+      if (c.deliveryPhoto) {
+        document.getElementById('actionModalBody').innerHTML = `
+          <div class="flex justify-center bg-[var(--bg-surface)] p-3 rounded-xl border border-[var(--border-color)]">
+            <img src="${c.deliveryPhoto}" class="max-h-[60vh] object-contain rounded-lg shadow-sm" alt="Delivery Photo" />
+          </div>`;
+      } else {
+        document.getElementById('actionModalBody').innerHTML = `
+          <div class="p-8 text-center text-[var(--text-muted)] font-bold border border-[var(--border-color)] rounded-xl bg-[var(--bg-base)] text-[10px] uppercase tracking-widest">
+            No Delivery Photo available.
+          </div>`;
+      }
+      
+      document.getElementById('actionModal').classList.remove('hidden');
     }
 
     async function executePodDelivered(cid) {
