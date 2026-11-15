@@ -403,126 +403,158 @@
       </div>
 
       <!-- TAB 2: ALERTS & CONFIRMATIONS -->
-      <div id="panel-confirmations" class="hidden space-y-4">
-        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="font-bold text-base text-slate-900">Pending Actions & Handover OTPs</h3>
+      <div id="panel-confirmations" class="hidden space-y-5">
+        <div class="ql-card p-6">
+          <h3 class="font-black text-sm text-[var(--text-primary)] uppercase tracking-widest">Actions & Handover</h3>
           
-          <div id="agentOtpSubmissionCard" class="hidden mt-4 pt-4 border-t border-slate-200">
-            <h4 class="font-bold text-xs text-amber-800 mb-2">Vendor Settlement Verification</h4>
-            <div id="agentPendingOtpsList" class="space-y-2"></div>
+          <div id="agentOtpSubmissionCard" class="hidden mt-5 pt-5 border-t border-[var(--border-color)]">
+            <h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-3">Vendor Settlement Verification</h4>
+            <div id="agentPendingOtpsList" class="space-y-3"></div>
           </div>
           
-          <div id="confirmationsList" class="mt-4 space-y-3"></div>
+          <div id="confirmationsList" class="mt-5 space-y-3"></div>
 
-          <div id="adminCocHandoverCard" class="admin-only hidden mt-4 pt-4 border-t border-slate-200">
-            <h4 class="font-bold text-xs text-blue-900 mb-2">Pending Office Intake (COC)</h4>
-            <div id="adminCocHandoverList" class="space-y-2"></div>
+          <div id="adminCocHandoverCard" class="admin-only hidden mt-5 pt-5 border-t border-[var(--border-color)]">
+            <h4 class="font-extrabold text-[10px] text-[var(--status-blue)] uppercase tracking-wider mb-3">Pending Office Intake (COC)</h4>
+            <div id="adminCocHandoverList" class="space-y-3"></div>
           </div>
           
-          <div id="adminSettlementOtpCard" class="admin-only hidden mt-4 pt-4 border-t border-slate-200">
-            <h4 class="font-bold text-xs text-slate-900 mb-2">Vendor Settlement OTP Handover</h4>
-            <div id="adminSettlementOtpList" class="space-y-2"></div>
+          <div id="adminSettlementOtpCard" class="admin-only hidden mt-5 pt-5 border-t border-[var(--border-color)]">
+            <h4 class="font-extrabold text-[10px] text-[var(--text-primary)] uppercase tracking-wider mb-3">Vendor Settlement OTP</h4>
+            <div id="adminSettlementOtpList" class="space-y-3"></div>
           </div>
         </div>
       </div>
 
       <!-- TAB 3: ADMIN DAILY REPORTS (ADMIN ONLY) -->
-      <div id="panel-agent-reports" class="hidden space-y-4">
-        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4 no-print">
-          <div><h3 class="font-bold text-sm text-slate-900">Delivery Agent Daily Activity Statement</h3></div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Select Agent</label><select id="adminReportSelect" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"></select></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Date</label><input id="adminReportDate" type="date" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none" /></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Status Scope</label><select id="adminReportStatus" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
+      <div id="panel-agent-reports" class="hidden space-y-5">
+        <div class="ql-card p-6 space-y-5 no-print">
+          <div><h3 class="font-black text-sm text-[var(--text-primary)] uppercase tracking-widest">Agent Activity Statement</h3></div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div><label class="block text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest mb-1.5">Select Agent</label><select id="adminReportSelect" class="w-full text-xs font-bold border border-[var(--border-color)] rounded-xl px-4 py-2.5 bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all cursor-pointer"></select></div>
+            <div><label class="block text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest mb-1.5">Date</label><input id="adminReportDate" type="date" class="w-full text-xs font-bold border border-[var(--border-color)] rounded-xl px-4 py-2.5 bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all" /></div>
+            <div><label class="block text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest mb-1.5">Status Scope</label><select id="adminReportStatus" class="w-full text-xs font-bold border border-[var(--border-color)] rounded-xl px-4 py-2.5 bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all cursor-pointer"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
           </div>
-          <div class="flex flex-wrap gap-2 pt-1">
-            <button onclick="generateAdminAgentReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Generate View</button>
-            <button onclick="printAdminAgentReport()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Print Statement</button>
-            <button onclick="exportAgentDailyExcel('admin')" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Export .xlsx</button>
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button onclick="generateAdminAgentReport()" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-[var(--shadow-elevated)] border border-[#1e293b] uppercase tracking-widest transition-all">Generate View</button>
+            <button onclick="printAdminAgentReport()" class="bg-[var(--bg-base)] hover:bg-[var(--border-color)] text-[var(--text-primary)] border border-[var(--border-color)] text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-sm transition-colors uppercase tracking-widest">Print Statement</button>
+            <button onclick="exportAgentDailyExcel('admin')" class="bg-[#10b981]/10 hover:bg-[#10b981]/20 text-[var(--status-emerald)] border border-[#10b981]/30 text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-sm transition-colors uppercase tracking-widest">Export .xlsx</button>
           </div>
         </div>
 
-        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4 no-print mt-4">
-          <div><h3 class="font-bold text-sm text-slate-900">Pending Deficit Tracking (COC / CAD)</h3></div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="ql-card p-6 space-y-5 no-print mt-5">
+          <div><h3 class="font-black text-sm text-[var(--text-primary)] uppercase tracking-widest">Pending Deficit (COC/CAD)</h3></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-500 mb-1">Personnel Filter</label>
-              <select id="adminCocReportSelect" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"></select>
+              <label class="block text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest mb-1.5">Personnel Filter</label>
+              <select id="adminCocReportSelect" class="w-full text-xs font-bold border border-[var(--border-color)] rounded-xl px-4 py-2.5 bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all cursor-pointer"></select>
             </div>
-            <div class="flex items-end gap-2">
-              <button onclick="generateAdminCocReport()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Generate View</button>
-              <button onclick="printAdminCocReport()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Print PDF Summary</button>
+            <div class="flex items-end gap-3">
+              <button onclick="generateAdminCocReport()" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-[var(--shadow-elevated)] border border-[#1e293b] uppercase tracking-widest transition-all">Generate View</button>
+              <button onclick="printAdminCocReport()" class="bg-[var(--bg-base)] hover:bg-[var(--border-color)] text-[var(--text-primary)] border border-[var(--border-color)] text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-sm transition-colors uppercase tracking-widest">Print PDF</button>
             </div>
           </div>
         </div>
 
-        <div id="printableAdminAgentReport" class="hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6"></div>
+        <div id="printableAdminAgentReport" class="hidden bg-white p-8 rounded-2xl shadow-sm border border-gray-200 space-y-6"></div>
       </div>
 
       <!-- TAB 4: AGENT FINANCE (AGENT ONLY) -->
-      <div id="panel-agent-finance" class="hidden space-y-4">
-        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4 no-print">
-          <div><h3 class="font-bold text-sm text-slate-900">My Daily Finance Statement</h3></div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Date</label><input id="agentFinanceDate" type="date" onchange="generateAgentFinanceReport()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none" /></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Filter</label><select id="agentFinanceStatus" onchange="generateAgentFinanceReport()" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
+      <div id="panel-agent-finance" class="hidden space-y-5">
+        <div class="ql-card p-6 space-y-5 no-print">
+          <div><h3 class="font-black text-sm text-[var(--text-primary)] uppercase tracking-widest">My Finance Statement</h3></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div><label class="block text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest mb-1.5">Date</label><input id="agentFinanceDate" type="date" onchange="generateAgentFinanceReport()" class="w-full text-xs font-bold border border-[var(--border-color)] rounded-xl px-4 py-2.5 bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all" /></div>
+            <div><label class="block text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest mb-1.5">Filter</label><select id="agentFinanceStatus" onchange="generateAgentFinanceReport()" class="w-full text-xs font-bold border border-[var(--border-color)] rounded-xl px-4 py-2.5 bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all cursor-pointer"><option value="Delivered">Delivered Only</option><option value="ALL">All Statuses</option></select></div>
           </div>
-          <div class="flex flex-wrap gap-2 pt-1">
-            <button onclick="generateAgentFinanceReport()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Generate View</button>
-            <button onclick="printAgentFinanceReport()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Print</button>
-            <button onclick="exportAgentDailyExcel('agent')" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Export .xlsx</button>
-            <button onclick="sendAgentReportWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">Share WhatsApp</button>
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button onclick="generateAgentFinanceReport()" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-[var(--shadow-elevated)] border border-[#1e293b] uppercase tracking-widest transition-all">Generate View</button>
+            <button onclick="printAgentFinanceReport()" class="bg-[var(--bg-base)] hover:bg-[var(--border-color)] text-[var(--text-primary)] border border-[var(--border-color)] text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-sm transition-colors uppercase tracking-widest">Print</button>
+            <button onclick="exportAgentDailyExcel('agent')" class="bg-[var(--bg-base)] hover:bg-[var(--border-color)] text-[var(--text-primary)] border border-[var(--border-color)] text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-sm transition-colors uppercase tracking-widest">Export .xlsx</button>
+            <button onclick="sendAgentReportWhatsApp()" class="bg-[#10b981]/10 hover:bg-[#10b981]/20 text-[var(--status-emerald)] border border-[#10b981]/30 text-[11px] font-extrabold px-5 py-2.5 rounded-xl shadow-sm transition-colors uppercase tracking-widest">Share WhatsApp</button>
           </div>
         </div>
-        <div id="printableAgentFinance" class="glass-card p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
-          <div class="flex justify-between border-b border-slate-200 pb-4">
-            <div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-400">Agent Financial Statement</p></div>
-            <div class="text-right"><p id="afAgentNameDisplay" class="text-sm font-bold text-slate-900"></p><p id="afDateDisplay" class="text-xs text-slate-500 font-semibold"></p></div>
+        
+        <div id="printableAgentFinance" class="ql-card p-6 sm:p-8 space-y-6">
+          <div class="flex flex-col sm:flex-row justify-between border-b border-[var(--border-color)] pb-5 gap-3">
+            <div>
+              <h2 class="text-lg font-black text-[var(--text-primary)] uppercase tracking-tighter">Next Way Delivery</h2>
+              <p class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest mt-1">Agent Financial Statement</p>
+            </div>
+            <div class="sm:text-right">
+              <p id="afAgentNameDisplay" class="text-sm font-black text-[var(--text-primary)] uppercase"></p>
+              <p id="afDateDisplay" class="text-[10px] text-[var(--text-secondary)] font-extrabold tracking-widest uppercase mt-1"></p>
+            </div>
           </div>
           
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80"><p class="text-xs text-slate-400 font-medium">Delivered Entries</p><p id="afTotalCount" class="text-lg font-black text-slate-900 mt-0.5">0</p></div>
-            <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200"><p class="text-[10px] font-bold text-blue-800 uppercase">Gross Collected</p><p id="afTotalCollected" class="text-lg font-black text-blue-900 mt-0.5">0.00 AED</p></div>
-            <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200"><p class="text-[10px] font-bold text-rose-800 uppercase">Total Expenses</p><p id="afTotalExpenses" class="text-lg font-black text-rose-900 mt-0.5">0.00 AED</p></div>
-            <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-[10px] font-bold text-emerald-800 uppercase">Net Handover</p><p id="afNetHandover" class="text-lg font-black text-emerald-900 mt-0.5">0.00 AED</p></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-[var(--bg-base)] border border-[var(--border-color)]">
+              <p class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">Entries</p>
+              <p id="afTotalCount" class="text-xl font-black text-[var(--text-primary)] mt-1 tabular-nums">0</p>
+            </div>
+            <div class="p-4 rounded-xl bg-[var(--status-blue-bg)] border border-[#3b82f6]/20">
+              <p class="text-[10px] font-extrabold text-[var(--status-blue)] uppercase tracking-wider">Gross</p>
+              <p id="afTotalCollected" class="text-xl font-black text-[var(--status-blue)] mt-1 tabular-nums">0.00 AED</p>
+            </div>
+            <div class="p-4 rounded-xl bg-[var(--status-rose-bg)] border border-[#f43f5e]/20">
+              <p class="text-[10px] font-extrabold text-[var(--status-rose)] uppercase tracking-wider">Expenses</p>
+              <p id="afTotalExpenses" class="text-xl font-black text-[var(--status-rose)] mt-1 tabular-nums">0.00 AED</p>
+            </div>
+            <div class="p-4 rounded-xl bg-[var(--status-emerald-bg)] border border-[#10b981]/20">
+              <p class="text-[10px] font-extrabold text-[var(--status-emerald)] uppercase tracking-wider">Net</p>
+              <p id="afNetHandover" class="text-xl font-black text-[var(--status-emerald)] mt-1 tabular-nums">0.00 AED</p>
+            </div>
           </div>
           
           <div>
-            <h3 class="font-bold text-xs text-slate-900 mb-2 uppercase tracking-wide">Deliveries & Collections</h3>
-            <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody id="afTableBody" class="divide-y divide-slate-100"></tbody></table></div>
+            <h3 class="font-black text-xs text-[var(--text-primary)] mb-3 uppercase tracking-widest">Deliveries & Collections</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse tabular-nums">
+                <thead><tr class="bg-[var(--bg-base)] border-b border-[var(--border-color)]"><th class="p-3 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">ID</th><th class="p-3 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Customer</th><th class="p-3 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Type</th><th class="p-3 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold text-right">Amt Collected</th></tr></thead>
+                <tbody id="afTableBody" class="divide-y divide-[var(--border-color)]"></tbody>
+              </table>
+            </div>
           </div>
 
-          <div class="pt-4 border-t border-slate-200">
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-xs text-rose-800 uppercase tracking-wide">Daily Expenses Claimed</h3>
-              <button onclick="openExpenseModal()" class="no-print bg-slate-900 text-amber-400 font-bold px-3 py-1.5 rounded-lg text-[10px] shadow-sm hover:bg-slate-800">+ Add Expense</button>
+          <div class="pt-5 border-t border-[var(--border-color)]">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-black text-xs text-[var(--status-rose)] uppercase tracking-widest">Daily Expenses</h3>
+              <button onclick="openExpenseModal()" class="no-print bg-[#0b0f19] text-[var(--accent-gold)] font-extrabold px-4 py-2 rounded-xl text-[10px] uppercase tracking-widest shadow-[var(--shadow-elevated)] hover:bg-[#131b2e] border border-[#1e293b] transition-all">+ Add Expense</button>
             </div>
-            <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-rose-50 border-b border-rose-100 text-rose-900"><th class="p-2.5">Category</th><th class="p-2.5">Notes</th><th class="p-2.5 text-right">Amount</th><th class="p-2.5 text-center">Status</th><th class="p-2.5 text-right no-print">Action</th></tr></thead><tbody id="afExpenseBody" class="divide-y divide-slate-100"></tbody></table></div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse tabular-nums">
+                <thead><tr class="bg-[var(--status-rose-bg)] border-b border-[#f43f5e]/20 text-[var(--status-rose)]"><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Category</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Notes</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold text-right">Amount</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold text-center">Status</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold text-right no-print">Action</th></tr></thead>
+                <tbody id="afExpenseBody" class="divide-y divide-[var(--border-color)]"></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- TAB: PENDING DEFICIT (AGENT ONLY) -->
-      <div id="panel-agent-deficit" class="hidden space-y-4">
-        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200">
-          <div class="flex justify-between items-center mb-4">
-             <h3 class="font-bold text-sm text-slate-900">Pending Deficit from Vendors</h3>
-             <input id="agentDeficitSearch" oninput="renderAgentDeficit()" type="text" placeholder="Search ID..." class="text-xs border border-slate-200 rounded-xl px-3 py-1.5 bg-slate-50 outline-none focus:border-amber-500 transition w-36 sm:w-48 shadow-sm" />
+      <div id="panel-agent-deficit" class="hidden space-y-5">
+        <div class="ql-card p-6">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-5 border-b border-[var(--border-color)] pb-4">
+             <h3 class="font-black text-sm text-[var(--text-primary)] uppercase tracking-widest">Pending Vendor Deficits</h3>
+             <div class="relative w-full sm:w-56">
+               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+               <input id="agentDeficitSearch" oninput="renderAgentDeficit()" type="text" placeholder="Search ID..." class="w-full pl-9 pr-3 py-2.5 text-xs font-bold border border-[var(--border-color)] rounded-xl bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all uppercase placeholder-[var(--text-muted)] shadow-sm" />
+             </div>
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs border-collapse">
+            <table class="w-full text-left text-xs border-collapse tabular-nums">
               <thead>
-                <tr class="bg-slate-100 border-b border-slate-200">
-                  <th class="p-2.5">ID</th>
-                  <th class="p-2.5">Vendor</th>
-                  <th class="p-2.5 text-right">Amount</th>
-                  <th class="p-2.5 text-center">Action</th>
+                <tr class="bg-[var(--bg-base)] border-b border-[var(--border-color)]">
+                  <th class="p-3 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">ID</th>
+                  <th class="p-3 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Vendor</th>
+                  <th class="p-3 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold text-right">Amount</th>
+                  <th class="p-3 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold text-center">Action</th>
                 </tr>
               </thead>
-              <tbody id="agentDeficitTableBody" class="divide-y divide-slate-100"></tbody>
+              <tbody id="agentDeficitTableBody" class="divide-y divide-[var(--border-color)]"></tbody>
             </table>
           </div>
-          <div id="agentDeficitEmpty" class="hidden text-center text-slate-400 font-bold p-6">No pending deficits.</div>
+          <div id="agentDeficitEmpty" class="hidden text-center text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest p-8">No pending deficits.</div>
         </div>
       </div>
 
@@ -1948,14 +1980,14 @@
         const v = getVendorByCode(c.vendorCode);
         const { deficitAmt } = getDeficitInfo(c);
         return `
-          <tr>
-            <td class="p-2.5 font-bold">${c.id}</td>
-            <td class="p-2.5 uppercase">${v ? v.name : c.vendorCode}</td>
-            <td class="p-2.5 text-right font-black text-rose-600">${formatAmt(deficitAmt)} AED</td>
-            <td class="p-2.5">
-              <div class="flex justify-center gap-1.5">
-                <button onclick="markDeficitReceived('${c.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 px-3 rounded-xl text-[10px] sm:text-xs shadow-sm transition uppercase tracking-wide">Received</button>
-                <button onclick="viewDeliveryPhoto('${c.id}')" class="bg-slate-800 hover:bg-slate-900 text-amber-400 font-bold py-1.5 px-3 rounded-xl text-[10px] sm:text-xs shadow-sm transition uppercase tracking-wide">View</button>
+          <tr class="hover:bg-[var(--bg-base)] transition-colors">
+            <td class="p-3 font-black text-[var(--text-primary)]">${c.id}</td>
+            <td class="p-3 font-bold uppercase text-[var(--text-secondary)]">${v ? v.name : c.vendorCode}</td>
+            <td class="p-3 text-right font-black text-[var(--status-rose)]">${formatAmt(deficitAmt)} AED</td>
+            <td class="p-3">
+              <div class="flex justify-center gap-2">
+                <button onclick="markDeficitReceived('${c.id}')" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] font-extrabold py-1.5 px-4 rounded-xl text-[10px] shadow-sm transition-all uppercase tracking-widest border border-[#1e293b]">Received</button>
+                <button onclick="viewDeliveryPhoto('${c.id}')" class="bg-[var(--bg-base)] hover:bg-[var(--border-color)] text-[var(--text-primary)] border border-[var(--border-color)] font-extrabold py-1.5 px-4 rounded-xl text-[10px] shadow-sm transition-colors uppercase tracking-widest">View</button>
               </div>
             </td>
           </tr>
@@ -3242,15 +3274,15 @@
         const pm = c.pendingModification;
         let changesText = '';
         if (pm.type === 'FULL_EDIT') {
-            changesText = `<b>${c.id}</b>: Full details modified by Admin. (Product: <b class="text-emerald-700">${pm.productAmount}</b>, Fee: <b class="text-emerald-700">${pm.deliveryCharge}</b>)`;
+            changesText = `<b class="text-[var(--text-primary)] font-black text-sm">${c.id}</b>: Full details modified by Admin.<br><span class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Product: <b class="text-[var(--status-emerald)]">${pm.productAmount}</b> | Fee: <b class="text-[var(--status-emerald)]">${pm.deliveryCharge}</b></span>`;
         } else {
-            changesText = `<b>${c.id}</b>: Product ${c.productAmount} -> <b class="text-emerald-700">${pm.newProductAmount}</b> | Service Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${pm.newDeliveryCharge}</b>`;
+            changesText = `<b class="text-[var(--text-primary)] font-black text-sm">${c.id}</b>: Product ${c.productAmount} -> <b class="text-[var(--status-emerald)]">${pm.newProductAmount}</b> <br> <span class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Service Fee ${c.deliveryCharge} -> <b class="text-[var(--status-emerald)]">${pm.newDeliveryCharge}</b></span>`;
         }
         const btnHtml = (currentUser.role === 'AGENT' && c.assignedTo === currentUser.id) 
-            ? `<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-amber-400 font-bold px-4 py-1.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Confirm Edit</button>` 
-            : `<br/><span class="text-[10px] text-slate-500 font-medium">Waiting for field agent confirmation</span>`;
-        return `<div class="p-3.5 border border-amber-200 rounded-xl bg-amber-50 mb-2 text-xs">${changesText} ${btnHtml}</div>`;
-      }).join('') : '<p class="text-xs text-slate-500 font-medium">No pending modifications.</p>';
+            ? `<button onclick="agentConfirmModification('${c.id}')" class="block mt-3 bg-[#0b0f19] text-[var(--accent-gold)] font-extrabold px-5 py-2.5 rounded-xl shadow-md hover:bg-[#131b2e] border border-[#1e293b] transition-all uppercase tracking-widest text-[10px]">Confirm Edit</button>` 
+            : `<div class="mt-3"><span class="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest">Waiting for field agent confirmation</span></div>`;
+        return `<div class="p-4 border border-[#c9a24b]/30 rounded-xl bg-[#c9a24b]/5 mb-3 text-xs shadow-sm">${changesText} ${btnHtml}</div>`;
+      }).join('') : '<p class="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-widest">No pending modifications.</p>';
 
       if (currentUser.role === 'ADMIN') {
         const pendingOtps = db.vendorSettlementOtps.filter(o => o.status === 'PENDING');
@@ -3259,9 +3291,17 @@
           otpCard.classList.toggle('hidden', pendingOtps.length === 0);
           document.getElementById('adminSettlementOtpList').innerHTML = pendingOtps.map(o => {
             const v = getVendorByCode(o.vendorCode); const a = db.users.find(u => u.id === o.agentId); const agentName = a ? a.name : 'Unknown Agent';
-            return `<div class="p-3.5 border border-slate-200 rounded-xl bg-slate-50 mb-2 text-xs flex flex-col sm:flex-row justify-between sm:items-center gap-3">
-              <div><b>${v ? v.name : o.vendorCode}</b><br/><span class="text-slate-600">Amount: <b class="text-emerald-700">${formatAmt(o.amount)} AED</b></span><br/><span class="text-slate-600">Bearer: <b>${agentName}</b></span></div>
-              <div class="flex gap-1.5 shrink-0"><input id="verifyOtpInput_${o.id}" type="text" placeholder="OTP" class="w-16 border border-slate-200 rounded-xl px-2 py-1 text-xs text-center font-bold outline-none focus:border-amber-500 transition" /><button onclick="verifySettlementOtp('${o.id}')" class="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold px-3 py-1.5 rounded-xl shadow-sm transition">Verify</button><button onclick="cancelSettlementOtp('${o.id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-sm transition">Cancel</button></div>
+            return `<div class="p-4 border border-[var(--border-color)] rounded-xl bg-[var(--bg-base)] mb-3 text-xs flex flex-col sm:flex-row justify-between sm:items-center gap-4 shadow-sm">
+              <div class="space-y-1">
+                <b class="text-[var(--text-primary)] font-black text-sm uppercase">${v ? v.name : o.vendorCode}</b><br/>
+                <span class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-bold">Amount: <b class="text-[var(--status-emerald)] tabular-nums text-xs">${formatAmt(o.amount)} AED</b></span><br/>
+                <span class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-bold">Bearer: <b class="text-[var(--text-primary)]">${agentName}</b></span>
+              </div>
+              <div class="flex gap-2 shrink-0 items-center">
+                <input id="verifyOtpInput_${o.id}" type="text" placeholder="OTP" class="w-20 border border-[var(--border-color)] rounded-xl px-3 py-2 text-xs text-center font-black bg-[var(--bg-surface)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all uppercase tracking-widest placeholder-[var(--text-muted)] shadow-sm" />
+                <button onclick="verifySettlementOtp('${o.id}')" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--accent-gold)] font-extrabold px-4 py-2.5 rounded-xl shadow-[var(--shadow-elevated)] transition-all text-[10px] uppercase tracking-widest border border-[#1e293b]">Verify</button>
+                <button onclick="cancelSettlementOtp('${o.id}')" class="bg-[var(--bg-base)] hover:bg-[var(--border-color)] text-[var(--status-rose)] border border-[var(--border-color)] font-extrabold px-4 py-2.5 rounded-xl shadow-sm transition-colors text-[10px] uppercase tracking-widest">Cancel</button>
+              </div>
             </div>`;
           }).join('');
         }
@@ -3272,12 +3312,13 @@
           cocCard.classList.toggle('hidden', cocHandovers.length === 0);
           document.getElementById('adminCocHandoverList').innerHTML = cocHandovers.map(c => {
             const ag = db.users.find(u => u.id === c.pickedUpBy);
-            return `<div class="p-3.5 border border-blue-200 rounded-xl bg-blue-50 mb-2 text-xs flex justify-between items-center gap-3">
-              <div>
-                <b>${c.id}</b> - Agent: <b>${ag ? ag.name : c.pickedUpBy}</b><br/>
-                Amount: <b class="text-blue-800">${formatAmt(c.cocPendingAmount)} AED</b>
+            return `<div class="p-4 border border-[#3b82f6]/30 rounded-xl bg-[var(--status-blue-bg)] mb-3 text-xs flex flex-col sm:flex-row justify-between sm:items-center gap-4 shadow-sm">
+              <div class="space-y-1">
+                <b class="text-[var(--text-primary)] font-black text-sm tracking-widest uppercase">${c.id}</b><br/>
+                <span class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-bold">Agent: <b class="text-[var(--text-primary)]">${ag ? ag.name : c.pickedUpBy}</b></span><br/>
+                <span class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-bold">Amount: <b class="text-[var(--status-blue)] tabular-nums text-xs">${formatAmt(c.cocPendingAmount)} AED</b></span>
               </div>
-              <button onclick="adminConfirmPendingCoc('${c.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-1.5 rounded-xl shadow-sm shrink-0 transition">Confirm Physical Deposit</button>
+              <button onclick="adminConfirmPendingCoc('${c.id}')" class="bg-[#0b0f19] hover:bg-[#131b2e] text-[var(--status-blue)] font-extrabold px-5 py-2.5 rounded-xl shadow-md shrink-0 transition-all text-[10px] uppercase tracking-widest border border-[#1e293b]">Confirm Deposit</button>
             </div>`;
           }).join('');
         }
@@ -3443,7 +3484,7 @@
     function generateAdminAgentReport() {
       const id = document.getElementById('adminReportSelect').value, d = document.getElementById('adminReportDate').value, stat = document.getElementById('adminReportStatus').value, ag = db.users.find(u=>u.id===id);
       const { rows, totalCollected } = getAgentFinanceRows(id, d, stat);
-      const tbody = rows.map(r=>`<tr><td class="p-2.5 font-bold">${r.id}</td><td class="p-2.5">${r.customer}</td><td class="p-2.5">${r.type}</td><td class="p-2.5 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
+      const tbody = rows.map(r=>`<tr class="border-b border-gray-200/50"><td class="py-3 px-2 font-bold">${r.id}</td><td class="py-3 px-2">${r.customer}</td><td class="py-3 px-2">${r.type}</td><td class="py-3 px-2 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
       
       const exps = (db.agentExpenses || []).filter(e => e.agentId === id && e.date === d);
       const totExp = exps.reduce((sum, e) => sum + (e.status !== 'REJECTED' ? parseFloat(e.amount) : 0), 0);
@@ -3451,36 +3492,42 @@
 
       const expTbody = exps.length ? exps.map(e => {
           let statusBadge = '';
-          if (e.status === 'PENDING') statusBadge = `<span class="text-amber-600 font-bold">Pending</span>`;
-          if (e.status === 'APPROVED') statusBadge = `<span class="text-emerald-600 font-bold">Approved</span>`;
-          if (e.status === 'REJECTED') statusBadge = `<span class="text-rose-600 font-bold line-through">Rejected</span>`;
+          if (e.status === 'PENDING') statusBadge = `<span class="text-amber-600 font-bold uppercase tracking-wider text-[10px]">Pending</span>`;
+          if (e.status === 'APPROVED') statusBadge = `<span class="text-emerald-600 font-bold uppercase tracking-wider text-[10px]">Approved</span>`;
+          if (e.status === 'REJECTED') statusBadge = `<span class="text-rose-600 font-bold uppercase tracking-wider text-[10px] line-through">Rejected</span>`;
           
           let actionBtns = '';
           if (e.status === 'PENDING') {
-              actionBtns = `<div class="flex gap-1 justify-end no-print"><button onclick="updateExpenseStatus('${e.id}', 'APPROVED')" class="bg-emerald-100 text-emerald-700 border border-emerald-200 px-2 py-1 rounded text-[10px] font-bold">Approve</button><button onclick="updateExpenseStatus('${e.id}', 'REJECTED')" class="bg-rose-100 text-rose-700 border border-rose-200 px-2 py-1 rounded text-[10px] font-bold">Reject</button></div>`;
+              actionBtns = `<div class="flex gap-2 justify-end mt-1.5 no-print"><button onclick="updateExpenseStatus('${e.id}', 'APPROVED')" class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase hover:bg-emerald-100 transition-colors">Approve</button><button onclick="updateExpenseStatus('${e.id}', 'REJECTED')" class="bg-rose-50 text-rose-700 border border-rose-200 px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase hover:bg-rose-100 transition-colors">Reject</button></div>`;
           }
 
-          return `<tr><td class="p-2.5 font-bold">${e.category}</td><td class="p-2.5 text-slate-500">${e.notes}</td><td class="p-2.5 text-right font-black text-rose-600">${formatAmt(e.amount)}</td><td class="p-2.5 text-right">${statusBadge} ${actionBtns}</td></tr>`;
-      }).join('') : `<tr><td colspan="4" class="p-4 text-center text-slate-400 font-medium">No expenses logged.</td></tr>`;
+          return `<tr class="border-b border-gray-200/50"><td class="py-3 px-2 font-bold">${e.category}</td><td class="py-3 px-2 text-gray-500">${e.notes}</td><td class="py-3 px-2 text-right font-black text-rose-600">${formatAmt(e.amount)}</td><td class="py-3 px-2 text-right">${statusBadge} ${actionBtns}</td></tr>`;
+      }).join('') : `<tr><td colspan="4" class="p-6 text-center text-gray-400 font-bold text-[10px] uppercase tracking-widest">No expenses logged.</td></tr>`;
 
       document.getElementById('printableAdminAgentReport').innerHTML = `
-      <div class="flex justify-between border-b border-slate-200 pb-4">
-        <div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-500">Agent Cash Settlement</p></div>
-        <div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-slate-500 font-semibold">${d}</p></div>
+      <div class="flex justify-between border-b border-gray-300 pb-5">
+        <div>
+            <h2 class="text-xl font-black text-gray-900 uppercase tracking-tighter">NEXT WAY DELIVERY</h2>
+            <p class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest mt-1">Agent Cash Settlement</p>
+        </div>
+        <div class="text-right">
+            <p class="text-sm font-black text-gray-900 uppercase">${ag?ag.name:id}</p>
+            <p class="text-[10px] text-gray-500 font-extrabold tracking-widest uppercase mt-1">${d}</p>
+        </div>
       </div>
       
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-[10px] font-bold text-slate-500 uppercase">Total Entries</p><p class="text-lg font-bold text-slate-900">${rows.length}</p></div>
-        <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200"><p class="text-[10px] font-bold text-blue-800 uppercase">Gross Collected</p><p class="text-lg font-black text-blue-900">${formatAmt(totalCollected)} AED</p></div>
-        <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200"><p class="text-[10px] font-bold text-rose-800 uppercase">Claimed Expenses</p><p class="text-lg font-black text-rose-900">${formatAmt(totExp)} AED</p></div>
-        <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-[10px] font-bold text-emerald-800 uppercase">Net Cash Expected</p><p class="text-lg font-black text-emerald-900">${formatAmt(netCash)} AED</p></div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 my-6">
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><p class="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Entries</p><p class="text-xl font-black text-gray-900 mt-1 tabular-nums">${rows.length}</p></div>
+        <div class="p-4 rounded-xl bg-blue-50 border border-blue-200"><p class="text-[10px] font-extrabold text-blue-800 uppercase tracking-wider">Gross</p><p class="text-xl font-black text-blue-900 mt-1 tabular-nums">${formatAmt(totalCollected)} AED</p></div>
+        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200"><p class="text-[10px] font-extrabold text-rose-800 uppercase tracking-wider">Expenses</p><p class="text-xl font-black text-rose-900 mt-1 tabular-nums">${formatAmt(totExp)} AED</p></div>
+        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Net Cash</p><p class="text-xl font-black text-emerald-900 mt-1 tabular-nums">${formatAmt(netCash)} AED</p></div>
       </div>
       
-      <h3 class="font-bold text-xs text-slate-900 mb-2 uppercase tracking-wide">Deliveries & Collections</h3>
-      <div class="overflow-x-auto mb-6"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-slate-100">${tbody}</tbody></table></div>
+      <h3 class="font-black text-xs text-gray-900 mb-3 uppercase tracking-widest">Deliveries & Collections</h3>
+      <div class="overflow-x-auto mb-8"><table class="w-full text-left text-xs border-collapse tabular-nums"><thead><tr class="bg-gray-100 border-b border-gray-300"><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold">ID</th><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold">Customer</th><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold">Type</th><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-gray-100 text-gray-800">${tbody}</tbody></table></div>
       
-      <h3 class="font-bold text-xs text-rose-800 mb-2 uppercase tracking-wide">Daily Expenses</h3>
-      <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-rose-50 border-b border-rose-100 text-rose-900"><th class="p-2.5">Category</th><th class="p-2.5">Notes</th><th class="p-2.5 text-right">Amount</th><th class="p-2.5 text-right">Status / Action</th></tr></thead><tbody class="divide-y divide-slate-100">${expTbody}</tbody></table></div>
+      <h3 class="font-black text-xs text-rose-800 mb-3 uppercase tracking-widest">Daily Expenses</h3>
+      <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse tabular-nums"><thead><tr class="bg-rose-50 border-b border-rose-200 text-rose-900"><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Category</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Notes</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold text-right">Amount</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold text-right">Status / Action</th></tr></thead><tbody class="divide-y divide-rose-50 text-gray-800">${expTbody}</tbody></table></div>
       `;
       document.getElementById('printableAdminAgentReport').classList.remove('hidden');
     }
@@ -3546,28 +3593,28 @@
         tot += deficitAmt;
         const v = getVendorByCode(c.vendorCode);
         const a = db.users.find(u=>u.id===c.pickedUpBy);
-        return `<tr>
-          <td class="p-2.5 font-bold">${c.id}</td>
-          <td class="p-2.5">${v ? v.name : c.vendorCode}</td>
-          <td class="p-2.5">${a ? a.name : c.pickedUpBy}</td>
-          <td class="p-2.5 text-slate-500 font-medium">Pending Merchant</td>
-          <td class="p-2.5 text-right font-black text-rose-700">${formatAmt(deficitAmt)}</td>
+        return `<tr class="border-b border-gray-200/50">
+          <td class="py-3 px-2 font-bold">${c.id}</td>
+          <td class="py-3 px-2 uppercase">${v ? v.name : c.vendorCode}</td>
+          <td class="py-3 px-2">${a ? a.name : c.pickedUpBy}</td>
+          <td class="py-3 px-2 text-gray-500 font-bold uppercase tracking-wider text-[10px]">Pending Merchant</td>
+          <td class="py-3 px-2 text-right font-black text-rose-700">${formatAmt(deficitAmt)}</td>
         </tr>`;
       }).join('');
 
       document.getElementById('printableAdminAgentReport').innerHTML = `
-        <div class="flex justify-between border-b border-slate-200 pb-4">
-          <div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-500">Merchant Deficit Receivable Report</p></div>
-          <div class="text-right"><p class="text-sm font-bold text-slate-900">${ag ? ag.name : 'ALL ROSTER'}</p><p class="text-xs text-slate-500 font-semibold">${getUAEISOString().split('T')[0]}</p></div>
+        <div class="flex justify-between border-b border-gray-300 pb-5">
+          <div><h2 class="text-xl font-black text-gray-900 uppercase tracking-tighter">NEXT WAY DELIVERY</h2><p class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest mt-1">Merchant Deficit Receivable Report</p></div>
+          <div class="text-right"><p class="text-sm font-black text-gray-900 uppercase">${ag ? ag.name : 'ALL ROSTER'}</p><p class="text-[10px] text-gray-500 font-extrabold tracking-widest uppercase mt-1">${getUAEISOString().split('T')[0]}</p></div>
         </div>
-        <div class="grid grid-cols-2 gap-3 my-4">
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-xs text-slate-500">Total Pending Shipments</p><p class="text-lg font-bold text-slate-900">${ls.length}</p></div>
-          <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200"><p class="text-xs font-bold text-rose-800">Total Uncollected Deficit</p><p class="text-lg font-black text-rose-900">${formatAmt(tot)} AED</p></div>
+        <div class="grid grid-cols-2 gap-4 my-6">
+          <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><p class="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Pending Shipments</p><p class="text-xl font-black text-gray-900 mt-1 tabular-nums">${ls.length}</p></div>
+          <div class="p-4 rounded-xl bg-rose-50 border border-rose-200"><p class="text-[10px] font-extrabold text-rose-800 uppercase tracking-wider">Uncollected Deficit</p><p class="text-xl font-black text-rose-900 mt-1 tabular-nums">${formatAmt(tot)} AED</p></div>
         </div>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Merchant</th><th class="p-2.5">Agent</th><th class="p-2.5">Status</th><th class="p-2.5 text-right">Pending Receivable</th></tr></thead>
-            <tbody class="divide-y divide-slate-100">${tbody}</tbody>
+          <table class="w-full text-left text-xs border-collapse tabular-nums">
+            <thead><tr class="bg-gray-100 border-b border-gray-300"><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold">ID</th><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold">Merchant</th><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold">Agent</th><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold">Status</th><th class="p-3 text-[10px] uppercase tracking-wider text-gray-600 font-extrabold text-right">Pending Receivable</th></tr></thead>
+            <tbody class="divide-y divide-gray-100 text-gray-800">${tbody}</tbody>
           </table>
         </div>`;
         
@@ -3592,9 +3639,16 @@
       const totalExpenses = exps.reduce((sum, e) => sum + (e.status !== 'REJECTED' ? parseFloat(e.amount) : 0), 0);
       const netHandover = totalCollected - totalExpenses;
       
-      document.getElementById('afTableBody').innerHTML = rows.map(r=>`<tr><td class="p-2.5 font-bold">${r.id}</td><td class="p-2.5">${r.customer}</td><td class="p-2.5">${r.type}</td><td class="p-2.5 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
+      document.getElementById('afTableBody').innerHTML = rows.map(r=>`<tr class="hover:bg-[var(--bg-base)] transition-colors"><td class="p-3 font-black text-[var(--text-primary)]">${r.id}</td><td class="p-3 font-bold text-[var(--text-secondary)] uppercase">${r.customer}</td><td class="p-3 font-bold text-[var(--text-muted)] uppercase text-[10px]">${r.type}</td><td class="p-3 text-right font-black text-[var(--text-primary)]">${formatAmt(r.amount)}</td></tr>`).join('');
       
-      document.getElementById('afExpenseBody').innerHTML = exps.length ? exps.map(e => `<tr><td class="p-2.5 font-bold text-slate-800">${e.category}</td><td class="p-2.5 text-slate-500">${e.notes}</td><td class="p-2.5 text-right font-black text-rose-600">${formatAmt(e.amount)}</td><td class="p-2.5 text-center font-bold ${e.status==='APPROVED'?'text-emerald-600':(e.status==='REJECTED'?'text-rose-600 line-through':'text-amber-500')}">${e.status}</td><td class="p-2.5 text-right no-print">${e.status === 'PENDING' ? `<button onclick="deleteExpense('${e.id}')" class="text-rose-600 font-bold bg-rose-50 px-2 py-1 rounded border border-rose-200 hover:bg-rose-100 transition">Del</button>` : '-'}</td></tr>`).join('') : `<tr><td colspan="5" class="p-4 text-center text-slate-400 font-medium">No expenses logged for this date.</td></tr>`;
+      document.getElementById('afExpenseBody').innerHTML = exps.length ? exps.map(e => `
+        <tr class="hover:bg-[var(--status-rose-bg)] transition-colors">
+            <td class="p-3 font-black text-[var(--text-primary)]">${e.category}</td>
+            <td class="p-3 font-bold text-[var(--text-secondary)]">${e.notes}</td>
+            <td class="p-3 text-right font-black text-[var(--status-rose)]">${formatAmt(e.amount)}</td>
+            <td class="p-3 text-center font-black uppercase tracking-widest text-[10px] ${e.status==='APPROVED'?'text-[var(--status-emerald)]':(e.status==='REJECTED'?'text-[var(--status-rose)] line-through opacity-60':'text-[var(--accent-gold)]')}">${e.status}</td>
+            <td class="p-3 text-right no-print">${e.status === 'PENDING' ? `<button onclick="deleteExpense('${e.id}')" class="text-[var(--status-rose)] font-extrabold bg-[var(--bg-base)] px-3 py-1.5 rounded-lg border border-[var(--border-color)] hover:bg-[var(--border-color-strong)] transition-colors text-[10px] uppercase tracking-widest shadow-sm">Del</button>` : '<span class="text-[var(--text-muted)]">-</span>'}</td>
+        </tr>`).join('') : `<tr><td colspan="5" class="p-8 text-center text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest">No expenses logged for this date.</td></tr>`;
 
       document.getElementById('afTotalCount').textContent = rows.length; 
       document.getElementById('afTotalCollected').textContent = formatAmt(totalCollected) + ' AED';
