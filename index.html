@@ -61,6 +61,9 @@
       --text-muted: #475569;
       
       /* Status Tweaks for Dark */
+      --status-emerald: #34d399;
+      --status-rose: #fb7185;
+      --status-blue: #60a5fa;
       --border-color: rgba(255, 255, 255, 0.08);
       --border-color-strong: rgba(255, 255, 255, 0.15);
       --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -118,6 +121,7 @@
 
     /* Dock Navigation Tab */
     .tab-active { 
+      position: relative;
       color: var(--accent-gold) !important; 
       font-weight: 700; 
       background: linear-gradient(180deg, rgba(201, 162, 75, 0.08) 0%, rgba(201, 162, 75, 0) 100%); 
@@ -136,21 +140,30 @@
 
     /* Dark Mode Fallbacks (Safeguarding existing JS strings until they are updated) */
     body.dark-mode .glass-card, body.dark-mode .bg-white, body.dark-mode .bg-white\/90 { background-color: var(--bg-surface) !important; border-color: var(--border-color) !important; color: var(--text-primary) !important; }
-    body.dark-mode .bg-slate-50, body.dark-mode .bg-slate-100 { background-color: var(--bg-base) !important; border-color: var(--border-color) !important; }
-    body.dark-mode .text-slate-900, body.dark-mode .text-slate-800 { color: var(--text-primary) !important; }
-    body.dark-mode .text-slate-600, body.dark-mode .text-slate-500, body.dark-mode .text-slate-400 { color: var(--text-secondary) !important; }
-    body.dark-mode .border-slate-200, body.dark-mode .border-b, body.dark-mode .border-t { border-color: var(--border-color) !important; }
+    body.dark-mode .bg-slate-50, body.dark-mode .bg-slate-100, body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100 { background-color: var(--bg-base) !important; border-color: var(--border-color) !important; }
+    body.dark-mode .bg-slate-200, body.dark-mode .bg-gray-200, body.dark-mode .bg-gray-300 { background-color: var(--border-color-strong) !important; color: var(--text-primary) !important; border-color: var(--border-color) !important; }
+    
+    body.dark-mode .text-slate-900, body.dark-mode .text-slate-800, body.dark-mode .text-slate-700, body.dark-mode .text-gray-900, body.dark-mode .text-gray-800 { color: var(--text-primary) !important; }
+    body.dark-mode .text-slate-600, body.dark-mode .text-slate-500, body.dark-mode .text-slate-400, body.dark-mode .text-gray-600, body.dark-mode .text-gray-500 { color: var(--text-secondary) !important; }
+    body.dark-mode .border-slate-200, body.dark-mode .border-b, body.dark-mode .border-t, body.dark-mode .border-gray-200, body.dark-mode .border-gray-300 { border-color: var(--border-color) !important; }
     
     body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color: var(--bg-base) !important; color: var(--text-primary) !important; border-color: var(--border-color-strong) !important; }
     body.dark-mode input::placeholder { color: var(--text-muted) !important; }
     body.dark-mode th { border-bottom-color: var(--border-color) !important; background-color: rgba(255,255,255,0.03) !important; color: var(--text-secondary) !important; }
-    body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]), body.dark-mode .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-color) !important; }
-    
-    /* Safely mapped state backgrounds for existing JS classes */
+    body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]), body.dark-mode .divide-slate-200 > :not([hidden]) ~ :not([hidden]), body.dark-mode .divide-gray-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-color) !important; }
+    body.dark-mode .hover\:bg-slate-200:hover, body.dark-mode .hover\:bg-slate-300:hover { background-color: var(--border-color-strong) !important; color: var(--text-primary) !important; }
+    body.dark-mode .shadow-sm, body.dark-mode .shadow-md, body.dark-mode .shadow-xl { box-shadow: var(--shadow-subtle) !important; }
+
+    /* Safely mapped state backgrounds and text colors for existing JS classes */
     body.dark-mode .bg-emerald-50, body.dark-mode .bg-emerald-50\/60 { background-color: var(--status-emerald-bg) !important; border-color: rgba(16, 185, 129, 0.2) !important; }
     body.dark-mode .bg-rose-50, body.dark-mode .bg-red-50 { background-color: var(--status-rose-bg) !important; border-color: rgba(244, 63, 94, 0.2) !important; }
     body.dark-mode .bg-blue-50, body.dark-mode .bg-blue-50\/60 { background-color: var(--status-blue-bg) !important; border-color: rgba(59, 130, 246, 0.2) !important; }
     body.dark-mode .bg-amber-50, body.dark-mode .bg-amber-100\/90 { background-color: rgba(201, 162, 75, 0.1) !important; border-color: rgba(201, 162, 75, 0.2) !important; }
+
+    body.dark-mode .text-emerald-700, body.dark-mode .text-emerald-800, body.dark-mode .text-emerald-900 { color: var(--status-emerald) !important; }
+    body.dark-mode .text-rose-700, body.dark-mode .text-rose-600, body.dark-mode .text-rose-800, body.dark-mode .text-red-700, body.dark-mode .text-red-600 { color: var(--status-rose) !important; }
+    body.dark-mode .text-blue-700, body.dark-mode .text-blue-800, body.dark-mode .text-blue-900 { color: var(--status-blue) !important; }
+    body.dark-mode .text-amber-700, body.dark-mode .text-amber-800 { color: var(--accent-gold) !important; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen antialiased selection:bg-amber-500 selection:text-slate-900">
