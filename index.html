@@ -20,54 +20,137 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <style>
+    :root {
+      /* Palette: Light / Warm Ivory & Porcelain */
+      --bg-base: #fcfbf9;
+      --bg-surface: #ffffff;
+      --text-primary: #0b0f19;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      
+      /* Accent: Champagne Gold */
+      --accent-gold: #c9a24b;
+      --accent-gold-light: #e5c77a;
+      --accent-gold-dark: #a68233;
+      
+      /* Status Semantics (Muted) */
+      --status-emerald: #10b981;
+      --status-emerald-bg: rgba(16, 185, 129, 0.08);
+      --status-rose: #f43f5e;
+      --status-rose-bg: rgba(244, 63, 94, 0.08);
+      --status-blue: #3b82f6;
+      --status-blue-bg: rgba(59, 130, 246, 0.08);
+      
+      /* Surfaces & Geometry */
+      --border-color: rgba(11, 15, 25, 0.08);
+      --border-color-strong: rgba(11, 15, 25, 0.15);
+      --shadow-subtle: 0 4px 20px rgba(11, 15, 25, 0.03);
+      --shadow-elevated: 0 12px 32px rgba(11, 15, 25, 0.06);
+      --glass-bg: rgba(255, 255, 255, 0.85);
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+    }
+
+    body.dark-mode {
+      /* Palette: Dark / Deep Ink */
+      --bg-base: #05070a;
+      --bg-surface: #0b0f19;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #475569;
+      
+      /* Status Tweaks for Dark */
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-color-strong: rgba(255, 255, 255, 0.15);
+      --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.6);
+      --glass-bg: rgba(11, 15, 25, 0.85);
+    }
+
     @media print {
       body * { visibility: hidden !important; }
       .print-area, .print-area * { visibility: visible !important; }
-      .print-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0.5rem !important; }
+      .print-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0.5rem !important; background: white !important; }
       .no-print { display: none !important; }
     }
-    * { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: -0.01em; }
-    body { padding-bottom: 84px; transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1); } 
-    .tab-active { color: #f59e0b !important; font-weight: 700; background: linear-gradient(180deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0) 100%); border-top: 2.5px solid #f59e0b; }
+
+    /* Core Typography & Base */
+    * { 
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; 
+      letter-spacing: -0.015em; 
+    }
+    body { 
+      background-color: var(--bg-base); 
+      color: var(--text-primary);
+      padding-bottom: 84px; 
+      transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    }
+    
+    /* Tabular Numerals for premium financial feel */
+    input[type="number"], td, th, .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Utilities preserved for JS */
     .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Custom Glass & Depth */
-    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.8); }
-    .gold-gradient { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+    /* Custom Luxury Components */
+    .glass-card, .ql-card { 
+      background: var(--bg-surface); 
+      border: 1px solid var(--border-color); 
+      box-shadow: var(--shadow-subtle);
+      border-radius: var(--radius-lg);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-panel {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-color: var(--border-color);
+    }
+    .gold-gradient { 
+      background: linear-gradient(135deg, var(--accent-gold-light) 0%, var(--accent-gold-dark) 100%); 
+      color: #0b0f19 !important;
+    }
 
-    /* Dark Mode Theme */
-    body.dark-mode { background-color: #0b0f19 !important; color: #f1f5f9 !important; }
-    body.dark-mode .glass-card, 
-    body.dark-mode .bg-white,
-    body.dark-mode .bg-white\/90 { background-color: #131b2e !important; border-color: #1e293b !important; color: #f1f5f9 !important; }
-    body.dark-mode .bg-gray-50, body.dark-mode .bg-gray-100, body.dark-mode .bg-slate-100, body.dark-mode .bg-slate-50, body.dark-mode .bg-slate-50\/80 { background-color: #0d1424 !important; border-color: #1e293b !important; }
-    body.dark-mode .bg-gray-200, body.dark-mode .bg-gray-300, body.dark-mode .bg-slate-200 { background-color: #1e293b !important; color: #f8fafc !important; border-color: #475569 !important; }
-    body.dark-mode .text-slate-900, body.dark-mode .text-slate-800, body.dark-mode .text-gray-900, body.dark-mode .text-gray-800, body.dark-mode .text-slate-700 { color: #f8fafc !important; }
-    body.dark-mode .text-gray-600, body.dark-mode .text-gray-500, body.dark-mode .text-slate-600, body.dark-mode .text-slate-500, body.dark-mode .text-slate-400 { color: #94a3b8 !important; }
-    body.dark-mode .border-gray-200, body.dark-mode .border-gray-300, body.dark-mode .border-gray-100, body.dark-mode .border-b, body.dark-mode .border-t, body.dark-mode .border-slate-200, body.dark-mode .border-slate-100, body.dark-mode .border-slate-200\/80 { border-color: #1e293b !important; }
-    body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color: #0b0f19 !important; color: #f8fafc !important; border-color: #334155 !important; }
-    body.dark-mode input::placeholder { color: #475569 !important; }
-    body.dark-mode .shadow-sm, body.dark-mode .shadow-md, body.dark-mode .shadow-xl { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important; }
-    
-    /* Dark Mode State Colors */
-    body.dark-mode .bg-emerald-50, body.dark-mode .bg-emerald-50\/60 { background-color: rgba(16, 185, 129, 0.12) !important; border-color: rgba(16, 185, 129, 0.25) !important; }
-    body.dark-mode .bg-yellow-50, body.dark-mode .bg-amber-50 { background-color: rgba(245, 158, 11, 0.12) !important; border-color: rgba(245, 158, 11, 0.25) !important; }
-    body.dark-mode .bg-red-50, body.dark-mode .bg-rose-50 { background-color: rgba(239, 68, 68, 0.12) !important; border-color: rgba(239, 68, 68, 0.25) !important; }
-    body.dark-mode .bg-blue-50, body.dark-mode .bg-blue-50\/60 { background-color: rgba(59, 130, 246, 0.12) !important; border-color: rgba(59, 130, 246, 0.25) !important; }
-    body.dark-mode .bg-amber-100\/90 { background-color: rgba(245, 158, 11, 0.15) !important; border-color: rgba(245, 158, 11, 0.3) !important; }
+    /* Dock Navigation Tab */
+    .tab-active { 
+      color: var(--accent-gold) !important; 
+      font-weight: 700; 
+      background: linear-gradient(180deg, rgba(201, 162, 75, 0.08) 0%, rgba(201, 162, 75, 0) 100%); 
+    }
+    .tab-active::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 3px;
+      background: var(--accent-gold);
+      border-radius: 0 0 3px 3px;
+    }
 
-    body.dark-mode .text-emerald-700, body.dark-mode .text-emerald-800, body.dark-mode .text-emerald-900 { color: #34d399 !important; }
-    body.dark-mode .text-rose-700, body.dark-mode .text-rose-600, body.dark-mode .text-rose-800, body.dark-mode .text-red-700, body.dark-mode .text-red-600 { color: #f87171 !important; }
-    body.dark-mode .text-blue-700, body.dark-mode .text-blue-800, body.dark-mode .text-blue-900 { color: #60a5fa !important; }
-    body.dark-mode .text-amber-700, body.dark-mode .text-amber-800 { color: #fbbf24 !important; }
+    /* Dark Mode Fallbacks (Safeguarding existing JS strings until they are updated) */
+    body.dark-mode .glass-card, body.dark-mode .bg-white, body.dark-mode .bg-white\/90 { background-color: var(--bg-surface) !important; border-color: var(--border-color) !important; color: var(--text-primary) !important; }
+    body.dark-mode .bg-slate-50, body.dark-mode .bg-slate-100 { background-color: var(--bg-base) !important; border-color: var(--border-color) !important; }
+    body.dark-mode .text-slate-900, body.dark-mode .text-slate-800 { color: var(--text-primary) !important; }
+    body.dark-mode .text-slate-600, body.dark-mode .text-slate-500, body.dark-mode .text-slate-400 { color: var(--text-secondary) !important; }
+    body.dark-mode .border-slate-200, body.dark-mode .border-b, body.dark-mode .border-t { border-color: var(--border-color) !important; }
     
-    body.dark-mode th { border-bottom-color: #1e293b !important; background-color: #0d1424 !important; color: #cbd5e1 !important; }
-    body.dark-mode .divide-gray-200 > :not([hidden]) ~ :not([hidden]), 
-    body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
-    body.dark-mode .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: #1e293b !important; }
-    body.dark-mode .hover\:bg-slate-200:hover, body.dark-mode .hover\:bg-slate-300:hover { background-color: #1e293b !important; color: #fff !important; }
+    body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color: var(--bg-base) !important; color: var(--text-primary) !important; border-color: var(--border-color-strong) !important; }
+    body.dark-mode input::placeholder { color: var(--text-muted) !important; }
+    body.dark-mode th { border-bottom-color: var(--border-color) !important; background-color: rgba(255,255,255,0.03) !important; color: var(--text-secondary) !important; }
+    body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]), body.dark-mode .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-color) !important; }
+    
+    /* Safely mapped state backgrounds for existing JS classes */
+    body.dark-mode .bg-emerald-50, body.dark-mode .bg-emerald-50\/60 { background-color: var(--status-emerald-bg) !important; border-color: rgba(16, 185, 129, 0.2) !important; }
+    body.dark-mode .bg-rose-50, body.dark-mode .bg-red-50 { background-color: var(--status-rose-bg) !important; border-color: rgba(244, 63, 94, 0.2) !important; }
+    body.dark-mode .bg-blue-50, body.dark-mode .bg-blue-50\/60 { background-color: var(--status-blue-bg) !important; border-color: rgba(59, 130, 246, 0.2) !important; }
+    body.dark-mode .bg-amber-50, body.dark-mode .bg-amber-100\/90 { background-color: rgba(201, 162, 75, 0.1) !important; border-color: rgba(201, 162, 75, 0.2) !important; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen antialiased selection:bg-amber-500 selection:text-slate-900">
