@@ -529,8 +529,7 @@
             </div>
           </div>
         </div>
-      </div>
-      <!-- TAB: PENDING DEFICIT (AGENT ONLY) -->
+      </div>      <!-- TAB: PENDING DEFICIT (AGENT ONLY) -->
       <div id="panel-agent-deficit" class="hidden space-y-5">
         <div class="ql-card p-6">
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-5 border-b border-[var(--border-color)] pb-4">
@@ -1066,7 +1065,7 @@
         </div>
         <div class="flex justify-end gap-3 pt-5 border-t border-[var(--border-color)]">
           <button type="button" onclick="closeModal('expenseModal')" class="px-5 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-color)] font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-color-strong)] transition-colors">Cancel</button>
-          <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#0b0f19] text-[var(--accent-gold)] font-extrabold shadow-md hover:bg-[#131b2e] border border-[#1e293b] transition-all uppercase tracking-wider">Save Expense</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#0b0f19] text-[var(--accent-gold)] font-extrabold shadow-[var(--shadow-elevated)] hover:bg-[#131b2e] border border-[#1e293b] transition-all uppercase tracking-wider">Save Expense</button>
         </div>
       </form>
     </div>
@@ -1237,8 +1236,7 @@
       </div>
     </div>
   </div>
-
-  \u003Cbutton type=\"submit\" class=\"px-6 py-2.5 rounded-xl bg-[#0b0f19] text-[var(--accent-gold)] font-extrabold shadow-[var(--shadow-elevated)] hover:bg-[#131b2e] border border-[#1e293b] transition-all uppercase tracking-wider\">Post Ledger\u003C/button>
+  
   <div id="vendorModal" class="hidden fixed inset-0 bg-[#0b0f19]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="ql-card max-w-md w-full p-6 space-y-5 text-xs">
       <div class="flex justify-between items-center border-b border-[var(--border-color)] pb-3">
@@ -3139,14 +3137,11 @@
         }
     }
 
-    function submitPodReturn() {
-        const cid = window.currentPodCid;
-        closeModal('podModal');
-        openReturnModal(cid); 
-    }
-
     async function submitPodDelivered(e) {
+        if (e) e.preventDefault();
         const cid = window.currentPodCid;
+        if (!cid) return alert('Error: Consignment ID missing.');
+        
         const c = db.consignments.find(x => x.id === cid);
         if (!c) return;
         
@@ -3158,10 +3153,12 @@
             return alert('Validation Failed: Please enter NCND Remarks because NCND Collected is less than NCND Amount.');
         }
         
-        const selectedPayMethod = document.querySelector('input[name="podPayMethod"]:checked').value;
+        const selectedPayRadio = document.querySelector('input[name="podPayMethod"]:checked');
+        const selectedPayMethod = selectedPayRadio ? selectedPayRadio.value : 'COD';
+        
         const payModeRemarks = document.getElementById('podPayModeRemarks').value.trim();
         
-        if (selectedPayMethod !== currentPodDefaultMethod && !payModeRemarks) {
+        if (selectedPayMethod !== (currentPodDefaultMethod || 'COD') && !payModeRemarks) {
             return alert('Validation Failed: Please enter Payment Mode Remarks since the default Payment Method was changed.');
         }
         
@@ -3190,7 +3187,8 @@
         const ncndAmt = parseFloat(document.getElementById('podNcndAmount').value) || 0;
         const ncndCol = parseFloat(document.getElementById('podNcndCollected').value) || 0;
         const ncndRemarks = document.getElementById('podNcndRemarks').value.trim();
-        const selectedPayMethod = document.querySelector('input[name="podPayMethod"]:checked').value;
+        const selectedPayRadio = document.querySelector('input[name="podPayMethod"]:checked');
+        const selectedPayMethod = selectedPayRadio ? selectedPayRadio.value : 'COD';
         const payModeRemarks = document.getElementById('podPayModeRemarks').value.trim();
         const courierCharge = parseFloat(document.getElementById('podCourierCharge').value) || 0;
         const codCol = parseFloat(document.getElementById('podCodCollected').value) || 0;
@@ -3227,7 +3225,7 @@
         c.podData = {
             receiverName: document.getElementById('podReceiverName').value.trim(),
             ncndCollected: ncndCol,
-            ncndPayMethod: document.querySelector('input[name="podNcndPayMethod"]:checked').value,
+            ncndPayMethod: document.querySelector('input[name="podNcndPayMethod"]:checked') ? document.querySelector('input[name="podNcndPayMethod"]:checked').value : 'Cash',
             ncndRemarks: ncndRemarks,
             payMethod: selectedPayMethod,
             payModeRemarks: payModeRemarks,
@@ -3241,6 +3239,13 @@
         refreshAllViews();
     }
 
+    function submitPodReturn() {
+        const cid = window.currentPodCid;
+        if (!cid) return alert("Error: Consignment ID not found.");
+        closeModal('podModal');
+        openReturnModal(cid); 
+    }
+
     function openDeliveryModal(cid) { const c = db.consignments.find(x=>x.id===cid); const collectAmt = c.feeType === 'COD' ? (parseFloat(c.productAmount) + parseFloat(c.deliveryCharge)) : parseFloat(c.productAmount); document.getElementById('actionModalTitle').textContent = `Deliver: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<div class="mb-4 p-4 bg-[var(--status-emerald-bg)] border border-[#10b981]/20 rounded-xl text-center"><p class="text-[10px] font-extrabold text-[var(--status-emerald)] uppercase tracking-widest mb-1.5">Collect from Customer</p><p class="text-3xl text-[var(--status-emerald)] font-black tabular-nums tracking-tighter">${formatAmt(collectAmt)} <span class="text-sm">AED</span></p></div><label class="block text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-secondary)] mb-1.5">Upload Proof</label><input type="file" accept="image/*" capture="environment" onchange="handleModalPhoto(event)" class="w-full mb-4 font-bold bg-[var(--bg-base)] p-3 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] text-xs outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all" /><img id="modalPhotoPreview" src="${tempPhotoData||''}" class="${tempPhotoData?'':'hidden'} h-32 mb-5 object-cover rounded-xl border border-[var(--border-color)] mx-auto shadow-sm" /><button id="btnConfirmAction" onclick="confirmDelivery('${c.id}')" class="w-full bg-[var(--status-emerald)] hover:bg-[#059669] text-white font-extrabold py-3.5 rounded-xl shadow-[var(--shadow-elevated)] transition-colors uppercase tracking-widest text-[11px]">Confirm Handover</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
     
     async function confirmDelivery(cid) { 
@@ -3252,6 +3257,8 @@
     
     function openReturnModal(cid) {
       const c = db.consignments.find(x => x.id === cid);
+      if (!c) return;
+      
       document.getElementById('actionModalTitle').textContent = `Return Consignment: ${c.id}`;
       document.getElementById('actionModalBody').innerHTML = `
         <div class="mb-4 p-4 bg-[var(--status-rose-bg)] border border-[#f43f5e]/20 rounded-xl">
@@ -3280,14 +3287,14 @@
     }
     
     function sendWhatsAppStatus(cid) { 
-  const c = db.consignments.find(x => x.id === cid); 
-  const v = getVendorByCode(c.vendorCode);
-  const vendorName = v ? v.name : c.vendorCode;
-  const collectAmt = c.feeType === 'COD' ? (parseFloat(c.productAmount) + parseFloat(c.deliveryCharge)) : parseFloat(c.productAmount); 
-  
-  const message = `Dear Customer,\nYour Shipment RefNo: *${c.id}*\n(From : *${vendorName}*),is on the way for delivery.\nAmount: Aed *${formatAmt(collectAmt)}*`;
-  
-  window.open(`https://wa.me/${c.customerPhone.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(message)}`,'_blank'); 
+      const c = db.consignments.find(x => x.id === cid); 
+      const v = getVendorByCode(c.vendorCode);
+      const vendorName = v ? v.name : c.vendorCode;
+      const collectAmt = c.feeType === 'COD' ? (parseFloat(c.productAmount) + parseFloat(c.deliveryCharge)) : parseFloat(c.productAmount); 
+      
+      const message = `Dear Customer,\nYour Shipment RefNo: *${c.id}*\n(From : *${vendorName}*),is on the way for delivery.\nAmount: Aed *${formatAmt(collectAmt)}*`;
+      
+      window.open(`https://wa.me/${c.customerPhone.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(message)}`,'_blank'); 
     }
     
     function renderConfirmations() {
@@ -3415,7 +3422,7 @@
             </div>
             ` : ''}
           </div>
-          <div id="qrCodeCanvas" class="flex justify-center items-center p-3 rounded-xl bg-white border border-[var(--border-color)] shrink-0 min-w-[90px] shadow-sm self-start sm:self-auto"></div>
+          <div id="qrCodeCanvas" class="flex justify-center items-center p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-color)] shrink-0 min-w-[90px] shadow-sm self-start sm:self-auto"></div>
         </div>
         
         <div class="grid grid-cols-2 gap-4 text-xs mb-5">
@@ -3474,7 +3481,20 @@
       
       document.getElementById('inspectContent').innerHTML = html + actionButtons; 
       document.getElementById('inspectModal').classList.remove('hidden'); 
-      if(c.qrGenerated){ setTimeout(()=>{ document.getElementById('qrCodeCanvas').innerHTML=''; new QRCode(document.getElementById('qrCodeCanvas'),{text:JSON.stringify({id:c.id}),width:72,height:72,colorDark:"#0b0f19",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.L}); }, 100); }
+      if(c.qrGenerated){ 
+          setTimeout(()=>{ 
+              document.getElementById('qrCodeCanvas').innerHTML=''; 
+              const isDarkMode = document.body.classList.contains('dark-mode');
+              new QRCode(document.getElementById('qrCodeCanvas'),{
+                  text:JSON.stringify({id:c.id}),
+                  width:72,
+                  height:72,
+                  colorDark: isDarkMode ? "#ffffff" : "#0b0f19",
+                  colorLight: isDarkMode ? "#0b0f19" : "#ffffff",
+                  correctLevel:QRCode.CorrectLevel.L
+              }); 
+          }, 100); 
+      }
     }
 
     function getAgentFinanceRows(agentId, dateStr, statusFilter) {
@@ -3512,7 +3532,7 @@
     function generateAdminAgentReport() {
       const id = document.getElementById('adminReportSelect').value, d = document.getElementById('adminReportDate').value, stat = document.getElementById('adminReportStatus').value, ag = db.users.find(u=>u.id===id);
       const { rows, totalCollected } = getAgentFinanceRows(id, d, stat);
-      const tbody = rows.map(r=>`<tr class="border-b border-gray-200/50"><td class="py-3 px-2 font-bold">${r.id}</td><td class="py-3 px-2">${r.customer}</td><td class="py-3 px-2">${r.type}</td><td class="py-3 px-2 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
+      const tbody = rows.map(r=>`<tr class="border-b border-[var(--border-color)]"><td class="py-3 px-2 font-bold">${r.id}</td><td class="py-3 px-2">${r.customer}</td><td class="py-3 px-2">${r.type}</td><td class="py-3 px-2 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
       
       const exps = (db.agentExpenses || []).filter(e => e.agentId === id && e.date === d);
       const totExp = exps.reduce((sum, e) => sum + (e.status !== 'REJECTED' ? parseFloat(e.amount) : 0), 0);
@@ -3520,17 +3540,17 @@
 
       const expTbody = exps.length ? exps.map(e => {
           let statusBadge = '';
-          if (e.status === 'PENDING') statusBadge = `<span class="text-amber-600 font-bold uppercase tracking-wider text-[10px]">Pending</span>`;
-          if (e.status === 'APPROVED') statusBadge = `<span class="text-emerald-600 font-bold uppercase tracking-wider text-[10px]">Approved</span>`;
-          if (e.status === 'REJECTED') statusBadge = `<span class="text-rose-600 font-bold uppercase tracking-wider text-[10px] line-through">Rejected</span>`;
+          if (e.status === 'PENDING') statusBadge = `<span class="text-[var(--accent-gold)] font-bold uppercase tracking-wider text-[10px]">Pending</span>`;
+          if (e.status === 'APPROVED') statusBadge = `<span class="text-[var(--status-emerald)] font-bold uppercase tracking-wider text-[10px]">Approved</span>`;
+          if (e.status === 'REJECTED') statusBadge = `<span class="text-[var(--status-rose)] font-bold uppercase tracking-wider text-[10px] line-through">Rejected</span>`;
           
           let actionBtns = '';
           if (e.status === 'PENDING') {
-              actionBtns = `<div class="flex gap-2 justify-end mt-1.5 no-print"><button onclick="updateExpenseStatus('${e.id}', 'APPROVED')" class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase hover:bg-emerald-100 transition-colors">Approve</button><button onclick="updateExpenseStatus('${e.id}', 'REJECTED')" class="bg-rose-50 text-rose-700 border border-rose-200 px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase hover:bg-rose-100 transition-colors">Reject</button></div>`;
+              actionBtns = `<div class="flex gap-2 justify-end mt-1.5 no-print"><button onclick="updateExpenseStatus('${e.id}', 'APPROVED')" class="bg-[var(--status-emerald-bg)] text-[var(--status-emerald)] border border-[#10b981]/20 px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase transition-colors">Approve</button><button onclick="updateExpenseStatus('${e.id}', 'REJECTED')" class="bg-[var(--status-rose-bg)] text-[var(--status-rose)] border border-[#f43f5e]/20 px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase transition-colors">Reject</button></div>`;
           }
 
-          return `<tr class="border-b border-gray-200/50"><td class="py-3 px-2 font-bold">${e.category}</td><td class="py-3 px-2 text-gray-500">${e.notes}</td><td class="py-3 px-2 text-right font-black text-rose-600">${formatAmt(e.amount)}</td><td class="py-3 px-2 text-right">${statusBadge} ${actionBtns}</td></tr>`;
-      }).join('') : `<tr><td colspan="4" class="p-6 text-center text-gray-400 font-bold text-[10px] uppercase tracking-widest">No expenses logged.</td></tr>`;
+          return `<tr class="border-b border-[var(--border-color)]"><td class="py-3 px-2 font-bold">${e.category}</td><td class="py-3 px-2 text-[var(--text-secondary)]">${e.notes}</td><td class="py-3 px-2 text-right font-black text-[var(--status-rose)]">${formatAmt(e.amount)}</td><td class="py-3 px-2 text-right">${statusBadge} ${actionBtns}</td></tr>`;
+      }).join('') : `<tr><td colspan="4" class="p-6 text-center text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest">No expenses logged.</td></tr>`;
 
       document.getElementById('printableAdminAgentReport').innerHTML = `
       <div class="flex justify-between border-b border-gray-300 pb-5">
