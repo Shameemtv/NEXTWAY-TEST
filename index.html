@@ -373,11 +373,26 @@
             <div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-400">Agent Financial Statement</p></div>
             <div class="text-right"><p id="afAgentNameDisplay" class="text-sm font-bold text-slate-900"></p><p id="afDateDisplay" class="text-xs text-slate-500 font-semibold"></p></div>
           </div>
+          
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80"><p class="text-xs text-slate-400 font-medium">Delivered Entries</p><p id="afTotalCount" class="text-lg font-black text-slate-900 mt-0.5">0</p></div>
-            <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Settled</p><p id="afTotalCollected" class="text-lg font-black text-emerald-900 mt-0.5">0.00 AED</p></div>
+            <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200"><p class="text-[10px] font-bold text-blue-800 uppercase">Gross Collected</p><p id="afTotalCollected" class="text-lg font-black text-blue-900 mt-0.5">0.00 AED</p></div>
+            <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200"><p class="text-[10px] font-bold text-rose-800 uppercase">Total Expenses</p><p id="afTotalExpenses" class="text-lg font-black text-rose-900 mt-0.5">0.00 AED</p></div>
+            <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-[10px] font-bold text-emerald-800 uppercase">Net Handover</p><p id="afNetHandover" class="text-lg font-black text-emerald-900 mt-0.5">0.00 AED</p></div>
           </div>
-          <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody id="afTableBody" class="divide-y divide-slate-100"></tbody></table></div>
+          
+          <div>
+            <h3 class="font-bold text-xs text-slate-900 mb-2 uppercase tracking-wide">Deliveries & Collections</h3>
+            <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody id="afTableBody" class="divide-y divide-slate-100"></tbody></table></div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-200">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-xs text-rose-800 uppercase tracking-wide">Daily Expenses Claimed</h3>
+              <button onclick="openExpenseModal()" class="no-print bg-slate-900 text-amber-400 font-bold px-3 py-1.5 rounded-lg text-[10px] shadow-sm hover:bg-slate-800">+ Add Expense</button>
+            </div>
+            <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-rose-50 border-b border-rose-100 text-rose-900"><th class="p-2.5">Category</th><th class="p-2.5">Notes</th><th class="p-2.5 text-right">Amount</th><th class="p-2.5 text-center">Status</th><th class="p-2.5 text-right no-print">Action</th></tr></thead><tbody id="afExpenseBody" class="divide-y divide-slate-100"></tbody></table></div>
+          </div>
         </div>
       </div>
 
@@ -560,6 +575,42 @@
         </div>
       </div>
 
+      <!-- TAB: ADMIN FINANCE (ADMIN ONLY) -->
+      <div id="panel-admin-finance" class="hidden space-y-4 admin-only">
+        <div class="glass-card p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+          <div class="border-b border-slate-200 pb-4">
+            <h2 class="text-lg font-black text-slate-900">Admin Finance Overview</h2>
+            <p class="text-xs text-slate-500 font-medium">Aggregated from all Delivered consignments</p>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Delivery Charges -->
+            <div class="p-4 rounded-xl bg-blue-50 border border-blue-200">
+              <p class="text-[11px] font-bold text-blue-800 uppercase tracking-wider">Delivery Charges</p>
+              <p id="adminFinDeliveryCharges" class="text-xl font-black text-blue-900 mt-1">0.00 AED</p>
+            </div>
+            
+            <!-- Expenses -->
+            <div class="p-4 rounded-xl bg-rose-50 border border-rose-200">
+              <p class="text-[11px] font-bold text-rose-800 uppercase tracking-wider">Expenses</p>
+              <p id="adminFinExpenses" class="text-xl font-black text-rose-900 mt-1">0.00 AED</p>
+            </div>
+            
+            <!-- Profit -->
+            <div id="adminFinProfitCard" class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 transition-colors">
+              <p id="adminFinProfitLabel" class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">Profit</p>
+              <p id="adminFinProfit" class="text-xl font-black text-emerald-900 mt-1 transition-colors">0.00 AED</p>
+            </div>
+            
+            <!-- Total Pending Deficit -->
+            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200">
+              <p class="text-[11px] font-bold text-amber-800 uppercase tracking-wider">Total Pending Deficit</p>
+              <p id="adminFinDeficit" class="text-xl font-black text-amber-900 mt-1">0.00 AED</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- TAB 7: SYSTEM & SETTINGS -->
       <div id="panel-system" class="hidden space-y-4">
         
@@ -639,12 +690,25 @@
         </div>
         <div class="admin-only glass-card rounded-2xl shadow-sm border border-slate-200 overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-slate-100 border-b border-slate-200"><th class="p-3.5">ID</th><th class="p-3.5">Full Name</th><th class="p-3.5">Username</th><th class="p-3.5">Account Status</th><th class="p-3.5">Actions</th></thead><tbody id="agentTableBody" class="divide-y divide-slate-100"></tbody></table></div>
       </div>
-      <!-- TAB: TEMPORARY WAYBILL -->
+      <!-- TAB: TEMPORARY WAYBILL & QUOTATION -->
       <div id="panel-waybill" class="hidden space-y-4">
         <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="font-bold text-lg text-slate-900 mb-4">Quick Waybill Generator</h3>
           
-          <div class="space-y-3 text-xs">
+          <!-- Toggle Header -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b border-slate-200 pb-3 gap-3">
+            <h3 class="font-bold text-lg text-slate-900">Document Generator</h3>
+            <div class="flex bg-slate-100 p-1 rounded-xl">
+              <label class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg cursor-pointer transition has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-amber-600 font-bold text-xs text-slate-600">
+                <input type="radio" name="wb_type" value="waybill" checked onchange="toggleWaybillView()" class="hidden"> Waybill
+              </label>
+              <label class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg cursor-pointer transition has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-amber-600 font-bold text-xs text-slate-600">
+                <input type="radio" name="wb_type" value="quotation" onchange="toggleWaybillView()" class="hidden"> Quotation
+              </label>
+            </div>
+          </div>
+          
+          <!-- WAYBILL FORM (Existing) -->
+          <div id="form-waybill" class="space-y-3 text-xs">
              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div class="space-y-2">
                    <label class="font-bold text-slate-700">From Name & Address</label>
@@ -697,6 +761,55 @@
                 <button onclick="generateAndSendWaybill()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition">Save & Send WhatsApp</button>
              </div>
           </div>
+          
+          <!-- QUOTATION FORM (New) -->
+          <div id="form-quotation" class="hidden space-y-4 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                      <label class="font-bold text-slate-700 block mb-1">Quotation no</label>
+                      <input id="qt_no" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" placeholder="e.g. NW/3921" />
+                  </div>
+                  <div>
+                      <label class="font-bold text-slate-700 block mb-1">Date</label>
+                      <input id="qt_date" type="date" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+                  </div>
+              </div>
+              
+              <div>
+                  <label class="font-bold text-slate-700 block mb-1">To</label>
+                  <textarea id="qt_to" rows="4" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 leading-relaxed" placeholder="Client Name&#10;Address Line 1&#10;Address Line 2&#10;TRN: XXXXXXXXX"></textarea>
+              </div>
+              
+              <div class="border-t border-slate-100 pt-3">
+                  <div class="flex justify-between items-center mb-3">
+                      <label class="font-bold text-slate-700 text-sm">Line Items</label>
+                      <button onclick="addQuotationRow()" class="bg-slate-900 text-amber-400 px-3 py-1.5 rounded-lg font-bold text-[10px] shadow-sm hover:bg-slate-800 transition">+ Add Item</button>
+                  </div>
+                  
+                  <!-- Container for Dynamic Items -->
+                  <div id="qt_items_container" class="space-y-2">
+                      <div class="flex gap-2 items-center qt-item-row">
+                          <input type="text" placeholder="Item Name" class="qt-item flex-1 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+                          <input type="text" placeholder="Qty" oninput="calcQtRow(this)" class="qt-qty w-20 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+                          <input type="number" placeholder="Price" oninput="calcQtRow(this)" class="qt-price w-24 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+                          <input type="number" placeholder="Total" oninput="calcQtGrandTotal()" class="qt-total w-28 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold outline-none focus:border-amber-500" />
+                          <button onclick="removeQuotationRow(this)" class="text-rose-400 hover:text-rose-600 font-bold px-2 text-xl transition">×</button>
+                      </div>
+                  </div>
+                  
+                  <div class="mt-4 flex justify-end items-center gap-3 font-black text-slate-900 text-sm bg-slate-50 p-3 rounded-xl border border-slate-200">
+                      <span class="uppercase text-slate-500 tracking-wider text-[11px]">Grand Total:</span>
+                      <span id="qt_grand_total" class="text-lg">0.00</span> <span>AED</span>
+                  </div>
+              </div>
+              
+              <div class="pt-4 flex flex-wrap justify-end gap-3 border-t border-slate-100">
+                  <button onclick="clearQuotationForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-6 py-2.5 rounded-xl shadow-sm transition">Clear</button>
+                  <button onclick="printQuotation()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition">Print PDF</button>
+                  <button onclick="generateAndSendQuotation()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition">Save & Send WhatsApp</button>
+              </div>
+          </div>
+          
         </div>
       </div>
     </section>
@@ -715,6 +828,10 @@
     </button>
     <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>Merchants</button>
     <button onclick="switchTab('invoices')" id="tab-invoices" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Ledger</button>
+    <button onclick="switchTab('admin-finance')" id="tab-admin-finance" class="admin-only shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      Profit
+    </button>
     <button onclick="switchTab('waybill')" id="tab-waybill" class="shrink-0 flex-1 min-w-[70px] sm:min-w-0 py-3 flex flex-col items-center gap-1 transition-all">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
       Waybill
@@ -723,6 +840,33 @@
   </nav>
 
   <!-- ================= MODALS ================= -->
+  <div id="expenseModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-xs border border-slate-100">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+        <h3 class="font-extrabold tracking-wide text-sm text-slate-900">Log Daily Expense</h3>
+        <button onclick="closeModal('expenseModal')" class="text-slate-400 hover:text-slate-600 font-bold text-lg transition">✕</button>
+      </div>
+      <form onsubmit="saveAgentExpense(event)" class="space-y-3">
+        <div><label class="font-bold block text-slate-700 mb-1">Category</label>
+          <select id="expCategory" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500">
+            <option value="Fuel">Fuel</option>
+            <option value="Food">Food / Allowance</option>
+            <option value="Parking">Parking Fee</option>
+            <option value="Salik/Toll">Salik / Toll</option>
+            <option value="Maintenance">Vehicle Maintenance</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div><label class="font-bold block text-slate-700 mb-1">Amount (AED)</label><input id="expAmount" type="number" step="0.01" required class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500" /></div>
+        <div><label class="font-bold block text-slate-700 mb-1">Notes / Description</label><input id="expNotes" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 outline-none focus:border-amber-500" placeholder="e.g. Receipt #1234" /></div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeModal('expenseModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 font-bold text-slate-700 hover:bg-slate-200 transition">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-900 text-amber-400 font-bold shadow-md hover:bg-slate-800 transition">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   
   <!-- SECURITY CREDENTIALS UPDATE MODAL -->
   <div id="credentialsModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -758,9 +902,21 @@
       <form onsubmit="saveNewConsignment(event)" class="space-y-3.5 text-xs overflow-y-auto pr-1 flex-1">
         <div class="grid grid-cols-2 gap-3">
           <div><label class="font-bold block text-slate-700 mb-1">ID Tracking</label><input id="cIdInput" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-semibold outline-none focus:border-amber-500" /></div>
-          <div><label class="font-bold block text-slate-700 mb-1">Merchant</label><div class="flex gap-1.5"><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-medium outline-none focus:border-amber-500"></select><button type="button" onclick="openVendorModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold px-3.5 rounded-xl shadow-sm transition" title="Add Vendor">+</button></div></div>
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="font-bold block text-slate-700">Merchant</label>
+              <input type="text" id="cVendorSearch" oninput="filterVendorSelect()" placeholder="Search..." class="w-24 px-1.5 py-0.5 text-[10px] border border-slate-200 rounded outline-none focus:border-amber-500 transition shadow-sm" />
+            </div>
+            <div class="flex gap-1.5"><select id="cVendorSelect" required onchange="syncVendorPickupAddress()" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-medium outline-none focus:border-amber-500"></select><button type="button" onclick="openVendorModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold px-3.5 rounded-xl shadow-sm transition" title="Add Vendor">+</button></div>
+          </div>
         </div>
         <div><label class="font-bold block text-slate-700 mb-1">Pickup Location</label><input id="cPickupFrom" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        
+        <!-- HIDDEN WALK-IN FIELDS -->
+        <div id="walkInFields" class="hidden grid-cols-2 gap-3">
+          <div><label class="font-bold block text-slate-500 mb-1">Actual Vendor</label><input id="cRefVendorName" type="text" placeholder="Name" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+          <div><label class="font-bold block text-slate-500 mb-1">Vendor Phone</label><input id="cRefVendorPhone" type="text" placeholder="Phone" class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
+        </div>
         <div class="grid grid-cols-2 gap-3">
           <div><label class="font-bold block text-slate-700 mb-1">Client Name</label><input id="cCustomerName" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
           <div><label class="font-bold block text-slate-700 mb-1">Contact Phone</label><input id="cCustomerPhone" type="text" required class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500 transition" /></div>
@@ -1142,6 +1298,7 @@
         db = remoteData; 
         db.vendorPayments = db.vendorPayments || []; 
         db.vendorSettlementOtps = db.vendorSettlementOtps || [];
+        db.agentExpenses = db.agentExpenses || [];
         if (!db.settings) db.settings = { showCloudSyncConfig: true };
         if (!db.settings.invoiceCounter) db.settings.invoiceCounter = 1001;
         db.consignments.forEach(c => { 
@@ -1196,6 +1353,7 @@
       db = saved && saved.users && saved.users.length ? saved : seedDB;
       db.vendorPayments = db.vendorPayments || []; 
       db.vendorSettlementOtps = db.vendorSettlementOtps || []; 
+      db.agentExpenses = db.agentExpenses || [];
       if (!db.settings) db.settings = { showCloudSyncConfig: true };
       if (!db.settings.invoiceCounter) db.settings.invoiceCounter = 1001;
       db.consignments.forEach(c => { 
@@ -1241,6 +1399,17 @@
             });
         } catch (e) { updateSyncBadge('ERROR', 'DB Error'); }
       } else { updateSyncBadge('ERROR', 'Offline Mode'); }
+
+      // --- ADD THIS BLOCK TO RESTORE SESSION ---
+      const savedUserId = localStorage.getItem('NEXTWAY_SESSION_USER');
+      if (savedUserId && db && db.users) {
+        const user = db.users.find(u => u.id === savedUserId);
+        if (user && user.status === 'ACTIVE') {
+          currentUser = user;
+          enterWorkspace();
+        }
+      }
+      // -----------------------------------------
     }
 
     function saveSupabaseConfigFromTab() { 
@@ -1464,12 +1633,14 @@
       if (inputHash !== user.passwordHash && pass !== user.passwordHash && pass !== user.password) { errBox.textContent = 'Invalid credentials provided.'; errBox.classList.remove('hidden'); return; }
       if (inputHash !== user.passwordHash) { user.passwordHash = inputHash; delete user.password; await saveDB(); }
       currentUser = user; 
+      localStorage.setItem('NEXTWAY_SESSION_USER', user.id); // Add this line
       document.getElementById('loginPassword').value = ''; 
       enterWorkspace();
     }
     
     function logout() { 
       currentUser = null; 
+      localStorage.removeItem('NEXTWAY_SESSION_USER'); // Add this line
       document.getElementById('appView').classList.add('hidden'); 
       document.getElementById('authView').classList.remove('hidden'); 
       document.getElementById('bottomNav').classList.add('hidden'); 
@@ -1519,13 +1690,14 @@
         globalHeader.classList.toggle('hidden', tName === 'dashboard');
       }
 
-      ['dashboard','consignments','confirmations','agent-reports','agent-finance','agent-deficit','vendors','invoices','system','waybill'].forEach(t => {
+      ['dashboard','consignments','confirmations','agent-reports','agent-finance','agent-deficit','vendors','invoices','admin-finance','system','waybill'].forEach(t => {
         const p = document.getElementById(`panel-${t}`), b = document.getElementById(`tab-${t}`);
         if(p) p.classList.toggle('hidden', t!==tName);
         if(b) { b.classList.toggle('tab-active', t===tName); b.classList.toggle('text-slate-400', t!==tName); }
       });
       if(tName==='dashboard') { closeDashSubScreen(); renderAgentDashboard(); }
       if(tName==='agent-finance') generateAgentFinanceReport();
+      if(tName==='admin-finance') generateAdminFinanceTab();
       if(tName==='agent-deficit') renderAgentDeficit();
       if(tName==='invoices') { 
         document.getElementById('invVendorSelect').innerHTML = `<option value="" selected disabled></option>`+db.vendors.map(v=>`<option value="${v.code}">${v.name}</option>`).join(''); 
@@ -1538,8 +1710,78 @@
       applySettingsUi();
       renderConsignments(); renderConfirmations();
       if(currentUser.role==='ADMIN'){ renderVendors(); renderAgents(); }
+      
       renderAgentDashboard();
+      
+      // NEW: Re-render the dashboard list immediately if it is currently open
+      const dashListScreen = document.getElementById('dashListScreen');
+      if (dashListScreen && !dashListScreen.classList.contains('hidden')) {
+          renderDashListItems();
+      }
+
       if(currentUser.role==='AGENT'){ renderAgentDeficit(); }
+      if(currentUser.role==='ADMIN'){ generateAdminFinanceTab(); } // Add this line
+    }
+
+    function generateAdminFinanceTab() {
+      if (!currentUser || currentUser.role !== 'ADMIN') return;
+
+      let collectedDeliveryCharges = 0;
+      let totalPendingDeficit = 0;
+      let totalExpenses = 0;
+
+      // 1. Calculate Collected Delivery Charges & Deficit (Strictly from Delivered consignments)
+      db.consignments.forEach(c => {
+        if (c.status === 'Delivered') {
+          let expectedCharge = parseFloat(c.deliveryCharge) || 0;
+          let pendingDeficitForThis = 0;
+
+          const { isDeficit, deficitAmt } = getDeficitInfo(c);
+          
+          // Check if there is an uncollected deficit on this consignment
+          if (isDeficit && !c.deficitReceivedDate) {
+            pendingDeficitForThis = deficitAmt;
+            totalPendingDeficit += deficitAmt;
+          }
+
+          // Delivery charges total ONLY includes what was actually collected
+          collectedDeliveryCharges += (expectedCharge - pendingDeficitForThis);
+        }
+      });
+
+      // 2. Calculate Total Expenses (ONLY Approved Expenses)
+      if (db.agentExpenses) {
+        db.agentExpenses.forEach(e => {
+          if (e.status === 'APPROVED') {
+            totalExpenses += (parseFloat(e.amount) || 0);
+          }
+        });
+      }
+
+      // 3. Calculate Profit based strictly on collected amounts minus approved expenses
+      const profit = collectedDeliveryCharges - totalExpenses;
+
+      // 4. Update UI
+      document.getElementById('adminFinDeliveryCharges').textContent = formatAmt(collectedDeliveryCharges) + ' AED';
+      document.getElementById('adminFinExpenses').textContent = formatAmt(totalExpenses) + ' AED';
+      document.getElementById('adminFinDeficit').textContent = formatAmt(totalPendingDeficit) + ' AED';
+
+      // 5. Handle Profit/Loss Styling dynamically
+      const profitEl = document.getElementById('adminFinProfit');
+      const profitCard = document.getElementById('adminFinProfitCard');
+      const profitLabel = document.getElementById('adminFinProfitLabel');
+      
+      profitEl.textContent = formatAmt(profit) + ' AED';
+
+      if (profit < 0) {
+        profitCard.className = "p-4 rounded-xl bg-rose-50 border border-rose-200 transition-colors";
+        profitLabel.className = "text-[11px] font-bold text-rose-800 uppercase tracking-wider";
+        profitEl.className = "text-xl font-black text-rose-900 mt-1 transition-colors";
+      } else {
+        profitCard.className = "p-4 rounded-xl bg-emerald-50 border border-emerald-200 transition-colors";
+        profitLabel.className = "text-[11px] font-bold text-emerald-800 uppercase tracking-wider";
+        profitEl.className = "text-xl font-black text-emerald-900 mt-1 transition-colors";
+      }
     }
 
     function renderAgentDeficit() {
@@ -2017,6 +2259,7 @@
 
     function openNewConsignmentModal() {
       document.getElementById('cIdInput').value = '';
+      document.getElementById('cVendorSearch').value = '';
       document.getElementById('cVendorSelect').innerHTML = db.vendors.map(v => `<option value="${v.code}">${v.name}</option>`).join(''); 
       syncVendorPickupAddress();
       
@@ -2046,11 +2289,41 @@
       document.getElementById('cCustomerName').value = ''; 
       document.getElementById('cCustomerPhone').value = '+971'; 
       document.getElementById('cDeliveryAddress').value = ''; 
+      document.getElementById('cRefVendorName').value = '';
+      document.getElementById('cRefVendorPhone').value = '';
       
       document.getElementById('consignmentModal').classList.remove('hidden');
     }
     
-    function syncVendorPickupAddress() { const v = getVendorByCode(document.getElementById('cVendorSelect').value); if(v) document.getElementById('cPickupFrom').value = v.address; }
+    function filterVendorSelect() {
+      const q = document.getElementById('cVendorSearch').value.toLowerCase();
+      const select = document.getElementById('cVendorSelect');
+      const filtered = db.vendors.filter(v => v.name.toLowerCase().includes(q) || v.code.toLowerCase().includes(q));
+      
+      select.innerHTML = filtered.map(v => `<option value="${v.code}">${v.name}</option>`).join('');
+      if (filtered.length === 0) select.innerHTML = `<option value="">No matches</option>`;
+      syncVendorPickupAddress();
+    }
+
+    function syncVendorPickupAddress() { 
+      const code = document.getElementById('cVendorSelect').value;
+      const v = getVendorByCode(code); 
+      if(v) document.getElementById('cPickupFrom').value = v.address; 
+      
+      // Toggle conditional fields ONLY if the merchant code is WALK-IN
+      const walkInContainer = document.getElementById('walkInFields');
+      if (walkInContainer) {
+        if (code === 'WALK-IN') {
+          walkInContainer.classList.remove('hidden');
+          walkInContainer.classList.add('grid');
+        } else {
+          walkInContainer.classList.add('hidden');
+          walkInContainer.classList.remove('grid');
+          document.getElementById('cRefVendorName').value = '';
+          document.getElementById('cRefVendorPhone').value = '';
+        }
+      }
+    }
     
     async function bulkAssign() {
       const ids = document.getElementById('bulkIds').value.split(',').map(s=>s.trim().toUpperCase()).filter(Boolean);
@@ -2101,6 +2374,8 @@
         id, 
         vendorCode: document.getElementById('cVendorSelect').value, 
         pickupFrom: document.getElementById('cPickupFrom').value, 
+        refVendorName: document.getElementById('cRefVendorName') ? document.getElementById('cRefVendorName').value.trim() : '',
+        refVendorPhone: document.getElementById('cRefVendorPhone') ? document.getElementById('cRefVendorPhone').value.trim() : '',
         customerName: document.getElementById('cCustomerName').value, 
         customerPhone: document.getElementById('cCustomerPhone').value, 
         deliveryAddress: document.getElementById('cDeliveryAddress').value, 
@@ -2259,6 +2534,21 @@
 
         const newData = window.tempEditData;
         
+        // NEW: If Delivered, send to Agent for confirmation instead of updating immediately
+        if (c.status === 'Delivered') {
+            c.pendingModification = {
+                type: 'FULL_EDIT',
+                requestedBy: currentUser.username,
+                ...newData
+            };
+            await saveDB();
+            closeModal('actionModal');
+            closeModal('editConsignmentModal');
+            refreshAllViews();
+            alert("Modifications to this Delivered consignment have been sent to the assigned Delivery Agent for confirmation.");
+            return;
+        }
+
         c.id = newData.id;
         c.vendorCode = newData.vendorCode;
         c.pickupFrom = newData.pickupFrom;
@@ -2799,7 +3089,19 @@
       const p = db.consignments.filter(c=>c.pendingModification && (currentUser.role==='ADMIN' || c.assignedTo===currentUser.id));
       const badge = document.getElementById('navConfirmBadge');
       if (p.length > 0) { badge.textContent = p.length; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
-      document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c=>`<div class="p-3.5 border border-amber-200 rounded-xl bg-amber-50 mb-2 text-xs"><b>${c.id}</b>: Product ${c.productAmount} -> <b class="text-emerald-700">${c.pendingModification.newProductAmount}</b> | Service Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${c.pendingModification.newDeliveryCharge}</b> ${currentUser.role==='AGENT'&&c.assignedTo===currentUser.id?`<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-amber-400 font-bold px-4 py-1.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Confirm Edit</button>`:'<br/><span class="text-[10px] text-slate-500 font-medium">Waiting for field agent confirmation</span>'}</div>`).join('') : '<p class="text-xs text-slate-500 font-medium">No pending balance modifications.</p>';
+      document.getElementById('confirmationsList').innerHTML = p.length ? p.map(c => {
+        const pm = c.pendingModification;
+        let changesText = '';
+        if (pm.type === 'FULL_EDIT') {
+            changesText = `<b>${c.id}</b>: Full details modified by Admin. (Product: <b class="text-emerald-700">${pm.productAmount}</b>, Fee: <b class="text-emerald-700">${pm.deliveryCharge}</b>)`;
+        } else {
+            changesText = `<b>${c.id}</b>: Product ${c.productAmount} -> <b class="text-emerald-700">${pm.newProductAmount}</b> | Service Fee ${c.deliveryCharge} -> <b class="text-emerald-700">${pm.newDeliveryCharge}</b>`;
+        }
+        const btnHtml = (currentUser.role === 'AGENT' && c.assignedTo === currentUser.id) 
+            ? `<button onclick="agentConfirmModification('${c.id}')" class="block mt-2 bg-slate-900 text-amber-400 font-bold px-4 py-1.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Confirm Edit</button>` 
+            : `<br/><span class="text-[10px] text-slate-500 font-medium">Waiting for field agent confirmation</span>`;
+        return `<div class="p-3.5 border border-amber-200 rounded-xl bg-amber-50 mb-2 text-xs">${changesText} ${btnHtml}</div>`;
+      }).join('') : '<p class="text-xs text-slate-500 font-medium">No pending modifications.</p>';
 
       if (currentUser.role === 'ADMIN') {
         const pendingOtps = db.vendorSettlementOtps.filter(o => o.status === 'PENDING');
@@ -2835,7 +3137,35 @@
     
     function openAmountEditModal(cid) { const c = db.consignments.find(x=>x.id===cid); if(currentUser.role==='AGENT' && c.status==='Delivered') return alert('Cannot edit after delivery.'); document.getElementById('actionModalTitle').textContent = `Modify Financials: ${c.id}`; document.getElementById('actionModalBody').innerHTML = `<p class="text-[10px] text-slate-500 font-medium mb-2">Edits to completed orders require field agent confirmation.</p><label class="font-bold block mb-1">Product Amount</label><input id="editProdAmt" type="number" step="0.01" value="${c.productAmount}" class="w-full border border-slate-200 rounded-xl px-3 py-2 mb-2 bg-slate-50 outline-none focus:border-amber-500 transition" /><label class="font-bold block mb-1">Delivery Charge</label><input id="editDelivFee" type="number" step="0.01" value="${c.deliveryCharge}" class="w-full border border-slate-200 rounded-xl px-3 py-2 mb-2 bg-slate-50 outline-none focus:border-amber-500 transition" /><button onclick="saveAmountModification('${c.id}')" class="w-full bg-slate-900 text-amber-400 font-bold py-2.5 rounded-xl shadow-sm hover:bg-slate-800 transition">Dispatch Modification</button>`; document.getElementById('actionModal').classList.remove('hidden'); }
     async function saveAmountModification(cid) { const c=db.consignments.find(x=>x.id===cid), np=parseFloat(document.getElementById('editProdAmt').value)||0, nd=parseFloat(document.getElementById('editDelivFee').value)||0; if(currentUser.role==='ADMIN') { if(c.status==='Delivered' && c.assignedTo) { c.pendingModification={newProductAmount:np, newDeliveryCharge:nd, requestedBy:currentUser.username}; } else { c.productAmount=np; c.deliveryCharge=nd; } } else { c.productAmount=np; } await saveDB(); closeModal('actionModal'); refreshAllViews(); }
-    async function agentConfirmModification(cid) { const c=db.consignments.find(x=>x.id===cid); if(!c||!c.pendingModification) return; c.productAmount=c.pendingModification.newProductAmount; c.deliveryCharge=c.pendingModification.newDeliveryCharge; c.pendingModification=null; await saveDB(); refreshAllViews(); }
+    async function agentConfirmModification(cid) { 
+        const c = db.consignments.find(x => x.id === cid); 
+        if(!c || !c.pendingModification) return; 
+        
+        const pm = c.pendingModification;
+        if (pm.type === 'FULL_EDIT') {
+            c.id = pm.id;
+            c.vendorCode = pm.vendorCode;
+            c.pickupFrom = pm.pickupFrom;
+            c.customerName = pm.customerName;
+            c.customerPhone = pm.customerPhone;
+            c.deliveryAddress = pm.deliveryAddress;
+            c.weight = pm.weight;
+            c.pieces = pm.pieces;
+            c.productAmount = pm.productAmount;
+            c.deliveryCharge = pm.deliveryCharge;
+            c.feeType = pm.feeType;
+            c.assignedTo = pm.assignedTo || null;
+            c.pickedUpBy = pm.pickedUpBy || null;
+        } else {
+            c.productAmount = pm.newProductAmount; 
+            c.deliveryCharge = pm.newDeliveryCharge; 
+        }
+        
+        c.pendingModification = null; 
+        await saveDB(); 
+        refreshAllViews(); 
+        if (currentUser.role === 'AGENT') alert('Modification Confirmed!');
+    }
 
     function inspectConsignmentById() { const id=document.getElementById('globalConsignmentSearch').value.trim().toUpperCase(), c=db.consignments.find(x=>x.id.toUpperCase()===id); if(c) showConsignmentDetails(c.id); else alert('Record not found.'); }
     function showConsignmentDetails(cid) { 
@@ -2848,6 +3178,7 @@
           <div class="flex-1 space-y-1.5">
             <p><b>Status:</b> <span class="px-2 py-0.5 bg-slate-200 rounded-lg font-bold">${c.status}</span></p>
             <p><b>Merchant:</b> ${v?v.name:c.vendorCode}</p>
+            ${c.refVendorName ? `<p><b>Ref Vendor:</b> <span class="text-blue-700 font-bold">${c.refVendorName}</span> ${c.refVendorPhone ? `(${c.refVendorPhone})` : ''}</p>` : ''}
             <p><b>Customer:</b> ${c.customerName}</p>
             <p><b>Phone:</b> ${c.customerPhone}</p>
             <p><b>Destination:</b> ${c.deliveryAddress}</p>
@@ -2888,11 +3219,8 @@
       
       // Restrict Edit, Deliver, and Return buttons to Admin only
       if (isA) {
-          if (c.status !== 'Delivered') {
-              actionButtons += `<button onclick="openEditConsignmentModal('${c.id}')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-sm transition">Edit</button>`;
-          } else {
-              actionButtons += `<button disabled class="bg-slate-300 text-slate-500 font-bold py-1.5 px-3 rounded-xl text-xs shadow-sm cursor-not-allowed">Edit</button>`;
-          }
+          // Allow Admin to edit even if Delivered
+          actionButtons += `<button onclick="openEditConsignmentModal('${c.id}')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-sm transition">Edit</button>`;
           
           if (canDeliver) {
               actionButtons += `<button onclick="closeModal('inspectModal'); openPodScreen('${c.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-sm transition">Deliver</button>`;
@@ -2968,8 +3296,84 @@
       const { rows, totalCollected } = getAgentFinanceRows(id, d, stat);
       const tbody = rows.map(r=>`<tr><td class="p-2.5 font-bold">${r.id}</td><td class="p-2.5">${r.customer}</td><td class="p-2.5">${r.type}</td><td class="p-2.5 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
       
-      document.getElementById('printableAdminAgentReport').innerHTML = `<div class="flex justify-between border-b border-slate-200 pb-4"><div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-500">Agent Field Accounting</p></div><div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-slate-500 font-semibold">${d}</p></div></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4"><div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-xs text-slate-500">Total Entries</p><p class="text-lg font-bold text-slate-900">${rows.length}</p></div><div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-xs font-bold text-emerald-800">Total Received</p><p class="text-lg font-black text-emerald-900">${formatAmt(totalCollected)} AED</p></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-slate-100">${tbody}</tbody></table></div>`;
+      const exps = (db.agentExpenses || []).filter(e => e.agentId === id && e.date === d);
+      const totExp = exps.reduce((sum, e) => sum + (e.status !== 'REJECTED' ? parseFloat(e.amount) : 0), 0);
+      const netCash = totalCollected - totExp;
+
+      const expTbody = exps.length ? exps.map(e => {
+          let statusBadge = '';
+          if (e.status === 'PENDING') statusBadge = `<span class="text-amber-600 font-bold">Pending</span>`;
+          if (e.status === 'APPROVED') statusBadge = `<span class="text-emerald-600 font-bold">Approved</span>`;
+          if (e.status === 'REJECTED') statusBadge = `<span class="text-rose-600 font-bold line-through">Rejected</span>`;
+          
+          let actionBtns = '';
+          if (e.status === 'PENDING') {
+              actionBtns = `<div class="flex gap-1 justify-end no-print"><button onclick="updateExpenseStatus('${e.id}', 'APPROVED')" class="bg-emerald-100 text-emerald-700 border border-emerald-200 px-2 py-1 rounded text-[10px] font-bold">Approve</button><button onclick="updateExpenseStatus('${e.id}', 'REJECTED')" class="bg-rose-100 text-rose-700 border border-rose-200 px-2 py-1 rounded text-[10px] font-bold">Reject</button></div>`;
+          }
+
+          return `<tr><td class="p-2.5 font-bold">${e.category}</td><td class="p-2.5 text-slate-500">${e.notes}</td><td class="p-2.5 text-right font-black text-rose-600">${formatAmt(e.amount)}</td><td class="p-2.5 text-right">${statusBadge} ${actionBtns}</td></tr>`;
+      }).join('') : `<tr><td colspan="4" class="p-4 text-center text-slate-400 font-medium">No expenses logged.</td></tr>`;
+
+      document.getElementById('printableAdminAgentReport').innerHTML = `
+      <div class="flex justify-between border-b border-slate-200 pb-4">
+        <div><h2 class="text-base font-black text-slate-900">NEXT WAY DELIVERY</h2><p class="text-xs text-slate-500">Agent Cash Settlement</p></div>
+        <div class="text-right"><p class="text-sm font-bold text-slate-900">${ag?ag.name:id}</p><p class="text-xs text-slate-500 font-semibold">${d}</p></div>
+      </div>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"><p class="text-[10px] font-bold text-slate-500 uppercase">Total Entries</p><p class="text-lg font-bold text-slate-900">${rows.length}</p></div>
+        <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200"><p class="text-[10px] font-bold text-blue-800 uppercase">Gross Collected</p><p class="text-lg font-black text-blue-900">${formatAmt(totalCollected)} AED</p></div>
+        <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200"><p class="text-[10px] font-bold text-rose-800 uppercase">Claimed Expenses</p><p class="text-lg font-black text-rose-900">${formatAmt(totExp)} AED</p></div>
+        <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="text-[10px] font-bold text-emerald-800 uppercase">Net Cash Expected</p><p class="text-lg font-black text-emerald-900">${formatAmt(netCash)} AED</p></div>
+      </div>
+      
+      <h3 class="font-bold text-xs text-slate-900 mb-2 uppercase tracking-wide">Deliveries & Collections</h3>
+      <div class="overflow-x-auto mb-6"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-100 border-b border-slate-200"><th class="p-2.5">ID</th><th class="p-2.5">Customer</th><th class="p-2.5">Type</th><th class="p-2.5 text-right">Amt Collected</th></tr></thead><tbody class="divide-y divide-slate-100">${tbody}</tbody></table></div>
+      
+      <h3 class="font-bold text-xs text-rose-800 mb-2 uppercase tracking-wide">Daily Expenses</h3>
+      <div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-rose-50 border-b border-rose-100 text-rose-900"><th class="p-2.5">Category</th><th class="p-2.5">Notes</th><th class="p-2.5 text-right">Amount</th><th class="p-2.5 text-right">Status / Action</th></tr></thead><tbody class="divide-y divide-slate-100">${expTbody}</tbody></table></div>
+      `;
       document.getElementById('printableAdminAgentReport').classList.remove('hidden');
+    }
+
+    function openExpenseModal() {
+        document.getElementById('expAmount').value = '';
+        document.getElementById('expNotes').value = '';
+        document.getElementById('expenseModal').classList.remove('hidden');
+    }
+
+    async function saveAgentExpense(e) {
+        e.preventDefault();
+        const date = document.getElementById('agentFinanceDate').value || getUAEISOString().split('T')[0];
+        const expense = {
+            id: 'EXP-' + Date.now(),
+            agentId: currentUser.id,
+            date: date,
+            category: document.getElementById('expCategory').value,
+            amount: parseFloat(document.getElementById('expAmount').value),
+            notes: document.getElementById('expNotes').value,
+            status: 'PENDING'
+        };
+        db.agentExpenses.unshift(expense);
+        await saveDB();
+        closeModal('expenseModal');
+        generateAgentFinanceReport();
+    }
+
+    async function deleteExpense(id) {
+        if(!confirm('Are you sure you want to delete this pending expense?')) return;
+        db.agentExpenses = db.agentExpenses.filter(e => e.id !== id);
+        await saveDB();
+        generateAgentFinanceReport();
+    }
+
+    async function updateExpenseStatus(id, status) {
+        const exp = db.agentExpenses.find(e => e.id === id);
+        if(exp) {
+            exp.status = status;
+            await saveDB();
+            generateAdminAgentReport();
+        }
     }
 
     function printAdminAgentReport() {
@@ -3031,13 +3435,24 @@
 
     function generateAgentFinanceReport() {
       if(currentUser.role !== 'AGENT') return;
-      if(!document.getElementById('agentFinanceDate').value) document.getElementById('agentFinanceDate').value=getUAEISOString().split('T')[0];
+      if(!document.getElementById('agentFinanceDate').value) document.getElementById('agentFinanceDate').value = getUAEISOString().split('T')[0];
       const d = document.getElementById('agentFinanceDate').value, stat = document.getElementById('agentFinanceStatus').value;
       const { rows, totalCollected } = getAgentFinanceRows(currentUser.id, d, stat);
       
+      const exps = (db.agentExpenses || []).filter(e => e.agentId === currentUser.id && e.date === d);
+      const totalExpenses = exps.reduce((sum, e) => sum + (e.status !== 'REJECTED' ? parseFloat(e.amount) : 0), 0);
+      const netHandover = totalCollected - totalExpenses;
+      
       document.getElementById('afTableBody').innerHTML = rows.map(r=>`<tr><td class="p-2.5 font-bold">${r.id}</td><td class="p-2.5">${r.customer}</td><td class="p-2.5">${r.type}</td><td class="p-2.5 text-right font-black">${formatAmt(r.amount)}</td></tr>`).join('');
-      document.getElementById('afTotalCount').textContent = rows.length; document.getElementById('afTotalCollected').textContent = formatAmt(totalCollected) + ' AED';
-      document.getElementById('afAgentNameDisplay').textContent = currentUser.name; document.getElementById('afDateDisplay').textContent = d;
+      
+      document.getElementById('afExpenseBody').innerHTML = exps.length ? exps.map(e => `<tr><td class="p-2.5 font-bold text-slate-800">${e.category}</td><td class="p-2.5 text-slate-500">${e.notes}</td><td class="p-2.5 text-right font-black text-rose-600">${formatAmt(e.amount)}</td><td class="p-2.5 text-center font-bold ${e.status==='APPROVED'?'text-emerald-600':(e.status==='REJECTED'?'text-rose-600 line-through':'text-amber-500')}">${e.status}</td><td class="p-2.5 text-right no-print">${e.status === 'PENDING' ? `<button onclick="deleteExpense('${e.id}')" class="text-rose-600 font-bold bg-rose-50 px-2 py-1 rounded border border-rose-200 hover:bg-rose-100 transition">Del</button>` : '-'}</td></tr>`).join('') : `<tr><td colspan="5" class="p-4 text-center text-slate-400 font-medium">No expenses logged for this date.</td></tr>`;
+
+      document.getElementById('afTotalCount').textContent = rows.length; 
+      document.getElementById('afTotalCollected').textContent = formatAmt(totalCollected) + ' AED';
+      document.getElementById('afTotalExpenses').textContent = formatAmt(totalExpenses) + ' AED';
+      document.getElementById('afNetHandover').textContent = formatAmt(netHandover) + ' AED';
+      document.getElementById('afAgentNameDisplay').textContent = currentUser.name; 
+      document.getElementById('afDateDisplay').textContent = d;
     }
     
     function printAgentFinanceReport() { 
@@ -3052,8 +3467,22 @@
       const d = role==='admin' ? document.getElementById('adminReportDate').value : document.getElementById('agentFinanceDate').value;
       const stat = role==='admin' ? document.getElementById('adminReportStatus').value : document.getElementById('agentFinanceStatus').value;
       const { rows } = getAgentFinanceRows(id, d, stat);
-      const data = rows.map(r => ({ "ID": r.id, "Customer": r.customer, "Type": r.type, "Amount Collected": r.amount }));
-      const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "AgentReport"); XLSX.writeFile(wb, `AgentReport_${d}.xlsx`);
+      
+      // Build standard delivery rows
+      const data = rows.map(r => ({ "ID": r.id, "Category / Customer": r.customer, "Notes / Type": r.type, "Amount": r.amount, "Entry Type": "Collection" }));
+      
+      // Append Approved Expenses
+      const exps = (db.agentExpenses || []).filter(e => e.agentId === id && e.date === d && e.status === 'APPROVED');
+      if (exps.length > 0) {
+        data.push({ "ID": "", "Category / Customer": "", "Notes / Type": "", "Amount": "", "Entry Type": "" }); // Blank row for spacing
+        exps.forEach(e => {
+            data.push({ "ID": e.id, "Category / Customer": e.category, "Notes / Type": e.notes, "Amount": -Math.abs(e.amount), "Entry Type": "Approved Expense" });
+        });
+      }
+      
+      const wb = XLSX.utils.book_new(); 
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "AgentReport"); 
+      XLSX.writeFile(wb, `AgentReport_${d}.xlsx`);
     }
 
     function sendAgentReportWhatsApp() {
@@ -3062,9 +3491,26 @@
       const d = document.getElementById('agentFinanceDate').value, stat = document.getElementById('agentFinanceStatus').value;
       const { rows, totalCollected } = getAgentFinanceRows(currentUser.id, d, stat);
       
+      // Fetch Approved Expenses
+      const exps = (db.agentExpenses || []).filter(e => e.agentId === currentUser.id && e.date === d && e.status === 'APPROVED');
+      const totalExpenses = exps.reduce((sum, e) => sum + parseFloat(e.amount), 0);
+      const netHandover = totalCollected - totalExpenses;
+      
       let text = `*Daily Financial Balance*\n*Representative:* ${currentUser.name}\n*Personnel ID:* ${currentUser.id}\n*Date:* ${d}\n\n`;
-      if(rows.length === 0) { text += `No deliveries registered for this date.`; } 
-      else { rows.forEach(r => { text += `• ${r.id} - ${r.type} - ${formatAmt(r.amount)} AED\n`; }); text += `\n*Total Records:* ${rows.length}\n*Net Collected:* ${formatAmt(totalCollected)} AED`; }
+      
+      text += `*--- COLLECTIONS ---*\n`;
+      if(rows.length === 0) { text += `No deliveries registered for this date.\n`; } 
+      else { rows.forEach(r => { text += `• ${r.id} - ${r.type} - ${formatAmt(r.amount)} AED\n`; }); }
+      
+      if(exps.length > 0) {
+          text += `\n*--- APPROVED EXPENSES ---*\n`;
+          exps.forEach(e => { text += `• ${e.category} - ${e.notes} - ${formatAmt(e.amount)} AED\n`; });
+      }
+      
+      text += `\n*Gross Collected:* ${formatAmt(totalCollected)} AED`;
+      if (exps.length > 0) text += `\n*Total Expenses:* -${formatAmt(totalExpenses)} AED`;
+      text += `\n*Net Handover:* ${formatAmt(netHandover)} AED`;
+      
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
@@ -3093,6 +3539,7 @@
       else if(type === 'RANGE') { const fS = start?`${start.split('-')[1]}-${start.split('-')[2]}-${start.split('-')[0]}`:''; const fE = end?`${end.split('-')[1]}-${end.split('-')[2]}-${end.split('-')[0]}`:''; period = `Period : ${fS} to ${fE}`; }
       
       const ls=db.consignments.filter(c => {
+        if(c.status !== 'Delivered') return false;
         if(c.feeType === 'COC' && !(c.cocPendingAmount > 0)) return false; 
         if(vCode!=='ALL'&&c.vendorCode!==vCode) return false;
         if(c.productAmount === 0 && c.feeType === 'COD') return false; 
@@ -3197,6 +3644,7 @@
       if(typeof XLSX === 'undefined') { alert("Excel library loading. Please try again."); return; }
       const v = document.getElementById('invVendorSelect').value; const type = document.getElementById('invFilterType').value; const sVal = document.getElementById('invSingleInput').value; const start = document.getElementById('invStartDate').value; const end = document.getElementById('invEndDate').value;
       const ls = db.consignments.filter(c => {
+        if(c.status !== 'Delivered') return false;
         if(c.feeType === 'COC' && !(c.cocPendingAmount > 0)) return false; 
         if(v!=='ALL'&&c.vendorCode!==v) return false; if(c.productAmount === 0 && c.feeType === 'COD') return false; 
         const cd = c.createdAt; if(type==='DATE'&&sVal&&cd!==sVal) return false; if(type==='MONTH'&&sVal&&!cd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!cd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&cd<start) return false; if(end&&cd>end) return false; } return true;
@@ -3225,7 +3673,7 @@
     function openVendorModal() { 
       editingVendorCode = null; document.getElementById('vendorModalTitle').textContent = 'Add Merchant'; document.getElementById('vCode').value = 'VND-00'+(db.vendors.length+1); 
       document.getElementById('vCode').readOnly = false; document.getElementById('vCode').classList.remove('bg-slate-200');
-      document.getElementById('vName').value=''; document.getElementById('vPhone').value=''; document.getElementById('vAddress').value=''; document.getElementById('vTRN').value=''; 
+      document.getElementById('vName').value=''; document.getElementById('vPhone').value='+971'; document.getElementById('vAddress').value=''; document.getElementById('vTRN').value=''; 
       
       const btn = document.getElementById('vAutoAdjustBtn'); const val = document.getElementById('vAutoAdjustVal');
       val.value = 'true'; btn.textContent = 'Enabled'; btn.className = 'w-full text-left border border-slate-200 rounded-xl px-3 py-2.5 bg-emerald-50 text-emerald-700 font-bold transition';
@@ -3461,6 +3909,215 @@
         bgImg.onerror = () => {
             alert("Could not load 1000515892.png. Make sure the file exists in the same folder as this HTML file.");
         };
+    }
+
+    // ================= QUOTATION & WAYBILL TOGGLE LOGIC =================
+    function toggleWaybillView() {
+        const isWaybill = document.querySelector('input[name="wb_type"]:checked').value === 'waybill';
+        document.getElementById('form-waybill').classList.toggle('hidden', !isWaybill);
+        document.getElementById('form-quotation').classList.toggle('hidden', isWaybill);
+    }
+
+    function addQuotationRow() {
+        const container = document.getElementById('qt_items_container');
+        const row = document.createElement('div');
+        row.className = 'flex gap-2 items-center qt-item-row mt-2';
+        row.innerHTML = `
+            <input type="text" placeholder="Item Name" class="qt-item flex-1 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+            <input type="text" placeholder="Qty" oninput="calcQtRow(this)" class="qt-qty w-20 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+            <input type="number" placeholder="Price" oninput="calcQtRow(this)" class="qt-price w-24 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+            <input type="number" placeholder="Total" oninput="calcQtGrandTotal()" class="qt-total w-28 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold outline-none focus:border-amber-500" />
+            <button onclick="removeQuotationRow(this)" class="text-rose-400 hover:text-rose-600 font-bold px-2 text-xl transition">×</button>
+        `;
+        container.appendChild(row);
+    }
+    
+    function removeQuotationRow(btn) {
+        btn.parentElement.remove();
+        calcQtGrandTotal();
+    }
+
+    function calcQtRow(el) {
+        const row = el.closest('.qt-item-row');
+        // Parse float for price, but allow text like "81 nos" in qty by extracting the number 
+        const qtyRaw = row.querySelector('.qt-qty').value;
+        const qtyMatch = qtyRaw.match(/[\d\.]+/);
+        const qty = qtyMatch ? parseFloat(qtyMatch[0]) : 0;
+        
+        const price = parseFloat(row.querySelector('.qt-price').value) || 0;
+        
+        if(qty > 0 && price > 0) {
+            row.querySelector('.qt-total').value = (qty * price).toFixed(2);
+        } else {
+            row.querySelector('.qt-total').value = '';
+        }
+        calcQtGrandTotal();
+    }
+
+    function calcQtGrandTotal() {
+        const totals = document.querySelectorAll('.qt-total');
+        let grand = 0;
+        totals.forEach(t => grand += parseFloat(t.value) || 0);
+        document.getElementById('qt_grand_total').textContent = grand.toFixed(2);
+    }
+
+    function clearQuotationForm() {
+        if (!confirm("Are you sure you want to clear all Quotation fields?")) return;
+        document.getElementById('qt_no').value = '';
+        document.getElementById('qt_date').value = '';
+        document.getElementById('qt_to').value = '';
+        
+        const container = document.getElementById('qt_items_container');
+        container.innerHTML = `
+            <div class="flex gap-2 items-center qt-item-row">
+                <input type="text" placeholder="Item Name" class="qt-item flex-1 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+                <input type="text" placeholder="Qty" oninput="calcQtRow(this)" class="qt-qty w-20 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+                <input type="number" placeholder="Price" oninput="calcQtRow(this)" class="qt-price w-24 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 outline-none focus:border-amber-500" />
+                <input type="number" placeholder="Total" oninput="calcQtGrandTotal()" class="qt-total w-28 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 font-bold outline-none focus:border-amber-500" />
+                <button onclick="removeQuotationRow(this)" class="text-rose-400 hover:text-rose-600 font-bold px-2 text-xl transition">×</button>
+            </div>
+        `;
+        calcQtGrandTotal();
+    }
+
+    // Shared Canvas Generator for Quotation
+    function generateQuotationCanvas(callback) {
+        const bgImg = new Image();
+        bgImg.src = '1000521341.jpg'; 
+        
+        bgImg.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = bgImg.width;
+            canvas.height = bgImg.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+            const scaleX = canvas.width / 1000;
+            const scaleY = canvas.height / 1414;
+
+            // 1. Quotation No & Date
+            const qtNo = document.getElementById('qt_no').value || '';
+            if (qtNo) {
+                ctx.fillStyle = '#091442'; 
+                ctx.font = `bold ${18 * scaleY}px Helvetica`; 
+                ctx.fillText(qtNo, 830 * scaleX, 158.36 * scaleY); 
+            }
+            
+            const dateVal = document.getElementById('qt_date').value;
+            if (dateVal) {
+                const d = new Date(dateVal);
+                const ds = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+                ctx.fillStyle = '#404040'; 
+                ctx.font = `normal ${14 * scaleY}px Helvetica`;
+                ctx.fillText(ds, 830 * scaleX, 185 * scaleY); 
+            }
+
+            // 2. Draw "To" Box
+            const toText = document.getElementById('qt_to').value || '';
+            const toLines = toText.split('\n');
+            toLines.forEach((line, i) => {
+                if (i === 0) {
+                    // First Line (Client Name): Bold, Increased Size, Dark Navy/Slate
+                    ctx.font = `bold ${16 * scaleY}px Helvetica`; 
+                    ctx.fillStyle = '#091442'; 
+                } else {
+                    // Sub-details: Maintained formatting combination, Increased Size
+                    ctx.font = `normal ${14 * scaleY}px Helvetica`; 
+                    ctx.fillStyle = '#404040'; 
+                }
+                ctx.fillText(line, 538 * scaleX, (315 + (i * 26)) * scaleY); 
+            });
+
+            // 3. Items Table
+            const rows = document.querySelectorAll('.qt-item-row');
+            let startY = 618; 
+            ctx.fillStyle = '#0f172a';
+            
+            rows.forEach((row, i) => {
+                const item = row.querySelector('.qt-item').value;
+                const qty = row.querySelector('.qt-qty').value;
+                const price = row.querySelector('.qt-price').value;
+                const total = row.querySelector('.qt-total').value;
+                
+                ctx.font = `bold ${17 * scaleY}px Helvetica Bold`; 
+                ctx.fillText(item, 120 * scaleX, (startY + (i * 50)) * scaleY);
+                ctx.fillText(qty, 530 * scaleX, (startY + (i * 50)) * scaleY);
+                if (price) ctx.fillText(`${price}/Pc`, 675 * scaleX, (startY + (i * 50)) * scaleY);
+                ctx.fillText(total, 798 * scaleX, (startY + (i * 50)) * scaleY);
+            });
+
+            // 4. Grand Total
+            const grandTotalY = startY + (rows.length * 50) + 50; 
+            ctx.font = `bold ${17 * scaleY}px Arial`; 
+            ctx.fillText("GRAND TOTAL", 530 * scaleX, grandTotalY * scaleY);
+            ctx.fillText(document.getElementById('qt_grand_total').textContent, 798 * scaleX, grandTotalY * scaleY);
+
+            callback(canvas);
+        };
+
+        bgImg.onerror = () => {
+            alert("Could not load 1000521341.jpg. Make sure the quotation template exists in the same folder.");
+        };
+    }
+
+    function generateAndSendQuotation() {
+        const phone = prompt("Enter WhatsApp number to send this to (include country code, e.g., 971501234567):", "+971");
+        if (phone === null) return; 
+
+        generateQuotationCanvas((canvas) => {
+            canvas.toBlob((blob) => {
+                const cleanPhone = phone.replace(/[^0-9]/g, '');
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Quotation_${(document.getElementById('qt_no').value || 'New').replace(/\//g, '-')}.jpg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                if (cleanPhone) {
+                    setTimeout(() => {
+                        if(confirm('Quotation Saved to downloads! Open WhatsApp to attach and send?')) {
+                            const message = encodeURIComponent("Please find the attached Quotation from NextWay Delivery.");
+                            window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${message}`, '_blank');
+                        }
+                    }, 300);
+                }
+            }, 'image/jpeg', 0.95);
+        });
+    }
+
+    function printQuotation() {
+        generateQuotationCanvas((canvas) => {
+            const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+            
+            // Generate a secure invisible print wrapper compatible with the app's existing @media print CSS
+            let printContainer = document.getElementById('printableQuotationArea');
+            if (!printContainer) {
+                printContainer = document.createElement('div');
+                printContainer.id = 'printableQuotationArea';
+                printContainer.className = 'hidden bg-white';
+                document.body.appendChild(printContainer);
+            }
+            
+            printContainer.innerHTML = `<img src="${dataUrl}" style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto;" />`;
+            
+            // Clean other print contexts briefly
+            document.querySelectorAll('.print-area').forEach(e => e.classList.remove('print-area'));
+            
+            printContainer.classList.remove('hidden');
+            printContainer.classList.add('print-area');
+            
+            const img = printContainer.querySelector('img');
+            const doPrint = () => {
+                window.print();
+                printContainer.classList.remove('print-area');
+                printContainer.classList.add('hidden');
+            };
+            // Make sure the image is decoded before opening the print dialog
+            if (img.complete) doPrint(); else img.onload = doPrint;
+        });
     }
 
     // Initialize Application Database Engine
