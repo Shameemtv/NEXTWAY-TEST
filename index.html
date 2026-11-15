@@ -1216,27 +1216,28 @@
   </div>
 
   <div id="actionModal" class="hidden fixed inset-0 bg-[#0b0f19]/60 backdrop-blur-sm z-[110] flex items-center justify-center p-3 transition-opacity duration-300">
-    <div class="ql-card max-w-md w-full p-6 space-y-5 flex flex-col text-xs">
+    <div class="ql-card max-w-md w-full p-6 space-y-5 flex flex-col text-xs max-h-[92vh] my-auto">
       <div class="flex justify-between items-center border-b border-[var(--border-color)] pb-3 shrink-0">
-        <h3 id="actionModalTitle" class="font-black tracking-widest text-sm text-[var(--text-primary)] uppercase">Action</h3>
+        <\u003Cdiv>\u003Clabel class=\"block text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-secondary)] mb-1.5\">Company Name\u003C/label>\u003Cinput id=\"vName\" type=\"text\" required class=\"w-full font-bold border border-[var(--border-color)] rounded-xl px-4 py-3 bg-[var(--bg-base)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-1 focus:ring-[var(--accent-gold)] transition-all\" />\u003C/div>h3 id="actionModalTitle" class="font-black tracking-widest text-sm text-[var(--text-primary)] uppercase">Action</h3>
         <button onclick="closeModal('actionModal')" class="text-[var(--text-muted)] hover:text-[var(--status-rose)] text-lg font-bold transition-colors p-1">✕</button>
       </div>
-      <div id="actionModalBody" class="space-y-4"></div>
+      <div id="actionModalBody" class="space-y-4 overflow-y-auto pr-2 flex-1 hide-scrollbar"></div>
     </div>
   </div>
 
   <div id="inspectModal" class="hidden fixed inset-0 bg-[#0b0f19]/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 transition-opacity duration-300">
-    <div class="ql-card max-w-lg w-full p-6 space-y-5 flex flex-col text-xs">
+    <div class="ql-card max-w-lg w-full p-6 space-y-5 flex flex-col text-xs max-h-[92vh] my-auto">
       <div class="flex justify-between items-center border-b border-[var(--border-color)] pb-3 shrink-0">
         <h3 id="inspectTitle" class="font-black tracking-widest text-sm text-[var(--text-primary)] uppercase">Details</h3>
         <button onclick="closeModal('inspectModal')" class="text-[var(--text-muted)] hover:text-[var(--status-rose)] font-bold transition-colors p-1 text-lg">✕</button>
       </div>
-      <div id="inspectContent" class="space-y-4"></div>
-      <div class="pt-5 border-t border-[var(--border-color)] flex justify-end">
+      <div id="inspectContent" class="space-y-4 overflow-y-auto pr-2 flex-1 hide-scrollbar"></div>
+      <div class="pt-5 border-t border-[var(--border-color)] flex justify-end shrink-0">
         <button onclick="closeModal('inspectModal')" class="bg-[var(--bg-base)] hover:bg-[var(--border-color-strong)] text-[var(--text-primary)] border border-[var(--border-color)] font-extrabold px-6 py-2.5 rounded-xl shadow-sm transition-colors uppercase tracking-widest">Close Window</button>
       </div>
     </div>
   </div>
+
   
   <div id="vendorModal" class="hidden fixed inset-0 bg-[#0b0f19]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="ql-card max-w-md w-full p-6 space-y-5 text-xs">
