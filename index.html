@@ -396,7 +396,7 @@
             </div>
             <div class="relative flex-1 sm:w-56">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              <input id="filterSearchText" oninput="renderConsignments()" type="text" placeholder="Filter List..." class="w-full pl-9 pr-3 py-2.5 text-xs font-bold border border-[var(--border-color)] rounded-xl bg-[var(--bg-base)] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:ring-2 focus:ring-[#c9a24b]/20 focus:border-[var(--accent-gold)] transition-all uppercase" />
+              <input id="filterSearchText" oninput="debounceRenderConsignments()" type="text" placeholder="Filter List..." class="w-full pl-9 pr-3 py-2.5 text-xs font-bold border border-[var(--border-color)] rounded-xl bg-[var(--bg-base)] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:ring-2 focus:ring-[#c9a24b]/20 focus:border-[var(--accent-gold)] transition-all uppercase" />
             </div>
           </div>
           
@@ -416,7 +416,27 @@
            <button onclick="bulkAssign()" class="bg-[#0b0f19] text-[var(--accent-gold)] font-extrabold px-5 py-2 rounded-xl text-[11px] tracking-widest uppercase shadow-sm hover:bg-[#131b2e] border border-[#1e293b] transition-all">Assign</button>
         </div>
 
-        <div id="consignmentsGrid" class="w-full space-y-4"></div>
+        <div id="consignmentsGrid" class="w-full space-y-4">
+          <div class="ql-card overflow-x-auto w-full">
+            <table class="w-full text-left text-xs border-collapse tabular-nums">
+              <thead class="bg-[var(--bg-base)] border-b border-[var(--border-color)]">
+                <tr>
+                  <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">#</th>
+                  <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold whitespace-nowrap">AWB Number</th>
+                  <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Company</th>
+                  <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Status</th>
+                  <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold whitespace-nowrap">Date Time</th>
+                </tr>
+              </thead>
+              <tbody id="consignmentsTbody" class="divide-y divide-[var(--border-color)]">
+                <!-- JS will only inject rows here -->
+              </tbody>
+            </table>
+          </div>
+          <div id="consignmentsEmptyState" class="hidden p-8 ql-card text-center font-bold text-[var(--text-muted)] text-[10px] uppercase tracking-widest">
+            No consignments found matching your parameters.
+          </div>
+        </div>
       </div>
 
       <!-- TAB 2: ALERTS & CONFIRMATIONS -->
@@ -2972,64 +2992,71 @@
       reader.readAsArrayBuffer(file);
     }
     
+    let searchDebounceTimer;
+    function debounceRenderConsignments() {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        requestAnimationFrame(renderConsignments);
+      }, 150);
+    }
+
     function renderConsignments() {
-      const g = document.getElementById('consignmentsGrid'), stat = document.getElementById('filterStatus').value, slc = document.getElementById('filterAgentSlicer')?.value||'ALL', q = document.getElementById('filterSearchText').value.toLowerCase(), isA = currentUser.role==='ADMIN';
+      const tbody = document.getElementById('consignmentsTbody');
+      const emptyState = document.getElementById('consignmentsEmptyState');
+      const tableCard = document.querySelector('#consignmentsGrid .ql-card');
+      const stat = document.getElementById('filterStatus').value;
+      const slc = document.getElementById('filterAgentSlicer')?.value || 'ALL';
+      const q = document.getElementById('filterSearchText').value.toLowerCase();
+      const isA = currentUser.role === 'ADMIN';
+
       const ls = db.consignments.filter(c => {
         if (!isA) {
-            const isAssigned = c.assignedTo === currentUser.id;
-            const isPool = c.status === 'Created';
-            
-            if (c.pickedUpBy === currentUser.id && !isAssigned) return false;
-            if (!isAssigned && !isPool) return false;
+          const isAssigned = c.assignedTo === currentUser.id;
+          const isPool = c.status === 'Created';
+          if (c.pickedUpBy === currentUser.id && !isAssigned) return false;
+          if (!isAssigned && !isPool) return false;
         }
-        if (stat === 'PENDING_ALL') { if(c.status === 'Delivered' || c.status === 'Returned') return false; } else if (stat!=='ALL' && c.status!==stat) return false;
-        if (isA && slc!=='ALL') { if(slc==='UNASSIGNED'&&c.assignedTo) return false; if(slc!=='UNASSIGNED'&&c.assignedTo!==slc) return false; }
-        if (q && !`${c.id} ${c.customerName} ${c.vendorCode}`.toLowerCase().includes(q)) return false; return true;
+        if (stat === 'PENDING_ALL') { if (c.status === 'Delivered' || c.status === 'Returned') return false; }
+        else if (stat !== 'ALL' && c.status !== stat) return false;
+        if (isA && slc !== 'ALL') { if (slc === 'UNASSIGNED' && c.assignedTo) return false; if (slc !== 'UNASSIGNED' && c.assignedTo !== slc) return false; }
+        if (q && !`${c.id} ${c.customerName} ${c.vendorCode}`.toLowerCase().includes(q)) return false;
+        return true;
       });
-      
-      if (ls.length===0) { g.innerHTML=`<div class="p-8 ql-card text-center font-bold text-[var(--text-muted)] text-[10px] uppercase tracking-widest">No consignments found matching your parameters.</div>`; return; }
-      
-      g.innerHTML = `
-        <div class="ql-card overflow-x-auto w-full">
-          <table class="w-full text-left text-xs border-collapse tabular-nums">
-            <thead class="bg-[var(--bg-base)] border-b border-[var(--border-color)]">
-              <tr>
-                <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">#</th>
-                <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold whitespace-nowrap">AWB Number</th>
-                <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Company</th>
-                <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Status</th>
-                <th class="p-4 text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold whitespace-nowrap">Date Time</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-[var(--border-color)]">
-              ${ls.map((c, idx) => {
-                const v = getVendorByCode(c.vendorCode);
-                const dt = c.status === 'Delivered' ? c.deliveredAt : (['Picked Up', 'Out for delivery'].includes(c.status) ? c.pickedUpAt : c.createdAt);
-                
-                let dtStr = '-';
-                if (dt) {
-                  if (typeof dt === 'string' && dt.includes('T')) {
-                    const parts = dt.split('T');
-                    dtStr = parts[0] + '<br>' + parts[1].split('.')[0];
-                  } else {
-                    dtStr = dt;
-                  }
-                }
 
-                return `
-                  <tr onclick="showConsignmentDetails('${c.id}')" class="cursor-pointer hover:bg-[var(--bg-base)] transition-colors">
-                    <td class="p-4 font-bold text-[var(--text-primary)]">${idx + 1}</td>
-                    <td class="p-4 font-black text-[var(--text-primary)] tracking-widest uppercase">${c.id}</td>
-                    <td class="p-4 font-bold uppercase text-[var(--text-secondary)]">${v ? v.name : c.vendorCode}</td>
-                    <td class="p-4 lowercase font-bold text-[var(--text-muted)]">${c.status}</td>
-                    <td class="p-4 leading-tight font-bold text-[var(--text-secondary)] whitespace-nowrap">${dtStr}</td>
-                  </tr>
-                `;
-              }).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
+      if (ls.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        tableCard.classList.add('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      tableCard.classList.remove('hidden');
+
+      tbody.innerHTML = ls.map((c, idx) => {
+        const v = getVendorByCode(c.vendorCode);
+        const dt = c.status === 'Delivered' ? c.deliveredAt : (['Picked Up', 'Out for delivery'].includes(c.status) ? c.pickedUpAt : c.createdAt);
+
+        let dtStr = '-';
+        if (dt) {
+          if (typeof dt === 'string' && dt.includes('T')) {
+            const parts = dt.split('T');
+            dtStr = parts[0] + '<br>' + parts[1].split('.')[0];
+          } else {
+            dtStr = dt;
+          }
+        }
+
+        return `
+          <tr onclick="showConsignmentDetails('${c.id}')" class="cursor-pointer hover:bg-[var(--bg-base)] transition-colors">
+            <td class="p-4 font-bold text-[var(--text-primary)]">${idx + 1}</td>
+            <td class="p-4 font-black text-[var(--text-primary)] tracking-widest uppercase">${c.id}</td>
+            <td class="p-4 font-bold uppercase text-[var(--text-secondary)]">${v ? v.name : c.vendorCode}</td>
+            <td class="p-4 lowercase font-bold text-[var(--text-muted)]">${c.status}</td>
+            <td class="p-4 leading-tight font-bold text-[var(--text-secondary)] whitespace-nowrap">${dtStr}</td>
+          </tr>
+        `;
+      }).join('');
     }
 
     async function agentMarkCocCollected(cid) {
