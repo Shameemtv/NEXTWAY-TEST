@@ -58,7 +58,7 @@
       --bg-surface: #0b0f19;
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
-      --text-muted: #475569;
+      --text-muted: #64748b; /* WCAG AA Compliant Contrast */
       
       /* Status Tweaks for Dark */
       --status-emerald: #34d399;
@@ -69,6 +69,23 @@
       --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.4);
       --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.6);
       --glass-bg: rgba(11, 15, 25, 0.85);
+    }
+
+    /* Premium SVG Chart Glows for Dark Mode */
+    body.dark-mode #dashDeliveredCircle {
+      filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.35));
+    }
+    body.dark-mode #dashPendingCircle {
+      filter: drop-shadow(0 0 8px rgba(201, 162, 75, 0.35));
+    }
+
+    /* Smooth Slide-up for the new More Menu */
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-up {
+      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @media print {
@@ -987,54 +1004,79 @@
       </div>
     </section>
   </main>
-  <!-- BOTTOM NAVIGATION BAR (SCROLLABLE & RESPONSIVE) -->
-  <nav id="bottomNav" class="hidden fixed bottom-0 w-full glass-panel border-t border-[var(--border-color)] flex overflow-x-auto hide-scrollbar justify-start sm:justify-around text-[10px] sm:text-xs text-[var(--text-secondary)] pb-safe z-50 shadow-[var(--shadow-elevated)] px-2">
-    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
+  <!-- CORE BOTTOM NAVIGATION BAR -->
+  <nav id="bottomNav" class="hidden fixed bottom-0 w-full glass-panel border-t border-[var(--border-color)] flex justify-around text-[10px] sm:text-xs text-[var(--text-secondary)] pb-safe z-[40] shadow-[var(--shadow-elevated)] px-2">
+    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="flex-1 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
       Dashboard
     </button>
-    <button onclick="switchTab('consignments')" id="tab-consignments" class="shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 tab-active transition-all font-semibold tracking-wide">
+    <button onclick="switchTab('consignments')" id="tab-consignments" class="flex-1 py-3.5 flex flex-col items-center gap-1.5 tab-active transition-all font-semibold tracking-wide">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
       Dispatch
     </button>
-    <button onclick="switchTab('confirmations')" id="tab-confirmations" class="shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all relative font-semibold tracking-wide">
+    <button onclick="switchTab('confirmations')" id="tab-confirmations" class="flex-1 py-3.5 flex flex-col items-center gap-1.5 transition-all relative font-semibold tracking-wide">
       <span id="navConfirmBadge" class="absolute top-1.5 right-3 bg-[var(--status-rose)] text-white text-[9px] font-black px-1.5 py-0.5 rounded-full hidden shadow-sm">0</span>
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
       Alerts
     </button>
-    <button onclick="switchTab('agent-reports')" id="tab-agent-reports" class="admin-only shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-      Reports
-    </button>
-    <button onclick="switchTab('agent-finance')" id="tab-agent-finance" class="agent-only shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      Finance
-    </button>
-    <button onclick="switchTab('agent-deficit')" id="tab-agent-deficit" class="agent-only shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      Deficit
-    </button>
-    <button onclick="switchTab('vendors')" id="tab-vendors" class="admin-only shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-      Merchants
-    </button>
-    <button onclick="switchTab('invoices')" id="tab-invoices" class="admin-only shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-      Ledger
-    </button>
-    <button onclick="switchTab('admin-finance')" id="tab-admin-finance" class="admin-only shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      Profit
-    </button>
-    <button onclick="switchTab('waybill')" id="tab-waybill" class="shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-      Waybill
-    </button>
-    <button onclick="switchTab('system')" id="tab-system" class="shrink-0 flex-1 min-w-[72px] sm:min-w-0 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-      System
+    <button onclick="toggleMoreMenu()" id="tab-more" class="flex-1 py-3.5 flex flex-col items-center gap-1.5 transition-all font-semibold tracking-wide">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      Menu
     </button>
   </nav>
+
+  <!-- MORE MENU BOTTOM SHEET -->
+  <div id="moreMenuDrawer" class="hidden fixed inset-0 bg-[#0b0f19]/60 backdrop-blur-sm z-[45] flex items-end sm:items-center justify-center transition-opacity duration-300">
+    <div class="bg-[var(--bg-surface)] w-full sm:max-w-md rounded-t-3xl sm:rounded-xl p-6 pb-24 sm:pb-6 space-y-6 shadow-[var(--shadow-elevated)] border-t border-[var(--border-color)] animate-slide-up">
+      <div class="flex justify-between items-center border-b border-[var(--border-color)] pb-3">
+        <h3 class="font-black tracking-widest text-sm text-[var(--text-primary)] uppercase">Workspace Menu</h3>
+        <button onclick="toggleMoreMenu()" class="text-[var(--text-muted)] hover:text-[var(--status-rose)] font-bold text-xl transition-colors">✕</button>
+      </div>
+      
+      <div class="grid grid-cols-4 gap-4 text-[var(--text-secondary)]">
+        <!-- Reports -->
+        <button onclick="switchTabWrapper('agent-reports')" id="tab-agent-reports" class="admin-only flex flex-col items-center gap-2 p-2 hover:bg-[var(--bg-base)] rounded-xl transition-colors font-semibold tracking-wide text-[10px]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          Reports
+        </button>
+        <!-- Finance (Agent) -->
+        <button onclick="switchTabWrapper('agent-finance')" id="tab-agent-finance" class="agent-only flex flex-col items-center gap-2 p-2 hover:bg-[var(--bg-base)] rounded-xl transition-colors font-semibold tracking-wide text-[10px]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Finance
+        </button>
+        <!-- Deficit (Agent) -->
+        <button onclick="switchTabWrapper('agent-deficit')" id="tab-agent-deficit" class="agent-only flex flex-col items-center gap-2 p-2 hover:bg-[var(--bg-base)] rounded-xl transition-colors font-semibold tracking-wide text-[10px]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Deficit
+        </button>
+        <!-- Merchants -->
+        <button onclick="switchTabWrapper('vendors')" id="tab-vendors" class="admin-only flex flex-col items-center gap-2 p-2 hover:bg-[var(--bg-base)] rounded-xl transition-colors font-semibold tracking-wide text-[10px]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          Merchants
+        </button>
+        <!-- Ledger -->
+        <button onclick="switchTabWrapper('invoices')" id="tab-invoices" class="admin-only flex flex-col items-center gap-2 p-2 hover:bg-[var(--bg-base)] rounded-xl transition-colors font-semibold tracking-wide text-[10px]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Ledger
+        </button>
+        <!-- Profit -->
+        <button onclick="switchTabWrapper('admin-finance')" id="tab-admin-finance" class="admin-only flex flex-col items-center gap-2 p-2 hover:bg-[var(--bg-base)] rounded-xl transition-colors font-semibold tracking-wide text-[10px]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Profit
+        </button>
+        <!-- Waybill -->
+        <button onclick="switchTabWrapper('waybill')" id="tab-waybill" class="flex flex-col items-center gap-2 p-2 hover:bg-[var(--bg-base)] rounded-xl transition-colors font-semibold tracking-wide text-[10px]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Waybill
+        </button>
+        <!-- System -->
+        <button onclick="switchTabWrapper('system')" id="tab-system" class="flex flex-col items-center gap-2 p-2 hover:bg-[var(--bg-base)] rounded-xl transition-colors font-semibold tracking-wide text-[10px]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          System
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ================= MODALS ================= -->
   <div id="expenseModal" class="hidden fixed inset-0 bg-[#0b0f19]/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 transition-opacity duration-300">
@@ -1910,6 +1952,15 @@
       refreshAllViews();
     }
 
+    function toggleMoreMenu() {
+      document.getElementById('moreMenuDrawer').classList.toggle('hidden');
+    }
+
+    function switchTabWrapper(tName) {
+      toggleMoreMenu();
+      switchTab(tName);
+    }
+
     function switchTab(tName) {
       const globalHeader = document.getElementById('globalWorkspaceHeader');
       if (globalHeader) {
@@ -1921,6 +1972,13 @@
         if(p) p.classList.toggle('hidden', t!==tName);
         if(b) { b.classList.toggle('tab-active', t===tName); b.classList.toggle('text-[var(--text-muted)]', t!==tName); }
       });
+      // Highlight the "Menu" button when a sub-tab is active
+      const moreBtn = document.getElementById('tab-more');
+      if (moreBtn) {
+        const isSub = !['dashboard', 'consignments', 'confirmations'].includes(tName);
+        moreBtn.classList.toggle('tab-active', isSub);
+        moreBtn.classList.toggle('text-[var(--text-muted)]', !isSub);
+      }
       if(tName==='dashboard') { closeDashSubScreen(); renderAgentDashboard(); }
       if(tName==='agent-finance') generateAgentFinanceReport();
       if(tName==='admin-finance') generateAdminFinanceTab();
