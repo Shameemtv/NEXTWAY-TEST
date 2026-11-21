@@ -88,10 +88,118 @@
       animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
+    /* Standard A5 Ledger Sheet Preview & Print Layout */
+    .a5-ledger-sheet {
+      width: 100%;
+      max-width: 148mm;
+      min-height: 200mm;
+      margin: 0 auto;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border: 1px solid #cbd5e1 !important;
+      padding: 6mm;
+      box-sizing: border-box;
+      font-size: 9.5px;
+      line-height: 1.35;
+      display: flex;
+      flex-direction: column;
+    }
+    .a5-ledger-sheet.hidden { display: none !important; }
+    .a5-ledger-sheet * {
+      color: inherit;
+    }
+    .a5-ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+      font-variant-numeric: tabular-nums;
+    }
+    .a5-ledger-table th {
+      background-color: #0b0f19 !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 4.5px 5px;
+      border: 1px solid #0b0f19 !important;
+      font-size: 8px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .a5-ledger-table td {
+      padding: 4px 5px;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      vertical-align: top;
+    }
+    .a5-ledger-table tbody tr:nth-child(even) td {
+      background-color: #f8fafc !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .a5-ledger-table tfoot td {
+      background-color: #f1f5f9 !important;
+      font-weight: 800;
+      border-top: 1.5px solid #0b0f19 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .a5-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+      font-variant-numeric: tabular-nums;
+    }
+    .a5-summary-table td {
+      padding: 3.5px 6px;
+      border: 1px solid #cbd5e1 !important;
+    }
+    .a5-summary-net td {
+      background-color: #0b0f19 !important;
+      color: #ffffff !important;
+      font-weight: 800;
+      font-size: 10px;
+      border-color: #0b0f19 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
     @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
       body * { visibility: hidden !important; }
       .print-area, .print-area * { visibility: visible !important; }
-      .print-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0.5rem !important; background: white !important; }
+      .print-area {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0.5rem !important;
+        background: #ffffff !important;
+      }
+      .print-area.print-a5 {
+        padding: 0 !important;
+        width: 136mm !important;
+        max-width: 100% !important;
+      }
+      .print-area.print-a5 .a5-ledger-sheet {
+        max-width: 100% !important;
+        width: 100% !important;
+        min-height: auto !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+      }
+      .a5-ledger-table thead { display: table-header-group; }
+      .a5-ledger-table tr { break-inside: avoid; page-break-inside: avoid; }
+      .a5-avoid-break { break-inside: avoid; page-break-inside: avoid; }
       .no-print { display: none !important; }
     }
 
@@ -640,38 +748,126 @@
         </div>
 
         <div id="printableInvoice" class="ql-card p-8 bg-white border border-[var(--border-color)] space-y-6">
-          <!-- STANDARD STATEMENT -->
-          <div id="standardInvoiceWrap" class="space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between border-b border-gray-200 pb-5 gap-4">
-              <div>
-                <h2 class="text-xl font-black text-gray-900 uppercase tracking-tighter">NEXT WAY DELIVERY SERVICES LLC</h2>
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Al Quoz 3, United Arab Emirates<br/>nextwaydelivery@gmail.com<br/>Ph: +971 56 691 3977</p>
+          <!-- STANDARD A5 LEDGER STATEMENT (TAX INVOICE = NO) -->
+          <div id="standardInvoiceWrap" class="a5-ledger-sheet">
+            <!-- Header -->
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0b0f19; padding-bottom:8px; margin-bottom:8px; gap:8px;">
+              <div style="max-width:62%;">
+                <img src="1000515619.jpg" alt="Logo" onerror="this.style.display='none'" style="height:30px; margin-bottom:4px; object-fit:contain;" />
+                <div style="font-size:12.5px; font-weight:900; color:#0b0f19; letter-spacing:-0.02em; text-transform:uppercase; line-height:1.15;">NEXT WAY DELIVERY SERVICES LLC</div>
+                <div style="font-size:8px; color:#475569; font-weight:600; margin-top:2px; line-height:1.35;">
+                  Al Quoz 3, United Arab Emirates<br/>
+                  nextwaydelivery@gmail.com | Ph: +971 56 691 3977
+                </div>
               </div>
-              <div class="text-left sm:text-right">
-                <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Merchant Statement</p>
-                <div id="invVendorHeader" class="text-sm font-black text-gray-900 mt-1 uppercase tracking-tight"></div>
-                <p id="invPeriodHeader" class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1"></p>
+              <div style="text-align:right; max-width:38%;">
+                <div style="font-size:12px; font-weight:900; color:#0b0f19; letter-spacing:0.06em; text-transform:uppercase;">LEDGER STATEMENT</div>
+                <div style="font-size:8px; color:#475569; font-weight:700; margin-top:4px; line-height:1.45;">
+                  Ref: <span id="invStatementRef" style="color:#0b0f19; font-weight:800;">-</span><br/>
+                  Date: <span id="invStatementDate" style="color:#0b0f19; font-weight:800;">-</span>
+                </div>
               </div>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><p class="text-[10px] uppercase font-extrabold text-gray-500 tracking-wider">Gross Collected</p><p id="invTotalProduct" class="text-xl font-black text-gray-900 mt-1 tabular-nums">0.00 AED</p></div>
-              <div class="p-4 rounded-xl bg-rose-50 border border-rose-200"><p class="text-[10px] uppercase font-extrabold text-rose-800 tracking-wider">Delivery Fees</p><p id="invTotalDeductions" class="text-xl font-black text-rose-900 mt-1 tabular-nums">0.00 AED</p></div>
-              <div class="p-4 rounded-xl bg-gray-50 border border-gray-200"><p class="text-[10px] uppercase font-extrabold text-gray-500 tracking-wider">Paid to Vendor</p><p id="invSettledAmount" class="text-xl font-black text-gray-700 mt-1 tabular-nums">0.00 AED</p></div>
-              <div class="p-4 rounded-xl bg-gray-900 border border-gray-900"><p id="invNetLabel" class="text-[10px] uppercase font-extrabold text-[#c9a24b] tracking-wider">Net Balance Due</p><p id="invNetAmount" class="text-xl font-black text-white mt-1 tabular-nums">0.00 AED</p></div>
+
+            <!-- Merchant & Statement Meta Box -->
+            <div style="display:flex; justify-content:space-between; border:1px solid #cbd5e1; background:#f8fafc; padding:6px 8px; margin-bottom:8px; gap:10px; -webkit-print-color-adjust:exact; print-color-adjust:exact;">
+              <div style="width:58%; border-right:1px solid #cbd5e1; padding-right:8px;">
+                <div style="font-size:7.5px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:2px;">Statement To (Merchant)</div>
+                <div id="invVendorHeader" style="font-size:9.5px; font-weight:800; color:#0b0f19; text-transform:uppercase; line-height:1.35;"></div>
+              </div>
+              <div style="width:42%; text-align:right;">
+                <div style="font-size:7.5px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:2px;">Statement Details</div>
+                <div id="invPeriodHeader" style="font-size:8.5px; font-weight:700; color:#0f172a; line-height:1.35;"></div>
+                <div style="font-size:8.5px; font-weight:700; color:#475569; margin-top:2px;">
+                  Orders: <span id="invOrderCount" style="color:#0b0f19; font-weight:800;">0</span> &nbsp;|&nbsp; Currency: <span style="color:#0b0f19; font-weight:800;">AED</span>
+                </div>
+              </div>
             </div>
-            <div class="space-y-5 overflow-x-auto">
-              <table class="w-full text-left text-xs border-collapse tabular-nums">
-                <thead><tr class="bg-gray-100 text-gray-700 border-b border-gray-300"><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Date</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Tracking ID</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Customer</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold text-right text-rose-700">Deduction / Deficit</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold text-right">Product Total</th></tr></thead>
-                <tbody id="invTableBody" class="divide-y divide-gray-100 text-gray-800"></tbody>
+
+            <!-- Consignment Ledger Table -->
+            <div style="flex:1;">
+              <table class="a5-ledger-table">
+                <thead>
+                  <tr>
+                    <th style="width:5%; text-align:center;">#</th>
+                    <th style="width:16%; text-align:left;">Date</th>
+                    <th style="width:18%; text-align:left;">AWB / ID</th>
+                    <th style="width:29%; text-align:left;">Customer</th>
+                    <th style="width:16%; text-align:right;">Deduction</th>
+                    <th style="width:16%; text-align:right;">Product</th>
+                  </tr>
+                </thead>
+                <tbody id="invTableBody"></tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4" style="text-align:right; text-transform:uppercase; font-size:8px; letter-spacing:0.04em;">Subtotals (AED)</td>
+                    <td id="invFootDeductions" style="text-align:right; color:#be123c !important;">0.00</td>
+                    <td id="invFootProduct" style="text-align:right; color:#0b0f19 !important;">0.00</td>
+                  </tr>
+                </tfoot>
               </table>
-              <div id="invSettledLedgerWrap" class="hidden pt-5 border-t border-gray-200"><p class="text-[10px] font-extrabold text-gray-900 uppercase tracking-widest mb-3">Direct Payouts Made to Vendor</p><table class="w-full text-left text-xs border-collapse tabular-nums"><thead><tr class="bg-gray-100 text-gray-700 border-b border-gray-300"><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Date</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Type</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold">Reference</th><th class="p-3 text-[10px] uppercase tracking-wider font-extrabold text-right">Amount</th></tr></thead><tbody id="invSettledTableBody" class="divide-y divide-gray-100 text-gray-800"></tbody></table></div>
+
+              <!-- Direct Payouts / Settlements Made to Vendor -->
+              <div id="invSettledLedgerWrap" class="hidden a5-avoid-break" style="margin-top:8px;">
+                <div style="font-size:8px; font-weight:800; color:#0b0f19; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:3px;">Direct Payouts / Adjustments</div>
+                <table class="a5-ledger-table">
+                  <thead>
+                    <tr>
+                      <th style="width:18%; text-align:left;">Date</th>
+                      <th style="width:16%; text-align:left;">Type</th>
+                      <th style="width:46%; text-align:left;">Reference / Notes</th>
+                      <th style="width:20%; text-align:right;">Amount (AED)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="invSettledTableBody"></tbody>
+                </table>
+              </div>
             </div>
-            <div class="flex justify-between items-end mt-6 pt-5 border-t border-gray-200">
-               <div id="pdfQrCodeCanvas" class="p-2 bg-white border border-gray-200 rounded-xl shadow-sm"></div>
-               <div class="flex gap-10 text-center text-xs text-gray-500">
-                 <div><div class="border-b border-gray-400 w-32 mx-auto mb-2"></div><p class="font-bold uppercase tracking-widest text-[10px]">Next Way Signatory</p></div>
-                 <div><div class="border-b border-gray-400 w-32 mx-auto mb-2"></div><p class="font-bold uppercase tracking-widest text-[10px]">Vendor Acceptance</p></div>
-               </div>
+
+            <!-- Bottom Summary & Verification -->
+            <div class="a5-avoid-break" style="display:flex; justify-content:space-between; align-items:flex-end; gap:10px; margin-top:10px; padding-top:8px; border-top:1.5px solid #0b0f19;">
+              <div style="width:46%; display:flex; align-items:flex-start; gap:7px;">
+                <div id="pdfQrCodeCanvas" style="padding:3px; background:#ffffff; border:1px solid #cbd5e1; border-radius:4px; flex-shrink:0;"></div>
+                <div style="font-size:7.5px; color:#475569; line-height:1.35;">
+                  <div style="font-weight:800; color:#0b0f19; text-transform:uppercase; margin-bottom:2px;">Note</div>
+                  Please report any discrepancy within 7 days of receipt.<br/>
+                  <span style="display:inline-block; margin-top:3px;">By: <b id="invPrintedBy" style="color:#0b0f19;">-</b></span><br/>
+                  <span>Printed: <b id="invPrintedDate" style="color:#0b0f19;">-</b></span>
+                </div>
+              </div>
+
+              <div style="width:54%;">
+                <table class="a5-summary-table">
+                  <tr>
+                    <td style="font-weight:700; color:#475569;">Gross Product Collected</td>
+                    <td id="invTotalProduct" style="text-align:right; font-weight:800; color:#0b0f19;">0.00 AED</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:700; color:#be123c;">Less: Delivery Fees / Deficit</td>
+                    <td id="invTotalDeductions" style="text-align:right; font-weight:800; color:#be123c;">0.00 AED</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:700; color:#475569;">Less: Paid to Vendor</td>
+                    <td id="invSettledAmount" style="text-align:right; font-weight:800; color:#0f172a;">0.00 AED</td>
+                  </tr>
+                  <tr class="a5-summary-net">
+                    <td id="invNetLabel" style="text-transform:uppercase; letter-spacing:0.03em;">Net Balance Due</td>
+                    <td id="invNetAmount" style="text-align:right;">0.00 AED</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Signatures -->
+            <div class="a5-avoid-break" style="display:flex; justify-content:space-between; margin-top:16px; padding-top:4px; font-size:8px; color:#475569;">
+              <div style="text-align:center; width:40%;">
+                <div style="border-bottom:1px solid #64748b; height:18px; margin-bottom:3px;"></div>
+                <span style="font-weight:800; text-transform:uppercase; letter-spacing:0.04em;">Next Way Signatory</span>
+              </div>
+              <div style="text-align:center; width:40%;">
+                <div style="border-bottom:1px solid #64748b; height:18px; margin-bottom:3px;"></div>
+                <span style="font-weight:800; text-transform:uppercase; letter-spacing:0.04em;">Merchant Acceptance</span>
+              </div>
             </div>
           </div>
 
@@ -3983,39 +4179,103 @@
         document.getElementById('standardInvoiceWrap').classList.remove('hidden');
         document.getElementById('taxInvoiceWrap').classList.add('hidden');
 
-        document.getElementById('invVendorHeader').innerHTML = v ? `${v.name}<br/><span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1 block leading-relaxed">${v.phone} <br/> ${v.address}</span>` : 'ALL REGISTERED VENDORS';
-        document.getElementById('invPeriodHeader').textContent = period;
+        const now = getUAEDisplayDate();
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yyyy = now.getFullYear();
 
-        let tp=0, td=0, netDeduction=0; 
-        document.getElementById('invTableBody').innerHTML = ls.map(c=>{
-          tp+=c.productAmount; 
-          
-          const defInfo = getDeficitInfo(c);
-          let deduction = defInfo.deductionInInvoice;
-          let mathDeduction = deduction;
-
-          if (c.feeType === 'COC') { 
-              deduction = c.cocPendingAmount > 0 ? c.deliveryCharge : 0; 
-              mathDeduction = deduction;
-          } else if (defInfo.excludeFromNet) {
-              mathDeduction = 0; 
-          }
-
-          td += deduction;
-          netDeduction += mathDeduction;
-          
-          const feeDisplay = c.feeType === 'COC' ? c.cocPendingAmount : deduction;
-          return `<tr><td class="p-3 font-bold">${c.createdAt}</td><td class="p-3 font-black">${c.id}</td><td class="p-3 uppercase font-bold">${c.customerName}</td><td class="p-3 text-right text-rose-700 font-bold">${formatAmt(feeDisplay)}</td><td class="p-3 text-right font-black">${formatAmt(c.productAmount)}</td></tr>`;
-        }).join(''); 
-        
-        let lp=0; const pL = db.vendorPayments.filter(p=>{
-          if(vCode!=='ALL'&&p.vendorCode!==vCode) return false;
-          const pd = p.date; if(type==='DATE'&&sVal&&pd!==sVal) return false; if(type==='MONTH'&&sVal&&!pd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!pd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&pd<start) return false; if(end&&pd>end) return false; } return true;
+        document.getElementById('invStatementDate').textContent = `${dd}/${mm}/${yyyy}`;
+        document.getElementById('invStatementRef').textContent = `STMT-${vCode}-${yyyy}${mm}${dd}`;
+        document.getElementById('invOrderCount').textContent = ls.length;
+        document.getElementById('invPrintedBy').textContent = currentUser ? currentUser.name : 'System';
+        document.getElementById('invPrintedDate').textContent = now.toLocaleString('en-GB', {
+            day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
         });
-        if(pL.length>0) { document.getElementById('invSettledLedgerWrap').classList.remove('hidden'); document.getElementById('invSettledTableBody').innerHTML = pL.map(p=>{ if(p.type==='PAID') lp+=p.amount; else lp-=p.amount; return `<tr><td class="p-3 font-bold">${p.date}</td><td class="p-3 font-black text-[10px] uppercase tracking-widest ${p.type==='PAID'?'text-[#10b981]':'text-[#3b82f6]'}">${p.type}</td><td class="p-3 font-bold">${p.notes}</td><td class="p-3 text-right font-black">${formatAmt(p.amount)}</td></tr>`;}).join(''); } else { document.getElementById('invSettledLedgerWrap').classList.add('hidden'); }
-        
-        document.getElementById('invTotalProduct').textContent=formatAmt(tp) + ' AED'; document.getElementById('invTotalDeductions').textContent=formatAmt(td) + ' AED'; document.getElementById('invSettledAmount').textContent=formatAmt(lp) + ' AED'; document.getElementById('invNetAmount').textContent=formatAmt(tp - netDeduction - lp) + ' AED'; 
-        setTimeout(()=>{ document.getElementById('pdfQrCodeCanvas').innerHTML=''; new QRCode(document.getElementById('pdfQrCodeCanvas'), { text: JSON.stringify({ Vendor: vCode, NetPayable: formatAmt(tp - netDeduction - lp), Date: getUAEISOString() }), width: 64, height: 64, colorDark: "#0b0f19", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L }); }, 100);
+
+        document.getElementById('invVendorHeader').innerHTML = v
+            ? `${v.name}<br/><span style="font-size:8px; font-weight:600; color:#475569; text-transform:none;">Code: ${v.code} | ${v.phone}<br/>${v.address}</span>`
+            : 'ALL REGISTERED VENDORS';
+        document.getElementById('invPeriodHeader').textContent = period || 'Period : All Dates';
+
+        let tp = 0, td = 0, netDeduction = 0;
+        document.getElementById('invTableBody').innerHTML = ls.length ? ls.map((c, idx) => {
+            tp += c.productAmount;
+
+            const defInfo = getDeficitInfo(c);
+            let deduction = defInfo.deductionInInvoice;
+            let mathDeduction = deduction;
+
+            if (c.feeType === 'COC') {
+                deduction = c.cocPendingAmount > 0 ? c.deliveryCharge : 0;
+                mathDeduction = deduction;
+            } else if (defInfo.excludeFromNet) {
+                mathDeduction = 0;
+            }
+
+            td += deduction;
+            netDeduction += mathDeduction;
+
+            const feeDisplay = c.feeType === 'COC' ? c.cocPendingAmount : deduction;
+            return `<tr>
+                <td style="text-align:center; font-weight:700;">${idx + 1}</td>
+                <td style="white-space:nowrap;">${c.createdAt}</td>
+                <td style="font-weight:800;">${c.id}</td>
+                <td style="text-transform:uppercase; font-weight:600;">${c.customerName}</td>
+                <td style="text-align:right; color:#be123c !important; font-weight:700;">${formatAmt(feeDisplay)}</td>
+                <td style="text-align:right; font-weight:800;">${formatAmt(c.productAmount)}</td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="6" style="text-align:center; padding:12px; color:#64748b; font-weight:700;">No delivered consignments found for this period.</td></tr>`;
+
+        document.getElementById('invFootDeductions').textContent = formatAmt(td);
+        document.getElementById('invFootProduct').textContent = formatAmt(tp);
+
+        let lp = 0;
+        const pL = db.vendorPayments.filter(p => {
+            if (vCode !== 'ALL' && p.vendorCode !== vCode) return false;
+            const pd = p.date;
+            if (type === 'DATE' && sVal && pd !== sVal) return false;
+            if (type === 'MONTH' && sVal && !pd.startsWith(sVal)) return false;
+            if (type === 'YEAR' && sVal && !pd.startsWith(String(sVal))) return false;
+            if (type === 'RANGE') { if (start && pd < start) return false; if (end && pd > end) return false; }
+            return true;
+        });
+
+        if (pL.length > 0) {
+            document.getElementById('invSettledLedgerWrap').classList.remove('hidden');
+            document.getElementById('invSettledTableBody').innerHTML = pL.map(p => {
+                if (p.type === 'PAID') lp += p.amount; else lp -= p.amount;
+                const typeColor = p.type === 'PAID' ? '#047857' : '#1d4ed8';
+                return `<tr>
+                    <td style="white-space:nowrap;">${p.date}</td>
+                    <td style="font-weight:800; color:${typeColor} !important;">${p.type}</td>
+                    <td>${p.notes || '-'}</td>
+                    <td style="text-align:right; font-weight:800;">${formatAmt(p.amount)}</td>
+                </tr>`;
+            }).join('');
+        } else {
+            document.getElementById('invSettledLedgerWrap').classList.add('hidden');
+        }
+
+        const netBalance = tp - netDeduction - lp;
+        document.getElementById('invTotalProduct').textContent = formatAmt(tp) + ' AED';
+        document.getElementById('invTotalDeductions').textContent = formatAmt(td) + ' AED';
+        document.getElementById('invSettledAmount').textContent = formatAmt(lp) + ' AED';
+        document.getElementById('invNetLabel').textContent = netBalance < 0 ? 'Net Receivable' : 'Net Payable Due';
+        document.getElementById('invNetAmount').textContent = formatAmt(netBalance) + ' AED';
+
+        setTimeout(() => {
+            const qrEl = document.getElementById('pdfQrCodeCanvas');
+            if (!qrEl) return;
+            qrEl.innerHTML = '';
+            new QRCode(qrEl, {
+                text: JSON.stringify({ Vendor: vCode, NetPayable: formatAmt(netBalance), Date: getUAEISOString() }),
+                width: 54,
+                height: 54,
+                colorDark: "#0b0f19",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
+            });
+        }, 100);
     }
   }
   
@@ -4037,16 +4297,40 @@
     const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Invoice"); XLSX.writeFile(wb, `NEXTWAY_Invoice_${v}.xlsx`);
   }
 
-  function printVendorInvoice() { 
+  function printVendorInvoice() {
     const isTaxInvoice = !document.getElementById('taxInvoiceWrap').classList.contains('hidden');
     if (isTaxInvoice) {
         db.settings.invoiceCounter = (db.settings.invoiceCounter || 1001) + 1;
         saveDB();
     }
-    document.querySelectorAll('.print-area').forEach(e=>e.classList.remove('print-area')); 
-    document.getElementById('printableInvoice').classList.add('print-area'); 
-    window.print(); 
-    if (isTaxInvoice) generateInvoicePreview(); 
+
+    let pageStyle = document.getElementById('dynamicPrintPageStyle');
+    if (!pageStyle) {
+        pageStyle = document.createElement('style');
+        pageStyle.id = 'dynamicPrintPageStyle';
+        document.head.appendChild(pageStyle);
+    }
+
+    const printableEl = document.getElementById('printableInvoice');
+    document.querySelectorAll('.print-area').forEach(e => e.classList.remove('print-area', 'print-a5'));
+    printableEl.classList.add('print-area');
+
+    if (!isTaxInvoice) {
+        pageStyle.textContent = '@page { size: A5 portrait; margin: 6mm; }';
+        printableEl.classList.add('print-a5');
+    } else {
+        pageStyle.textContent = '@page { size: A4 portrait; margin: 10mm; }';
+        printableEl.classList.remove('print-a5');
+    }
+
+    const cleanupPrint = () => {
+        pageStyle.textContent = '';
+        printableEl.classList.remove('print-a5');
+    };
+    window.addEventListener('afterprint', cleanupPrint, { once: true });
+
+    window.print();
+    if (isTaxInvoice) generateInvoicePreview();
   }
   
   function openVendorModal() { 
