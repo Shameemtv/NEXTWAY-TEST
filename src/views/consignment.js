@@ -873,6 +873,6 @@ export const sendWhatsAppStatus = (cid) => {
     const vendorName = v ? v.name : c.vendorCode;
     const collectAmt = c.feeType === 'COD' ? (parseFloat(c.productAmount) + parseFloat(c.deliveryCharge)) : parseFloat(c.productAmount); 
     
-    const message = `*NEXTWAY DELIVERY SERVICES LLC*\n\nDear Customer,\nYour Shipment RefNo: *${c.id}*\n(From : *${vendorName}*),is on the way for delivery.\nAmount: Aed *${formatAmt(collectAmt)}*\nPayment Mode: Cash Only\n\nPlease share your location 📍`;
+    const message = `*NEXTWAY DELIVERY SERVICES LLC*\n\nDear Customer,\nYour Shipment RefNo: *${c.id}*\n(From : *${vendorName}*), is on the way for delivery.\nAmount: AED *${formatAmt(collectAmt)}*\nPayment Mode: *Cash Only*\n\nPlease share your location 📍`;
     window.open(`https://wa.me/${c.customerPhone.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(message)}`,'_blank'); 
 };
