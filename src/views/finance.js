@@ -238,54 +238,102 @@ export const generateInvoicePreview = () => {
         document.getElementById('standardInvoiceWrap').classList.remove('hidden');
         document.getElementById('taxInvoiceWrap').classList.add('hidden');
 
-        document.getElementById('invVendorHeader').innerHTML = v ? `${v.name}<br/><span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1 block leading-relaxed">${v.phone} <br/> ${v.address}</span>` : 'ALL REGISTERED VENDORS';
-        document.getElementById('invPeriodHeader').textContent = period;
+        const now = getUAEDisplayDate();
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yyyy = now.getFullYear();
 
-        let tp=0, td=0, netDeduction=0; 
-        document.getElementById('invTableBody').innerHTML = ls.map(c=>{
-          tp+=c.productAmount; 
-          
-          const defInfo = getDeficitInfo(c);
-          let deduction = defInfo.deductionInInvoice;
-          let mathDeduction = deduction;
-
-          if (c.feeType === 'COC') { 
-              deduction = c.cocPendingAmount > 0 ? c.deliveryCharge : 0; 
-              mathDeduction = deduction;
-          } else if (defInfo.excludeFromNet) {
-              mathDeduction = 0; 
-          }
-
-          td += deduction;
-          netDeduction += mathDeduction;
-          
-          const feeDisplay = c.feeType === 'COC' ? c.cocPendingAmount : deduction;
-          return `<tr><td class="p-3 font-bold">${c.createdAt}</td><td class="p-3 font-black">${c.id}</td><td class="p-3 uppercase font-bold">${c.customerName}</td><td class="p-3 text-right text-rose-700 font-bold">${formatAmt(feeDisplay)}</td><td class="p-3 text-right font-black">${formatAmt(c.productAmount)}</td></tr>`;
-        }).join(''); 
-        
-        let lp=0; 
-        const pL = db.vendorPayments.filter(p=>{
-          if(vCode!=='ALL'&&p.vendorCode!==vCode) return false;
-          const pd = p.date; if(type==='DATE'&&sVal&&pd!==sVal) return false; if(type==='MONTH'&&sVal&&!pd.startsWith(sVal)) return false; if(type==='YEAR'&&sVal&&!pd.startsWith(String(sVal))) return false; if(type==='RANGE') { if(start&&pd<start) return false; if(end&&pd>end) return false; } return true;
+        document.getElementById('invStatementDate').textContent = `${dd}/${mm}/${yyyy}`;
+        document.getElementById('invStatementRef').textContent = `STMT-${vCode}-${yyyy}${mm}${dd}`;
+        document.getElementById('invOrderCount').textContent = ls.length;
+        document.getElementById('invPrintedBy').textContent = currentUser ? currentUser.name : 'System';
+        document.getElementById('invPrintedDate').textContent = now.toLocaleString('en-GB', {
+            day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
         });
-        
-        if(pL.length>0) { 
-            document.getElementById('invSettledLedgerWrap').classList.remove('hidden'); 
-            document.getElementById('invSettledTableBody').innerHTML = pL.map(p=>{ if(p.type==='PAID') lp+=p.amount; else lp-=p.amount; return `<tr><td class="p-3 font-bold">${p.date}</td><td class="p-3 font-black text-[10px] uppercase tracking-widest ${p.type==='PAID'?'text-[#10b981]':'text-[#3b82f6]'}">${p.type}</td><td class="p-3 font-bold">${p.notes}</td><td class="p-3 text-right font-black">${formatAmt(p.amount)}</td></tr>`;}).join(''); 
-        } else { 
-            document.getElementById('invSettledLedgerWrap').classList.add('hidden'); 
-        }
-        
-        document.getElementById('invTotalProduct').textContent = formatAmt(tp) + ' AED'; 
-        document.getElementById('invTotalDeductions').textContent = formatAmt(td) + ' AED'; 
-        document.getElementById('invSettledAmount').textContent = formatAmt(lp) + ' AED'; 
-        document.getElementById('invNetAmount').textContent = formatAmt(tp - netDeduction - lp) + ' AED'; 
-        
-        setTimeout(()=>{ 
-            document.getElementById('pdfQrCodeCanvas').innerHTML=''; 
-            if(window.QRCode) {
-                new window.QRCode(document.getElementById('pdfQrCodeCanvas'), { text: JSON.stringify({ Vendor: vCode, NetPayable: formatAmt(tp - netDeduction - lp), Date: getUAEISOString() }), width: 64, height: 64, colorDark: "#0b0f19", colorLight: "#ffffff", correctLevel: window.QRCode.CorrectLevel.L }); 
+
+        document.getElementById('invVendorHeader').innerHTML = v
+            ? `${v.name}<br/><span style="font-size:8px; font-weight:600; color:#475569; text-transform:none;">Code: ${v.code} | ${v.phone}<br/>${v.address}</span>`
+            : 'ALL REGISTERED VENDORS';
+        document.getElementById('invPeriodHeader').textContent = period || 'Period : All Dates';
+
+        let tp = 0, td = 0, netDeduction = 0;
+        document.getElementById('invTableBody').innerHTML = ls.length ? ls.map((c, idx) => {
+            tp += c.productAmount;
+
+            const defInfo = getDeficitInfo(c);
+            let deduction = defInfo.deductionInInvoice;
+            let mathDeduction = deduction;
+
+            if (c.feeType === 'COC') {
+                deduction = c.cocPendingAmount > 0 ? c.deliveryCharge : 0;
+                mathDeduction = deduction;
+            } else if (defInfo.excludeFromNet) {
+                mathDeduction = 0;
             }
+
+            td += deduction;
+            netDeduction += mathDeduction;
+
+            const feeDisplay = c.feeType === 'COC' ? c.cocPendingAmount : deduction;
+            return `<tr>
+                <td style="text-align:center; font-weight:700;">${idx + 1}</td>
+                <td style="white-space:nowrap;">${c.createdAt}</td>
+                <td style="font-weight:800;">${c.id}</td>
+                <td style="text-transform:uppercase; font-weight:600;">${c.customerName}</td>
+                <td style="text-align:right; color:#be123c !important; font-weight:700;">${formatAmt(feeDisplay)}</td>
+                <td style="text-align:right; font-weight:800;">${formatAmt(c.productAmount)}</td>
+            </tr>`;
+        }).join('') : `<tr><td colspan="6" style="text-align:center; padding:12px; color:#64748b; font-weight:700;">No delivered consignments found for this period.</td></tr>`;
+
+        document.getElementById('invFootDeductions').textContent = formatAmt(td);
+        document.getElementById('invFootProduct').textContent = formatAmt(tp);
+
+        let lp = 0;
+        const pL = db.vendorPayments.filter(p => {
+            if (vCode !== 'ALL' && p.vendorCode !== vCode) return false;
+            const pd = p.date;
+            if (type === 'DATE' && sVal && pd !== sVal) return false;
+            if (type === 'MONTH' && sVal && !pd.startsWith(sVal)) return false;
+            if (type === 'YEAR' && sVal && !pd.startsWith(String(sVal))) return false;
+            if (type === 'RANGE') { if (start && pd < start) return false; if (end && pd > end) return false; }
+            return true;
+        });
+
+        if (pL.length > 0) {
+            document.getElementById('invSettledLedgerWrap').classList.remove('hidden');
+            document.getElementById('invSettledTableBody').innerHTML = pL.map(p => {
+                if (p.type === 'PAID') lp += p.amount; else lp -= p.amount;
+                const typeColor = p.type === 'PAID' ? '#047857' : '#1d4ed8';
+                return `<tr>
+                    <td style="white-space:nowrap;">${p.date}</td>
+                    <td style="font-weight:800; color:${typeColor} !important;">${p.type}</td>
+                    <td>${p.notes || '-'}</td>
+                    <td style="text-align:right; font-weight:800;">${formatAmt(p.amount)}</td>
+                </tr>`;
+            }).join('');
+        } else {
+            document.getElementById('invSettledLedgerWrap').classList.add('hidden');
+        }
+
+        const netBalance = tp - netDeduction - lp;
+        document.getElementById('invTotalProduct').textContent = formatAmt(tp) + ' AED';
+        document.getElementById('invTotalDeductions').textContent = formatAmt(td) + ' AED';
+        document.getElementById('invSettledAmount').textContent = formatAmt(lp) + ' AED';
+        document.getElementById('invNetLabel').textContent = netBalance < 0 ? 'Net Receivable' : 'Net Payable Due';
+        document.getElementById('invNetAmount').textContent = formatAmt(netBalance) + ' AED';
+
+        setTimeout(() => {
+            const qrEl = document.getElementById('pdfQrCodeCanvas');
+            if (!qrEl || !window.QRCode) return;
+            qrEl.innerHTML = '';
+            new window.QRCode(qrEl, {
+                text: JSON.stringify({ Vendor: vCode, NetPayable: formatAmt(netBalance), Date: getUAEISOString() }),
+                width: 54,
+                height: 54,
+                colorDark: "#0b0f19",
+                colorLight: "#ffffff",
+                correctLevel: window.QRCode.CorrectLevel.L
+            });
         }, 100);
     }
 };
@@ -401,17 +449,41 @@ export const printAgentFinanceReport = () => {
     window.print(); 
 };
 
-export const printVendorInvoice = () => { 
+export const printVendorInvoice = () => {
     const db = getDB();
     const isTaxInvoice = !document.getElementById('taxInvoiceWrap').classList.contains('hidden');
     if (isTaxInvoice) {
         db.settings.invoiceCounter = (db.settings.invoiceCounter || 1001) + 1;
         saveDB();
     }
-    document.querySelectorAll('.print-area').forEach(e => e.classList.remove('print-area')); 
-    document.getElementById('printableInvoice').classList.add('print-area'); 
-    window.print(); 
-    if (isTaxInvoice) generateInvoicePreview(); 
+
+    let pageStyle = document.getElementById('dynamicPrintPageStyle');
+    if (!pageStyle) {
+        pageStyle = document.createElement('style');
+        pageStyle.id = 'dynamicPrintPageStyle';
+        document.head.appendChild(pageStyle);
+    }
+
+    const printableEl = document.getElementById('printableInvoice');
+    document.querySelectorAll('.print-area').forEach(e => e.classList.remove('print-area', 'print-a5'));
+    printableEl.classList.add('print-area');
+
+    if (!isTaxInvoice) {
+        pageStyle.textContent = '@page { size: A5 portrait; margin: 6mm; }';
+        printableEl.classList.add('print-a5');
+    } else {
+        pageStyle.textContent = '@page { size: A4 portrait; margin: 10mm; }';
+        printableEl.classList.remove('print-a5');
+    }
+
+    const cleanupPrint = () => {
+        pageStyle.textContent = '';
+        printableEl.classList.remove('print-a5');
+    };
+    window.addEventListener('afterprint', cleanupPrint, { once: true });
+
+    window.print();
+    if (isTaxInvoice) generateInvoicePreview();
 };
 
 // ==========================================
